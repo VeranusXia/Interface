@@ -1,0 +1,7 @@
+## Interface: 80200
+## Title: Rematch ElvUI Skin
+## Notes: This addon reskins the Rematch battle pet addon to better blend in with ElvUI.
+## Author: Gello
+## Version: 1.2.2
+## Dependencies: Rematch, ElvUI
+RematchElvUISkin.lua

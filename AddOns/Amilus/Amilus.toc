@@ -1,0 +1,11 @@
+﻿## Interface: 80300
+## Title: Amilus Corruption Auction
+## Notes-zhCN: 腐蚀拍卖纪录
+## Version: 1.0
+## SavedVariables: Amilus_DB
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+
+
+Amilus.lua

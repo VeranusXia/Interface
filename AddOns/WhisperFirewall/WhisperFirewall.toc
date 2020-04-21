@@ -1,0 +1,11 @@
+﻿## Interface: 80200
+## Title: WhisperFirewall
+## Notes-zhCN: 密语防火墙
+## Version: 1.0
+## SavedVariables: WhisperFirewall_DB
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+
+
+WhisperFirewall.lua

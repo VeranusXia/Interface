@@ -1,0 +1,14 @@
+tag d0b73350c521e9611a793efdce5007d092af0bc3 8.4.0-release
+Author:	Hizuro <hizuro@gmx.net>
+Date:	Tue Apr 14 13:08:46 2020 +0200
+
+Tagging as 8.4.0-release
+
+commit fa2c7aabf113bdc08b50ba4562a05e71170eb4ec
+Author: Hizuro <hizuro@gmx.net>
+Date:   Tue Apr 14 13:07:25 2020 +0200
+
+    - moved SuperTrackedQuest into separated addon.
+    - updated localizations
+    - minor changes
+

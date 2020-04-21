@@ -1,0 +1,10 @@
+## Interface: 70300
+## Title: oUF Raid Debuff Highlight
+## Notes: Adds Raid Debuff Highlighting to oUF.
+## Author: cadcamzy
+## Version: 1.0
+## X-Category: UnitFrame
+## Dependencies: oUF
+
+oUF_RaidDebuffHighlight.lua
+
