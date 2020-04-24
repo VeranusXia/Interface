@@ -1,22 +1,16 @@
-# [2.17.1](https://github.com/WeakAuras/WeakAuras2/tree/2.17.1) (2020-04-16)
+# [2.17.4](https://github.com/WeakAuras/WeakAuras2/tree/2.17.4) (2020-04-22)
 
-[Full Changelog](https://github.com/WeakAuras/WeakAuras2/compare/2.17.0...2.17.1)
+[Full Changelog](https://github.com/WeakAuras/WeakAuras2/compare/2.17.3...2.17.4)
 
 ## Highlights
 
- - b
-- u
-- g
-- f
-- i
-- x
-- e
-- s 
+ - fix a buff tracking and nameplates regression 
 
 ## Commits
 
-mrbuds (2):
+InfusOnWoW (3):
 
-- aura trigger: fix error with empty specific unit
-- classic: fix ZG not matched for 20 man raid load condition
+- BT2 Fix Multi by adjusting it to recent changes (#2139)
+- Clean up match data if a unit ceases to exists
+- Fix nameplates auras sometimes not being applied if in a raid group
 

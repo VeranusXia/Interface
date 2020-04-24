@@ -1,6 +1,6 @@
 ## Interface: 80300
 ## Title: FarmHud [QuestArrow]
-## Version: 8.4.0-release
+## Version: 8.4.1-release
 ## Notes: Experimental way to suppress the quest arrow while FarmHud is active.
 ## Author: Hizuro
 ## Dependencies: FarmHud

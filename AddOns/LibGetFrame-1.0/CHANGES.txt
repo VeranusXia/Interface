@@ -1,10 +1,16 @@
-lightweight tag b402d3bec1a5b2ba90d2ae767e6a00a9a59ec2ca 1.4.0
+lightweight tag 58fc4ca269787e17badd28ead5917bf654ca88a3 1.4.1
 Author:	Buds <mrbouyou@gmail.com>
-Date:	Mon Mar 30 20:39:14 2020 +0200
+Date:	Fri Apr 17 14:34:52 2020 +0200
 
-commit b402d3bec1a5b2ba90d2ae767e6a00a9a59ec2ca
+commit 58fc4ca269787e17badd28ead5917bf654ca88a3
 Author: Buds <mrbouyou@gmail.com>
-Date:   Mon Mar 30 20:39:14 2020 +0200
+Date:   Fri Apr 17 14:34:52 2020 +0200
 
-    replaced FRAME_GUID_UPDATE with FRAME_UNIT_UPDATE
+    bump minor version
+
+commit b0e4f21f5ac9e9faf91ee55259e9e4e2a25d1e67
+Author: Buds <mrbouyou@gmail.com>
+Date:   Fri Apr 17 14:33:48 2020 +0200
+
+    fix GetUnitNameplate for elvui
 
