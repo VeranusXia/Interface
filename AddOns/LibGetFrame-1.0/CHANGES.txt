@@ -1,16 +1,16 @@
-lightweight tag 58fc4ca269787e17badd28ead5917bf654ca88a3 1.4.1
+lightweight tag 00d583fa55c081d25b997ec5548ccaec40b2648d 1.4.2
 Author:	Buds <mrbouyou@gmail.com>
-Date:	Fri Apr 17 14:34:52 2020 +0200
+Date:	Sun Apr 26 17:28:40 2020 +0200
 
-commit 58fc4ca269787e17badd28ead5917bf654ca88a3
+commit 00d583fa55c081d25b997ec5548ccaec40b2648d
 Author: Buds <mrbouyou@gmail.com>
-Date:   Fri Apr 17 14:34:52 2020 +0200
+Date:   Sun Apr 26 17:28:40 2020 +0200
 
-    bump minor version
+    bump minor
 
-commit b0e4f21f5ac9e9faf91ee55259e9e4e2a25d1e67
+commit f0e3cd943930ff348b9d5a9ca497df2cfe0cf2db
 Author: Buds <mrbouyou@gmail.com>
-Date:   Fri Apr 17 14:33:48 2020 +0200
+Date:   Sun Apr 26 17:28:07 2020 +0200
 
-    fix GetUnitNameplate for elvui
+    move CompactRaid priority after addons party frames
 
