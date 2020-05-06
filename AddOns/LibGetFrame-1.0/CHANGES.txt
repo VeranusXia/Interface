@@ -1,16 +1,11 @@
-lightweight tag 00d583fa55c081d25b997ec5548ccaec40b2648d 1.4.2
+lightweight tag 33fd99afba2ab7a2e56ebc44e3e135c261af9cf8 1.5.0
 Author:	Buds <mrbouyou@gmail.com>
-Date:	Sun Apr 26 17:28:40 2020 +0200
+Date:	Thu Apr 30 20:02:02 2020 +0200
 
-commit 00d583fa55c081d25b997ec5548ccaec40b2648d
+commit 33fd99afba2ab7a2e56ebc44e3e135c261af9cf8
 Author: Buds <mrbouyou@gmail.com>
-Date:   Sun Apr 26 17:28:40 2020 +0200
+Date:   Thu Apr 30 20:02:02 2020 +0200
 
-    bump minor
-
-commit f0e3cd943930ff348b9d5a9ca497df2cfe0cf2db
-Author: Buds <mrbouyou@gmail.com>
-Date:   Sun Apr 26 17:28:07 2020 +0200
-
-    move CompactRaid priority after addons party frames
+    new callback FRAME_UNIT_REMOVED
+    trigger when a frame does't mach a unit anymore
 
