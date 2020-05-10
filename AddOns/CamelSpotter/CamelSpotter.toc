@@ -1,9 +1,0 @@
-## Interface: 80205
-## Title: |cffEEE4AECamel Spotter|r
-## Notes: |cff58C6FAHelps you find Mysterious Camel Figurines in Uldum.|r
-## Author: Yuyuli
-## Version: 1.4.9
-## SavedVariables: CamelSpotterDB
-
-CamelSpotter.lua
-Waypoints.lua

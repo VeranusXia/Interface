@@ -130,8 +130,8 @@ function Amilus:rowUpdate(row)
 		local corruptionRank =Amilus:GetCorruption(bonusIDs)
 		if not Amilus_DB[realmName][name] then Amilus_DB[realmName][name]={} end
 		if corruptionRank then  
-			local data= {corruptionRank[1],level,data.buyoutAmount}
-			table.insert(Amilus_DB[realmName][name],data)
+			--local data= {corruptionRank[1],level,data.buyoutAmount}
+			--table.insert(Amilus_DB[realmName][name],data)
 			row.corruption:SetText(corruptionRank[1]) 
             row.corruption:Show()  
 		else
