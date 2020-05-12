@@ -1,6 +1,6 @@
 ﻿## Interface: 80205
 ## Title: AutoLoadPetTeam For Rematch
-## Title-zhCN: AutoLoadPetTeam For Rematch
+## Title-zhCN: [Veranus]AutoLoadPetTeam For Rematch
 ## Notes: 宠物自动换队-适配Rematch版
 ## Author: scdhao
 ## Version: 2.0.4

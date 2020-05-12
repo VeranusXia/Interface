@@ -1,5 +1,5 @@
 ## Interface: 80100
-## Title: tdBattlePetScript Rematch
+## Title: [Veranus]tdBattlePetScript Rematch
 ## Author: DengSir
 ## Version: 80100.01
 ## Dependencies: tdBattlePetScript, Rematch

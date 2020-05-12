@@ -1,7 +1,7 @@
 ## Interface: 80205
 ## Title: Rematch
 ## Notes: A pet journal alternative for managing pets and teams.
-## Title-zhCN: |c0066ffffBB_Rematch宠物组合保存|r
+## Title-zhCN: [Veranus]Rematch
 ## Notes-zhCN: |cFF34A2F7宠物组合保存.|r
 ## Author: Gello
 ## Version: 4.9.13
