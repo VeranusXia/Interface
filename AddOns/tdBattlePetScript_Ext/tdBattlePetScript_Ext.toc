@@ -1,0 +1,8 @@
+﻿## Interface: 80300
+## Title: tdBattlePetScript_Ext
+## Title-zhCN: tdBattlePetScript命令扩展
+## Author: scdhao
+## Version: 1.0.1
+## Dependencies: tdBattlePetScript
+
+tdBattlePetScript_Ext.lua
