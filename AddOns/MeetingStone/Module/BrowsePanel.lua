@@ -1174,7 +1174,7 @@ end
 
 function BrowsePanel:QuickSearch(activityCode, mode, loot, searchText)
     self:StartSet()
-    Profile:SetLastSearchCode(activityCode)
+    Profile:SetLastSearchCode(activityCode) 
     self.ActivityDropdown:SetValue(activityCode)
     if not NO_SCAN_WORD then
         self.SearchInput:SetText(searchText or '')

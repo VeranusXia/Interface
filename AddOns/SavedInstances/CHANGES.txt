@@ -1,22 +1,30 @@
-tag 849d420231e22cdbdee5cc3e8e7ecae274e34a85 8.3.3
+tag b2fb981f99f81398bd8e8a192710da4f6fe7b446 8.3.4
 Author:	Benjamin Staneck <staneck@gmail.com>
-Date:	Tue May 19 18:19:13 2020 +0200
+Date:	Wed Jun 3 22:31:48 2020 +0200
 
-Tagging as 8.3.3
+Tag as 8.3.4
 
-commit 3958649e2be23b59f93deecd7e280bc064464e57
-Author: Tom Knaepen <t.knaepen@ccvlab.eu>
-Date:   Fri May 8 11:21:12 2020 +0200
+commit 3f26d9ed9b1609f2f6fba18e3ed2e05b236178c4
+Author: LiangYuxuan <lyx@lyx.es>
+Date:   Mon May 25 10:22:22 2020 +0800
 
-    Use locale global strings
-    
-    Thanks to LiangYuxuan
+    fixes #380
 
-commit ebefb253c50a5e2b0091e02c911c5e92a1b4de1b
-Author: Tom <tom.knaepen@telenet.be>
-Date:   Tue May 5 10:07:54 2020 +0200
+commit 851e8cd703d87a77dd256e91a2eed73321638b86
+Author: LiangYuxuan <lyx@lyx.es>
+Date:   Fri May 22 12:31:24 2020 +0800
 
-    Add equipped cloak rank + resist to character tooltip
-    
-    Closes #344
+    core: update cloak related code
+    * fix nil error when unequipped cloak (fixes #377)
+    * update essence id checking to fix function with essence
+      * Unwavering Ward
+      * Spirit of Preservation
+      * Touch of the Everlasting
+      (fixes #376)
+
+commit e3af3c589e001a9b390b226cf774ccfa953c3d91
+Author: LiangYuxuan <lyx@lyx.es>
+Date:   Fri May 22 12:17:18 2020 +0800
+
+    misc: update .luacheckrc
 
