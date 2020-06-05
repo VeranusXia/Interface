@@ -1,6 +1,6 @@
-﻿local AutoBattleGround = CreateFrame("Frame")
+﻿--local AutoBattleGround = CreateFrame("Frame")
 
-frame = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
+local frame = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
 frame.Title:SetTextColor(1,1,1)
 frame.Title:SetText("自动评级小插件")
 frame:SetWidth(240)
@@ -8,7 +8,8 @@ frame:SetClampedToScreen(true)
 frame:SetFrameStrata("DIALOG")
 frame:SetPoint("Left", 400, -200)  
 frame:SetHeight(80) 
-frame:Show()
+--frame:Show()
+frame:Hide()
 
 local actionButton= CreateFrame("Button",nil,frame, "UIPanelButtonTemplate")
 actionButton:SetSize(80, 30)
@@ -46,7 +47,7 @@ function frame:Action()
 		step = 0
 		if GetNumGroupMembers()<=7 then
 			LeaveParty()
-			print("人数小于7 自动离队")
+			print("人数小于8 果断离队")
 		end
 		
 		if StaticPopup1Button2:IsShown() then
