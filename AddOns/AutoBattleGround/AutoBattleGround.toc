@@ -1,7 +1,7 @@
 ﻿## Interface: 80300
-## Title: AutoBattleGround
-## Notes-zhCN: 自动评级战场[仅限内部使用]
-## Version: 1.0
+## Title: [Veranus]艾泽拉斯科学研究院自动评级小助手
+## Notes-zhCN: 艾泽拉斯科学研究院自动评级小助手
+## Version: 1.4
 ## SavedVariables: ABG_DB
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Always: delayed

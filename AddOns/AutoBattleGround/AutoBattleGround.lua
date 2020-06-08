@@ -1,43 +1,81 @@
 ﻿--local AutoBattleGround = CreateFrame("Frame")
 
-local frame = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
-frame.Title:SetTextColor(1,1,1)
-frame.Title:SetText("自动评级小插件")
-frame:SetWidth(240)
-frame:SetClampedToScreen(true)
-frame:SetFrameStrata("DIALOG")
-frame:SetPoint("Left", 400, -200)  
-frame:SetHeight(80) 
---frame:Show()
-frame:Hide()
+local AutoBattleGround = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
+AutoBattleGround.Title:SetTextColor(1,1,1)
+AutoBattleGround.Title:SetText("艾泽拉斯科学研究院自动评级小助手")
+AutoBattleGround.Title:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE")
+AutoBattleGround:SetSize(300, 150) 
+AutoBattleGround:SetClampedToScreen(true)
+AutoBattleGround:SetFrameStrata("DIALOG")
+AutoBattleGround:SetPoint("Left", 400, -200)   
+AutoBattleGround:Show() 
 
-local actionButton= CreateFrame("Button",nil,frame, "UIPanelButtonTemplate")
+AutoBattleGround:SetMovable(true)
+AutoBattleGround:EnableMouse(true) 
+AutoBattleGround:RegisterForDrag("LeftButton")
+AutoBattleGround:SetScript("OnDragStart", AutoBattleGround.StartMoving)
+AutoBattleGround:SetScript("OnDragStop", AutoBattleGround.StopMovingOrSizing)
+
+local header = CreateFrame("Frame", nil, AutoBattleGround)
+header:SetSize(250,40) 
+header:SetPoint("TOP",   0, -40)
+
+local actionButton= CreateFrame("Button",nil,header, "UIPanelButtonTemplate")
 actionButton:SetSize(80, 30)
-actionButton:SetPoint("LEFT", 20, -10)
+actionButton:SetPoint("LEFT", 20, 0)
 actionButton.Text = actionButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 actionButton.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
 actionButton.Text:SetText("初始化") -- 设置材质路径 
-actionButton.Text:SetPoint("LEFT", actionButton, "LEFT", 24, 0)
+actionButton.Text:SetPoint("LEFT", actionButton, "LEFT", 15, 0)
 actionButton:SetScript("OnClick", function() 
-	step=0;
+	step=0
+	oldtime=nil
 end)
 
-local hideButton= CreateFrame("Button",nil,frame, "UIPanelButtonTemplate")
+local hideButton= CreateFrame("Button",nil,header, "UIPanelButtonTemplate")
 hideButton:SetSize(80, 30)
-hideButton:SetPoint("LEFT", 120, -10)
+hideButton:SetPoint("LEFT", 100, 0)
 hideButton.Text = hideButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 hideButton.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-hideButton.Text:SetText("隐藏") -- 设置材质路径 
-hideButton.Text:SetPoint("LEFT", hideButton, "LEFT", 24, 0)
+hideButton.Text:SetText("ReloadUI") -- 设置材质路径 
+hideButton.Text:SetPoint("LEFT", hideButton, "LEFT", 15, 0)
 hideButton:SetScript("OnClick", function() 
-	frame:Hide()
+	ReloadUI()
 end)
 
+
+
+local content = CreateFrame("Frame", nil, AutoBattleGround)
+content:SetSize(250,40) 
+content:SetPoint("TOP",  0, -80)
+content.Text = content:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+content.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+content.Text:SetPoint("LEFT", content, "LEFT", 24, 0)
+
+function logText(text)
+	content.Text:SetText(date("[%H:%M:%S] ")..text)  
+	print(date("[%H:%M:%S] ")..text)
+end
+
+
+
+
+local timeico = CreateFrame("Frame", nil, header)
+timeico:SetSize(80, 30)
+timeico:SetPoint("LEFT", 180, 0)
+timeico.Text = timeico:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+timeico.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+timeico.Text:SetPoint("LEFT", timeico, "LEFT", 24, 0)
+
+function logTime(difftime)
+	timeico.Text:SetText(difftime)  
+end
 
 
 local step = 0;
+local oldtime = nil
 
-function frame:Action()
+function AutoBattleGround:Action()
 	local MeetingStone = LibStub('AceAddon-3.0'):GetAddon('MeetingStone')
 	local BrowsePanel = MeetingStone:GetModule('BrowsePanel')
 	local MainPanel =MeetingStone:GetModule('MainPanel')
@@ -45,35 +83,56 @@ function frame:Action()
 			 
 	if IsInGroup() then
 		step = 0
-		if GetNumGroupMembers()<=7 then
-			LeaveParty()
-			print("人数小于8 果断离队")
+		local _, instanceType = IsInInstance()
+		local IsInBG = instanceType=="pvp"
+		if not IsInBG then
+			if oldtime ==nil  then
+				oldtime = time()
+			end
+			local newtime = time()
+			local difftime=newtime-oldtime
+			logTime(difftime) 
+			if difftime>120 then
+				LeaveParty()
+				logText("长时间没开打 果断离队")
+			end
+			if  GetNumGroupMembers()<=7 then
+				LeaveParty()
+				logText("人数过少 果断离队")
+			end
+		else
+			oldtime =nil
+			logTime("")
 		end
+		
+		 
 		
 		if StaticPopup1Button2:IsShown() then
 			StaticPopup1Button2:Click() 
-			--print("StaticPopup1Button2.click")
+			--logText("StaticPopup1Button2.click")
 		end
 		if LFGListInviteDialog:IsShown() then  
 			LFGListInviteDialog.AcknowledgeButton:Click()
-			print("关闭邀请框")			
+			logText("关闭邀请框")			
 		end
 		if LFDRoleCheckPopup:IsShown() then
 			LFDRoleCheckPopupAcceptButton:Click() 
-			print("选择职责")
+			logText("选择职责")
 		end  
 		if PVPMatchResults:IsShown() then
 			PVPMatchResults["leaveButton"]:Click() 
-			print("退出战场")
+			logText("退出战场")
 		end 
 		return 
 	else
+		oldtime =nil
+		logTime("")
 		if step==0 then
 			if MainPanel:IsShown() then
-				print("集合石已打开")
+				logText("集合石已打开")
 			else
 				MeetingStone:Toggle()
-				print("打开集合石")
+				logText("打开集合石")
 			end
 			if BrowsePanel.RefreshButton:IsEnabled() then
 				BrowsePanel:DoSearch() 
@@ -81,7 +140,7 @@ function frame:Action()
 					return activity:GetMaxMembers() - activity:GetNumMembers()
 				end)
 				step=1;
-				print("搜索集合石队伍")
+				logText("搜索集合石队伍")
 			end
 
 			return
@@ -91,7 +150,7 @@ function frame:Action()
 			local num = math.random(5)  
 			BrowsePanel.ActivityList:Sort()
 			local item = BrowsePanel.ActivityList:GetItem(num) 
-			print("随机选择第"..num.."队")
+			logText("随机选择第"..num.."队")
 			BrowsePanel:SignUp(item)
 			step=2
 			return
@@ -101,7 +160,7 @@ function frame:Action()
 			if  LFGListApplicationDialog:IsShown() then 
 				LFGListApplicationDialog.SignUpButton:Click() 
 				step=3				
-				print("申请加入队伍")
+				logText("申请加入队伍")
 			end 
 			return 
 		end 
@@ -109,7 +168,7 @@ function frame:Action()
 		if step==3 then  
 			if  LFGListInviteDialog:IsShown() then 
 				LFGListInviteDialog.AcceptButton:Click() 
-				print("自动进组")
+				logText("自动进组")
 			else
 				step=1
 			end 
@@ -121,3 +180,8 @@ function frame:Action()
 end
 	
 	
+function SlashCmdList.AutoBattleGround(msg)
+	AutoBattleGround:Show() 
+end
+SLASH_AutoBattleGround1 = '/AutoBattleGround'
+SLASH_AutoBattleGround2 = '/abg'
