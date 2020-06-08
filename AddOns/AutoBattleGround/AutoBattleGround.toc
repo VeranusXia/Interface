@@ -1,7 +1,7 @@
 ﻿## Interface: 80300
 ## Title: [Veranus]艾泽拉斯科学研究院自助评级小助手
 ## Notes-zhCN: 艾泽拉斯科学研究院自助评级小助手
-## Version: 1.5
+## Version: 1.6
 ## SavedVariables: ABG_DB
 ## LoadManagers: AddonLoader
 ## RequiredDeps: MeetingStone

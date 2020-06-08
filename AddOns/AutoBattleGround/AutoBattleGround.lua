@@ -1,18 +1,6 @@
-﻿local abg = CreateFrame("Frame"); 
-abg:RegisterEvent("ADDON_LOADED");
-function abg:OnEvent(event, arg1) 
-	if (not ABG_DB) then
-		ABG_DB = {};
-	end 
-	if (not ABG_DB.config) then
-		ABG_DB.config = {};
-	end 
-	if not GetMacroInfo("快乐评级") then
-		ABG_DB.marco = CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
-	end
-end
-abg:SetScript("OnEvent", abg.OnEvent);
- 
+﻿
+local config={}
+
 
   
   
@@ -34,6 +22,28 @@ local classSpell ={
 }
 local _, className, index = UnitClass("player"); --检测职业
 local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
+local macrotxt = ""
+
+
+local piaobtn =  CreateFrame("BUTTON", nil, UIParent, "UIPanelButtonTemplate")
+piaobtn:SetSize(100, 40)
+piaobtn.Text = piaobtn:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+piaobtn.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+piaobtn.Text:SetText("评级小助手") -- 设置材质路径 
+piaobtn.Text:SetPoint("CENTER", piaobtn)
+piaobtn:SetClampedToScreen(true)
+piaobtn:SetPoint("LEFT", 300, 0)
+piaobtn:SetMovable(true)
+piaobtn:EnableMouse(true) 
+piaobtn:RegisterForDrag("LeftButton")
+piaobtn:SetScript("OnDragStart", piaobtn.StartMoving)
+piaobtn:SetScript("OnDragStop", piaobtn.StopMovingOrSizing)
+piaobtn:SetScript("OnClick", function() 
+	piaobtn:Hide()
+end)
+piaobtn:SetScript("OnHide", function()
+	AutoBattleGround:Show() 
+end)
 
 --主面板
 local AutoBattleGround = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
@@ -49,13 +59,15 @@ AutoBattleGround:EnableMouse(true)
 AutoBattleGround:RegisterForDrag("LeftButton")
 AutoBattleGround:SetScript("OnDragStart", AutoBattleGround.StartMoving)
 AutoBattleGround:SetScript("OnDragStop", AutoBattleGround.StopMovingOrSizing)
-AutoBattleGround:Show() 
+AutoBattleGround:SetScript("OnHide", function()
+	piaobtn:Show()
+end)
+AutoBattleGround:Hide()
 
 
 local PVPBtn = CreateFrame("BUTTON", "HappyPVP", nil, "SecureActionButtonTemplate")
 PVPBtn:SetSize(0,0)
 PVPBtn:SetAttribute("*type*", "macro") 
-local macrotxt = ""
  
 
 --第一行
@@ -111,21 +123,18 @@ local modeck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 modeck.text = modeck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 modeck.text:SetPoint("LEFT", modeck, "RIGHT", 0, 1)
 modeck:SetPoint("LEFT", 5, 0)
-modeck:SetChecked(curHour>=22 or curHour<=7)
-modeck.text:SetText("夜间模式")
+modeck.text:SetText("开启夜间")
 
 local itemwp = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemwp.text = itemwp:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemwp.text:SetPoint("LEFT", itemwp, "RIGHT", 0, 1)
 itemwp:SetPoint("LEFT", 110, 0)
-itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 itemwp.text:SetText("快乐法杖")
 
 local itemtk = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemtk.text = itemtk:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemtk.text:SetPoint("LEFT", itemtk, "RIGHT", 0, 1)
 itemtk:SetPoint("LEFT", 215, 0)
-itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
 itemtk.text:SetText("快乐饰品")    
 
 
@@ -222,11 +231,17 @@ function AutoBattleGround:Action()
 	local MainPanel =MeetingStone:GetModule('MainPanel')
 	local item = BrowsePanel.ActivityList:GetItem(1) 
 	
-	local difftime_config= modeck:GetChecked() and 300 or 120
-	local groupmembers_config = modeck:GetChecked() and 7 or 6 
+	local difftime_config= 120
+	local groupmembers_config = 6
 	
-	curHour = tonumber(date("%H"))
-	modeck:SetChecked(curHour>=22 or curHour<=7)
+	
+	local auto = modeck:GetChecked()
+	if auto then
+		local curHour = tonumber(date("%H")) 
+		difftime_config= (curHour>=24 or curHour<=7) and 300 or 120
+		groupmembers_config = modeck:GetChecked() and 7 or 6 
+	end
+	
  
 	
 	if IsInGroup() then
@@ -251,6 +266,10 @@ function AutoBattleGround:Action()
 				return
 			end
 		else
+			if UnitIsGroupLeader("player") then
+				LeaveParty()
+				logText("我怎么变团长了? 果断离队")
+			end
 			oldtime =nil
 			logTime(0)
 		end
@@ -300,7 +319,13 @@ function AutoBattleGround:Action()
 			else
 				MeetingStone:Toggle()
 				logText("打开集合石")
+			end 
+			
+			if MainPanel:GetSelectedTab()>1 then
+			     MainPanel:SelectTab(1)
 			end
+			
+			
 			if BrowsePanel.RefreshButton:IsEnabled() then
 				BrowsePanel:DoSearch() 
 				BrowsePanel.ActivityList:SetSortHandler(function(activity)
@@ -349,6 +374,30 @@ end
 	
 function SlashCmdList.AutoBattleGround(msg)
 	AutoBattleGround:Show() 
+	piaobtn:Hide()
 end
 SLASH_AutoBattleGround1 = '/AutoBattleGround'
 SLASH_AutoBattleGround2 = '/abg'
+
+
+
+local abg = CreateFrame("Frame"); 
+abg:RegisterEvent("PLAYER_ENTERING_WORLD");
+function abg:OnEvent(event, arg1) 
+	if (not ABG_DB) then
+		ABG_DB = {};
+	end 
+	if (not ABG_DB.config) then
+		ABG_DB.config = {};
+	else
+		config = ABG_DB.config;
+	end 
+	if not GetMacroInfo("快乐评级") then
+		ABG_DB.marco = CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
+	end
+	modeck:SetChecked(true)
+	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
+	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+end
+abg:SetScript("OnEvent", abg.OnEvent);
+ 
