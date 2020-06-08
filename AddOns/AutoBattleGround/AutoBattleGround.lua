@@ -1,86 +1,234 @@
-﻿--local AutoBattleGround = CreateFrame("Frame")
+﻿local abg = CreateFrame("Frame"); 
+abg:RegisterEvent("ADDON_LOADED");
+function abg:OnEvent(event, arg1) 
+	if (not ABG_DB) then
+		ABG_DB = {};
+	end 
+	if (not ABG_DB.config) then
+		ABG_DB.config = {};
+	end 
+	if not GetMacroInfo("快乐评级") then
+		ABG_DB.marco = CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
+	end
+end
+abg:SetScript("OnEvent", abg.OnEvent);
+ 
 
+  
+  
+local step = 0;
+local oldtime = nil
+local classSpell ={
+	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
+	["PALADIN"] = "/targetfriendplayer\n/cast 殉道者之光\n",--Paladin
+	["HUNTER"] = "/cast 意气风发\n", --Hunter
+	["ROGUE"] = "", --Rogue
+	["PRIEST"] = "/cast 绝望祷言\n/castsequence reset=6 真言术：耀,预兆\n",--Priest
+	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
+	["SHAMAN"] = "", --Shaman
+	["MAGE"] = "", --Mage
+	["WARLOCK"] = "/cast 黑暗契约\n/use 治疗石\n/cast 制造治疗石\n",--Warlock
+	["MONK"] = "",--Monk
+	["DRUID"] = "",--Druid
+	["DEMON HUNTER"] = "",--Demon Hunter
+}
+local _, className, index = UnitClass("player"); --检测职业
+local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
+
+--主面板
 local AutoBattleGround = CreateFrame("Frame", "AutoBattleGround", UIParent, "UIPanelDialogTemplate")
 AutoBattleGround.Title:SetTextColor(1,1,1)
-AutoBattleGround.Title:SetText("艾泽拉斯科学研究院自动评级小助手")
-AutoBattleGround.Title:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE")
-AutoBattleGround:SetSize(300, 150) 
+AutoBattleGround.Title:SetText("艾泽拉斯科学研究院自助评级小助手 by 微微")
+AutoBattleGround.Title:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
+AutoBattleGround:SetSize(350, 250) 
 AutoBattleGround:SetClampedToScreen(true)
 AutoBattleGround:SetFrameStrata("DIALOG")
 AutoBattleGround:SetPoint("Left", 400, -200)   
-AutoBattleGround:Show() 
-
 AutoBattleGround:SetMovable(true)
 AutoBattleGround:EnableMouse(true) 
 AutoBattleGround:RegisterForDrag("LeftButton")
 AutoBattleGround:SetScript("OnDragStart", AutoBattleGround.StartMoving)
 AutoBattleGround:SetScript("OnDragStop", AutoBattleGround.StopMovingOrSizing)
+AutoBattleGround:Show() 
 
-local header = CreateFrame("Frame", nil, AutoBattleGround)
-header:SetSize(250,40) 
-header:SetPoint("TOP",   0, -40)
 
-local actionButton= CreateFrame("Button",nil,header, "UIPanelButtonTemplate")
-actionButton:SetSize(80, 30)
-actionButton:SetPoint("LEFT", 20, 0)
-actionButton.Text = actionButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-actionButton.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-actionButton.Text:SetText("初始化") -- 设置材质路径 
-actionButton.Text:SetPoint("LEFT", actionButton, "LEFT", 15, 0)
-actionButton:SetScript("OnClick", function() 
+local PVPBtn = CreateFrame("BUTTON", "HappyPVP", nil, "SecureActionButtonTemplate")
+PVPBtn:SetSize(0,0)
+PVPBtn:SetAttribute("*type*", "macro") 
+local macrotxt = ""
+ 
+
+--第一行
+local line1 = CreateFrame("Frame", nil, AutoBattleGround)
+line1:SetSize(330,40) 
+line1:SetPoint("TOP",   0, -40)
+--按钮1
+local resetButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
+resetButton:SetSize(90, 30)
+resetButton:SetPoint("LEFT", 10, 0)
+resetButton.Text = resetButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+resetButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+resetButton.Text:SetText("初始化") -- 设置材质路径 
+resetButton.Text:SetPoint("CENTER", resetButton)
+resetButton:SetScript("OnClick", function() 
 	step=0
-	oldtime=nil
+	oldtime=nil 
+	logText("重置step:"..step)
 end)
-
-local hideButton= CreateFrame("Button",nil,header, "UIPanelButtonTemplate")
-hideButton:SetSize(80, 30)
-hideButton:SetPoint("LEFT", 100, 0)
-hideButton.Text = hideButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-hideButton.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-hideButton.Text:SetText("ReloadUI") -- 设置材质路径 
-hideButton.Text:SetPoint("LEFT", hideButton, "LEFT", 15, 0)
-hideButton:SetScript("OnClick", function() 
+--按钮2
+local rlButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
+rlButton:SetSize(90, 30)
+rlButton:SetPoint("LEFT", 110, 0)
+rlButton.Text = rlButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+rlButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+rlButton.Text:SetText("重载UI") -- 设置材质路径 
+rlButton.Text:SetPoint("CENTER", rlButton)
+rlButton:SetScript("OnClick", function() 
 	ReloadUI()
 end)
 
+--显示待机时间
+
+local timeico = CreateFrame("Frame", nil, line1)
+timeico:SetSize(80, 30)
+timeico:SetPoint("LEFT", 190, 0)
+timeico.Text = timeico:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+timeico.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+timeico.Text:SetPoint("LEFT", timeico, "LEFT", 24, 0)
+
+function logTime(difftime)
+	if difftime>0 then
+		timeico.Text:SetText("等待时间: "..difftime)  
+	end
+end
+
+---第二行
+local line2 = CreateFrame("Frame", nil, AutoBattleGround)
+line2:SetSize(330,40) 
+line2:SetPoint("TOP",   0, -80) 
+
+local modeck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+modeck.text = modeck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+modeck.text:SetPoint("LEFT", modeck, "RIGHT", 0, 1)
+modeck:SetPoint("LEFT", 5, 0)
+modeck:SetChecked(curHour>=22 or curHour<=7)
+modeck.text:SetText("夜间模式")
+
+local itemwp = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+itemwp.text = itemwp:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+itemwp.text:SetPoint("LEFT", itemwp, "RIGHT", 0, 1)
+itemwp:SetPoint("LEFT", 110, 0)
+itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
+itemwp.text:SetText("快乐法杖")
+
+local itemtk = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+itemtk.text = itemtk:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+itemtk.text:SetPoint("LEFT", itemtk, "RIGHT", 0, 1)
+itemtk:SetPoint("LEFT", 215, 0)
+itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+itemtk.text:SetText("快乐饰品")    
 
 
+---第三行
+local line3 = CreateFrame("Frame", nil, AutoBattleGround)
+line3:SetSize(330,40) 
+line3:SetPoint("TOP",   0, -120) 
+
+local boxck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+boxck.text = boxck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+boxck.text:SetPoint("LEFT", boxck, "RIGHT", 0, 1)
+boxck:SetPoint("LEFT", 5, 0)
+boxck:SetChecked(true)
+boxck.text:SetText("快乐宝箱")
+
+local fishck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+fishck.text = fishck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+fishck.text:SetPoint("LEFT", fishck, "RIGHT", 0, 1)
+fishck:SetPoint("LEFT", 110, 0)
+fishck:SetChecked(false)
+fishck.text:SetText("快乐开鱼")
+
+local classSPck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+classSPck.text = classSPck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+classSPck.text:SetPoint("LEFT", classSPck, "RIGHT", 0, 1)
+classSPck:SetPoint("LEFT", 215, 0)
+classSPck:SetChecked(classSpell[className]~="")
+classSPck.text:SetText("职业技能")
+
+
+---第四行
+
+
+local line4 = CreateFrame("Frame", nil, AutoBattleGround)
+line4:SetSize(330,40) 
+line4:SetPoint("TOP",   0, -160) 
+ 
+local neckck = CreateFrame("CheckButton", nil, line4, "UICheckButtonTemplate")
+neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
+neckck:SetPoint("LEFT", 5, 0)
+neckck:SetChecked(classSpell[className]=="")
+neckck.text:SetText("火红烈焰")
+
+
+--配置按钮
+local configButton= CreateFrame("Button",nil,line4, "UIPanelButtonTemplate")
+configButton:SetSize(80, 30)
+configButton:SetPoint("LEFT", 110, 0)
+configButton.Text = configButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+configButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+configButton.Text:SetText("更新设置") -- 设置材质路径 
+configButton.Text:SetPoint("CENTER", configButton)
+configButton:SetScript("OnClick", function()  
+	SaveConfig() 
+	logText("修改配置")
+	print(macrotxt)
+end)
+
+
+
+--第N行 显示log
 local content = CreateFrame("Frame", nil, AutoBattleGround)
-content:SetSize(250,40) 
-content:SetPoint("TOP",  0, -80)
+content:SetSize(330,40) 
+content:SetPoint("TOP",  0, -200)
 content.Text = content:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 content.Text:SetFont(STANDARD_TEXT_FONT, 11, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-content.Text:SetPoint("LEFT", content, "LEFT", 24, 0)
+content.Text:SetPoint("LEFT", content, "LEFT", 15, 0)
 
 function logText(text)
 	content.Text:SetText(date("[%H:%M:%S] ")..text)  
 	print(date("[%H:%M:%S] ")..text)
 end
 
-
-
-
-local timeico = CreateFrame("Frame", nil, header)
-timeico:SetSize(80, 30)
-timeico:SetPoint("LEFT", 180, 0)
-timeico.Text = timeico:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-timeico.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-timeico.Text:SetPoint("LEFT", timeico, "LEFT", 24, 0)
-
-function logTime(difftime)
-	timeico.Text:SetText(difftime)  
+--保存配置 重置宏
+function SaveConfig()
+	local usewptxt = itemwp:GetChecked() and "\n/use 16\n" or ""
+	local usetktxt = itemtk:GetChecked() and "/use 13\n/use 14\n" or ""
+	local usebox = boxck:GetChecked() and "/use 黄金保险箱\n/use 钢铁保险箱\n" or ""
+	local usefish = fishck:GetChecked() and "/use 淡紫刺鳐\n/use 软泥鲭鱼\n/use 洋流鲷鱼\n/use 狂乱的利齿青鱼\n/use 赤尾泥鳅\n/use 海砂变色鱼\n/use 提拉加德鲈鱼\n/use 蝰鱼\n/use 无尽之海鲶鱼\n" or ""
+	local useneck = neckck:GetChecked() and "/targetenemy\n/cast 火红烈焰\n" or ""
+	local useclassSpell = classSPck:GetChecked() and classSpell[className] or ""
+	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell.."/run AutoBattleGround:Action()\n/click PVPReadyDialogEnterBattleButton\n"
+	PVPBtn:SetAttribute("macrotext",macrotxt)
 end
 
+SaveConfig()
 
-local step = 0;
-local oldtime = nil
 
+--主逻辑
 function AutoBattleGround:Action()
 	local MeetingStone = LibStub('AceAddon-3.0'):GetAddon('MeetingStone')
 	local BrowsePanel = MeetingStone:GetModule('BrowsePanel')
 	local MainPanel =MeetingStone:GetModule('MainPanel')
 	local item = BrowsePanel.ActivityList:GetItem(1) 
-			 
+	
+	local difftime_config= modeck:GetChecked() and 300 or 120
+	local groupmembers_config = modeck:GetChecked() and 7 or 6 
+	
+	curHour = tonumber(date("%H"))
+	modeck:SetChecked(curHour>=22 or curHour<=7)
+ 
+	
 	if IsInGroup() then
 		step = 0
 		local _, instanceType = IsInInstance()
@@ -92,24 +240,25 @@ function AutoBattleGround:Action()
 			local newtime = time()
 			local difftime=newtime-oldtime
 			logTime(difftime) 
-			if difftime>120 then
+			if difftime>difftime_config then
 				LeaveParty()
-				logText("长时间没开打 果断离队")
+				logText("整整"..difftime.."秒没开打 果断离队")
+				return
 			end
-			if  GetNumGroupMembers()<=7 then
+			if  GetNumGroupMembers()<=groupmembers_config then
 				LeaveParty()
 				logText("人数过少 果断离队")
+				return
 			end
 		else
 			oldtime =nil
-			logTime("")
+			logTime(0)
 		end
 		
 		 
 		
 		if StaticPopup1Button2:IsShown() then
 			StaticPopup1Button2:Click() 
-			--logText("StaticPopup1Button2.click")
 		end
 		if LFGListInviteDialog:IsShown() then  
 			LFGListInviteDialog.AcknowledgeButton:Click()
@@ -119,14 +268,32 @@ function AutoBattleGround:Action()
 			LFDRoleCheckPopupAcceptButton:Click() 
 			logText("选择职责")
 		end  
+		  
+		
 		if PVPMatchResults:IsShown() then
 			PVPMatchResults["leaveButton"]:Click() 
 			logText("退出战场")
 		end 
+		
+		if BonusRollFrame:IsShown() then
+			DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
+			logText("关闭ROLL币框")
+		end
 		return 
 	else
+
+	
 		oldtime =nil
-		logTime("")
+		logTime(0)
+		
+		
+		if step>0 and not MainPanel:IsShown() then
+			MeetingStone:Toggle()
+				logText("打开集合石")
+			return
+		end
+		
+		
 		if step==0 then
 			if MainPanel:IsShown() then
 				logText("集合石已打开")
