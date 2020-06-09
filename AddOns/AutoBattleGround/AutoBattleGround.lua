@@ -1,5 +1,4 @@
-﻿
-local config={}
+﻿ 
 
 
   
@@ -21,8 +20,12 @@ local classSpell ={
 	["DEMON HUNTER"] = "",--Demon Hunter
 }
 local _, className, index = UnitClass("player"); --检测职业
+local pr= UnitName("player") .. "-" .. GetRealmName()
 local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
 local macrotxt = ""
+local signUpNum = 5
+local groupLeaderName = ""
+ 
 
 
 local piaobtn =  CreateFrame("BUTTON", nil, UIParent, "UIPanelButtonTemplate")
@@ -111,6 +114,8 @@ timeico.Text:SetPoint("LEFT", timeico, "LEFT", 24, 0)
 function logTime(difftime)
 	if difftime>0 then
 		timeico.Text:SetText("等待时间: "..difftime)  
+	else
+		timeico.Text:SetText("战场中...")
 	end
 end
 
@@ -221,7 +226,6 @@ function SaveConfig()
 	PVPBtn:SetAttribute("macrotext",macrotxt)
 end
 
-SaveConfig()
 
 
 --主逻辑
@@ -241,9 +245,7 @@ function AutoBattleGround:Action()
 		difftime_config= (curHour>=24 or curHour<=7) and 300 or 120
 		groupmembers_config = modeck:GetChecked() and 7 or 6 
 	end
-	
  
-	
 	if IsInGroup() then
 		step = 0
 		local _, instanceType = IsInInstance()
@@ -265,39 +267,47 @@ function AutoBattleGround:Action()
 				logText("人数过少 果断离队")
 				return
 			end
-		else
 			if UnitIsGroupLeader("player") then
 				LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
+		else
 			oldtime =nil
 			logTime(0)
 		end
 		
-		 
+		  
 		
 		if StaticPopup1Button2:IsShown() then
 			StaticPopup1Button2:Click() 
 		end
 		if LFGListInviteDialog:IsShown() then  
 			LFGListInviteDialog.AcknowledgeButton:Click()
-			logText("关闭邀请框")			
+			logText("关闭邀请框")	
+			return
 		end
 		if LFDRoleCheckPopup:IsShown() then
 			LFDRoleCheckPopupAcceptButton:Click() 
 			logText("选择职责")
+			return
 		end  
 		  
 		
 		if PVPMatchResults:IsShown() then
 			PVPMatchResults["leaveButton"]:Click() 
+			--GetRate()
 			logText("退出战场")
+		else
+			groupLeaderName = GetGroupLeader()
+			--logText("当前车头:"..groupLeaderName)
 		end 
 		
 		if BonusRollFrame:IsShown() then
 			DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
 			logText("关闭ROLL币框")
+			return
 		end
+		
 		return 
 	else
 
@@ -315,13 +325,13 @@ function AutoBattleGround:Action()
 		
 		if step==0 then
 			if MainPanel:IsShown() then
-				logText("集合石已打开")
+				--logText("集合石已打开")
 			else
 				MeetingStone:Toggle()
 				logText("打开集合石")
 			end 
 			
-			if MainPanel:GetSelectedTab()>1 then
+			if  MainPanel:GetSelectedTab()~=nil and MainPanel:GetSelectedTab()>1 then
 			     MainPanel:SelectTab(1)
 			end
 			
@@ -333,18 +343,28 @@ function AutoBattleGround:Action()
 				end)
 				step=1;
 				logText("搜索集合石队伍")
+			else
+				logText("集合石刷新中请稍等")
 			end
 
 			return
 		end
 			
 		if step==1 then 
-			local num = math.random(5)  
+			local num = math.random(signUpNum)  
 			BrowsePanel.ActivityList:Sort()
 			local item = BrowsePanel.ActivityList:GetItem(num) 
-			logText("随机选择第"..num.."队")
+			
+			local info = C_LFGList.GetSearchResultInfo(item:GetID()) -- info.leaderName info.name  info.comment
+			local winrate = GetWinRate(info.leaderName)
+			if item:IsAnyFriend() then
+				return
+			end
+			--activity:IsAnyFriend()
+			--activity:GetTitle() 
+			logText("随机选择第"..num.."队 "..winrate) 
 			BrowsePanel:SignUp(item)
-			step=2
+			step=2 
 			return
 		end
 			
@@ -363,6 +383,7 @@ function AutoBattleGround:Action()
 				logText("自动进组")
 			else
 				step=1
+				BrowsePanel:DoSearch() 
 			end 
 			return 
 		end
@@ -370,7 +391,24 @@ function AutoBattleGround:Action()
 	end
   
 end
-	
+
+function GetWinRate(leaderName)
+	local win = 0
+	local lose =0  
+	for k1,v1 in pairs(ABG_DB) do  
+        for k2,v2 in pairs(v1) do
+			if k2==leaderName then
+				win = win + v2.win
+				lose = lose + v2.lose
+			end
+		end
+    end
+	if lose==0 and win==0 then
+		return leaderName.."(暂无胜率)"
+	else
+		return leaderName.."("..string.format("%.2f",win/(win+lose)*100).."%)"
+	end
+end
 	
 function SlashCmdList.AutoBattleGround(msg)
 	AutoBattleGround:Show() 
@@ -379,7 +417,33 @@ end
 SLASH_AutoBattleGround1 = '/AutoBattleGround'
 SLASH_AutoBattleGround2 = '/abg'
 
+function GetGroupLeader()
+	for i=1,10  do 
+		name = GetRaidRosterInfo(i);   
+		if UnitIsGroupLeader(name)==true then 
+			return name
+		end
+	end
+end
 
+
+function GetRate()
+	local winner=C_PvP.GetActiveMatchWinner()
+	local fatcion = GetBattlefieldArenaFaction()
+	 
+	name = groupLeaderName
+	if (not ABG_DB[pr][name]) then
+		ABG_DB[pr][name] = {};
+		ABG_DB[pr][name].win=0;
+		ABG_DB[pr][name].lose=0;
+	end 
+	if winner == fatcion then
+		ABG_DB[pr][name].win= ABG_DB[pr][name].win +1
+	else
+		ABG_DB[pr][name].lose= ABG_DB[pr][name].lose+1
+	end
+	ConfirmOrLeaveBattlefield()	 
+ end
 
 local abg = CreateFrame("Frame"); 
 abg:RegisterEvent("PLAYER_ENTERING_WORLD");
@@ -387,10 +451,11 @@ function abg:OnEvent(event, arg1)
 	if (not ABG_DB) then
 		ABG_DB = {};
 	end 
-	if (not ABG_DB.config) then
-		ABG_DB.config = {};
-	else
-		config = ABG_DB.config;
+	if ABG_DB.config then
+		ABG_DB = {};
+	end
+	if (not ABG_DB[pr]) then
+		ABG_DB[pr] = {};
 	end 
 	if not GetMacroInfo("快乐评级") then
 		ABG_DB.marco = CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
@@ -398,6 +463,16 @@ function abg:OnEvent(event, arg1)
 	modeck:SetChecked(true)
 	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+	SaveConfig()
+	--print(GetWinRate("奶爸空间-白银之手"))
 end
 abg:SetScript("OnEvent", abg.OnEvent);
+
+local abgPVPmatch = CreateFrame("Frame")
+abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE")
+function abgPVPmatch:OnEvent(event, arg1) 
+	GetRate()
+end
+abgPVPmatch:SetScript("OnEvent", abgPVPmatch.OnEvent);
+
  
