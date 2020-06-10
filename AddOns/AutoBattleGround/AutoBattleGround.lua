@@ -1,7 +1,4 @@
 ﻿ 
-
-
-  
   
 local step = 0;
 local oldtime = nil
@@ -20,32 +17,34 @@ local classSpell ={
 	["DEMON HUNTER"] = "",--Demon Hunter
 }
 local _, className, index = UnitClass("player"); --检测职业
+local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[className]
 local pr= UnitName("player") .. "-" .. GetRealmName()
 local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
 local macrotxt = ""
 local signUpNum = 5
 local groupLeaderName = ""
+local rateFrame  
+local loseNum=0
  
 
 
-local piaobtn =  CreateFrame("BUTTON", nil, UIParent, "UIPanelButtonTemplate")
-piaobtn:SetSize(100, 40)
+local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent)
+piaobtn:SetSize(50, 50)
+piaobtn:SetBackdrop({bgFile = "Interface\\AddOns\\AutoBattleGround\\AutoBattleGround"})
 piaobtn.Text = piaobtn:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 piaobtn.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-piaobtn.Text:SetText("评级小助手") -- 设置材质路径 
+piaobtn.Text:SetText("评") -- 设置材质路径 
 piaobtn.Text:SetPoint("CENTER", piaobtn)
 piaobtn:SetClampedToScreen(true)
 piaobtn:SetPoint("LEFT", 300, 0)
+piaobtn:SetBackdropColor(color.r, color.g, color.b)
 piaobtn:SetMovable(true)
 piaobtn:EnableMouse(true) 
 piaobtn:RegisterForDrag("LeftButton")
 piaobtn:SetScript("OnDragStart", piaobtn.StartMoving)
 piaobtn:SetScript("OnDragStop", piaobtn.StopMovingOrSizing)
 piaobtn:SetScript("OnClick", function() 
-	piaobtn:Hide()
-end)
-piaobtn:SetScript("OnHide", function()
-	AutoBattleGround:Show() 
+	AutoBattleGround:Toggle()
 end)
 
 --主面板
@@ -56,18 +55,24 @@ AutoBattleGround.Title:SetFont(STANDARD_TEXT_FONT, 12, "THINOUTLINE")
 AutoBattleGround:SetSize(350, 250) 
 AutoBattleGround:SetClampedToScreen(true)
 AutoBattleGround:SetFrameStrata("DIALOG")
-AutoBattleGround:SetPoint("Left", 400, -200)   
+AutoBattleGround:SetPoint("Left", 300, 0)   
 AutoBattleGround:SetMovable(true)
 AutoBattleGround:EnableMouse(true) 
 AutoBattleGround:RegisterForDrag("LeftButton")
 AutoBattleGround:SetScript("OnDragStart", AutoBattleGround.StartMoving)
 AutoBattleGround:SetScript("OnDragStop", AutoBattleGround.StopMovingOrSizing)
 AutoBattleGround:SetScript("OnHide", function()
-	piaobtn:Show()
-end)
-AutoBattleGround:Hide()
+	if ABG_CONFIG.modeck then 
+		piaobtn:Show()
+	end
+end) 
+AutoBattleGround:SetScript("OnShow", function()
+	if piaobtn:IsShown() then
+		piaobtn:Hide()
+	end
+end) 
 
-
+--主宏
 local PVPBtn = CreateFrame("BUTTON", "HappyPVP", nil, "SecureActionButtonTemplate")
 PVPBtn:SetSize(0,0)
 PVPBtn:SetAttribute("*type*", "macro") 
@@ -101,23 +106,20 @@ rlButton.Text:SetPoint("CENTER", rlButton)
 rlButton:SetScript("OnClick", function() 
 	ReloadUI()
 end)
+--按钮3
+local rateButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
+rateButton:SetSize(90, 30)
+rateButton:SetPoint("LEFT", 210, 0)
+rateButton.Text = rateButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+rateButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+rateButton.Text:SetText("车头数据") -- 设置材质路径 
+rateButton.Text:SetPoint("CENTER", rateButton)
+rateButton:SetScript("OnClick", function() 
+	AddRateWindow()	 
+	rateButton:SetEnabled(false)
+end)
 
---显示待机时间
 
-local timeico = CreateFrame("Frame", nil, line1)
-timeico:SetSize(80, 30)
-timeico:SetPoint("LEFT", 190, 0)
-timeico.Text = timeico:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-timeico.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-timeico.Text:SetPoint("LEFT", timeico, "LEFT", 24, 0)
-
-function logTime(difftime)
-	if difftime>0 then
-		timeico.Text:SetText("等待时间: "..difftime)  
-	else
-		timeico.Text:SetText("")
-	end
-end
 
 ---第二行
 local line2 = CreateFrame("Frame", nil, AutoBattleGround)
@@ -128,19 +130,29 @@ local modeck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 modeck.text = modeck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 modeck.text:SetPoint("LEFT", modeck, "RIGHT", 0, 1)
 modeck:SetPoint("LEFT", 5, 0)
-modeck.text:SetText("开启夜间")
+modeck.text:SetText("悬浮图标")
+modeck:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
 
 local itemwp = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemwp.text = itemwp:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemwp.text:SetPoint("LEFT", itemwp, "RIGHT", 0, 1)
 itemwp:SetPoint("LEFT", 110, 0)
 itemwp.text:SetText("快乐法杖")
+itemwp:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
+
 
 local itemtk = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemtk.text = itemtk:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemtk.text:SetPoint("LEFT", itemtk, "RIGHT", 0, 1)
 itemtk:SetPoint("LEFT", 215, 0)
 itemtk.text:SetText("快乐饰品")    
+itemtk:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
 
 
 ---第三行
@@ -152,23 +164,28 @@ local boxck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
 boxck.text = boxck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 boxck.text:SetPoint("LEFT", boxck, "RIGHT", 0, 1)
 boxck:SetPoint("LEFT", 5, 0)
-boxck:SetChecked(true)
 boxck.text:SetText("快乐宝箱")
+boxck:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
 
 local fishck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
 fishck.text = fishck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 fishck.text:SetPoint("LEFT", fishck, "RIGHT", 0, 1)
 fishck:SetPoint("LEFT", 110, 0)
-fishck:SetChecked(false)
 fishck.text:SetText("快乐开鱼")
+fishck:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
 
 local classSPck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
 classSPck.text = classSPck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 classSPck.text:SetPoint("LEFT", classSPck, "RIGHT", 0, 1)
 classSPck:SetPoint("LEFT", 215, 0)
-classSPck:SetChecked(classSpell[className]~="")
 classSPck.text:SetText("职业技能")
-
+classSPck:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
 
 ---第四行
 
@@ -181,25 +198,10 @@ local neckck = CreateFrame("CheckButton", nil, line4, "UICheckButtonTemplate")
 neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
 neckck:SetPoint("LEFT", 5, 0)
-neckck:SetChecked(classSpell[className]=="")
 neckck.text:SetText("火红烈焰")
-
-
---配置按钮
-local configButton= CreateFrame("Button",nil,line4, "UIPanelButtonTemplate")
-configButton:SetSize(80, 30)
-configButton:SetPoint("LEFT", 110, 0)
-configButton.Text = configButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-configButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-configButton.Text:SetText("更新设置") -- 设置材质路径 
-configButton.Text:SetPoint("CENTER", configButton)
-configButton:SetScript("OnClick", function()  
+neckck:SetScript("OnClick", function() 
 	SaveConfig() 
-	logText("修改配置")
-	print(macrotxt)
 end)
-
-
 
 --第N行 显示log
 local content = CreateFrame("Frame", nil, AutoBattleGround)
@@ -224,9 +226,90 @@ function SaveConfig()
 	local useclassSpell = classSPck:GetChecked() and classSpell[className] or ""
 	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell.."/run AutoBattleGround:Action()\n/click PVPReadyDialogEnterBattleButton\n"
 	PVPBtn:SetAttribute("macrotext",macrotxt)
+	logText("ABG配置成功")
+	
+	ABG_CONFIG.modeck = modeck:GetChecked()
+	ABG_CONFIG.boxck = boxck:GetChecked()
+	ABG_CONFIG.fishck = fishck:GetChecked()
+	
+	--print(macrotxt)
 end
 
+function AddRateWindow()
 
+    rateFrame = CreateFrame("Frame", "rateFrame", UIParent, "UIPanelDialogTemplate")
+    rateFrame.Title:SetTextColor(1,1,1)
+	rateFrame.Title:SetText("车头胜率")
+	
+	--rateFrame:SetMovable(true)
+	rateFrame:EnableMouse(true) 
+	rateFrame:RegisterForDrag("LeftButton") 
+	rateFrame:SetScript("OnDragStart", rateFrame.StartMoving)
+	rateFrame:SetScript("OnDragStop", rateFrame.StopMovingOrSizing)
+    rateFrame:SetWidth(500)  
+	rateFrame:SetPoint("TOP", 0, -100)  
+	rateFrame:SetScript("OnHide",function() 
+		rateButton:SetEnabled(true) 
+	end)
+	 
+	
+	local index = 1
+	AddLine(rateFrame,"车头","胜场","负场","胜率",index)
+	for k,v in pairs(GetDrivers()) do
+		if index<= 20 then
+			index= index + 1
+			AddLine(rateFrame,v.name,v.win,v.lose,v.rateStr,index)
+		else
+			break
+		end
+	end
+	rateFrame:SetHeight(680)
+end
+function AddLine(parentFrame,name,win,lose,rate,index)
+	
+	local line = CreateFrame("Frame", nil, parentFrame)
+	line:SetWidth(490) -- 设置宽度
+	line:SetHeight(20) -- 设置高度 
+	line:SetPoint("TOP",   0, -30*index)
+
+	local txtDriver= CreateFrame("Frame",nil,line)
+	txtDriver:SetWidth(150) -- 设置宽度
+	txtDriver:SetHeight(20) -- 设置高度 
+	txtDriver:SetPoint("LEFT", 50, 0)
+	txtDriver.Text = txtDriver:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+	txtDriver.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+	txtDriver.Text:SetText(name) -- 设置材质路径 
+	txtDriver.Text:SetPoint("CENTER", txtDriver, "CENTER", 0, 0)
+	
+	local txtWin = CreateFrame("Frame",nil,line)
+	txtWin:SetWidth(50) -- 设置宽度
+	txtWin:SetHeight(20) -- 设置高度 
+	txtWin:SetPoint("LEFT",   200, 0)
+	txtWin.Text = txtWin:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+	txtWin.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+	txtWin.Text:SetText(win) -- 设置材质路径 
+	txtWin.Text:SetPoint("CENTER", txtWin, "CENTER", 0, 0)
+	
+	local txtLose= CreateFrame("Frame",nil,line)
+	txtLose:SetWidth(50) -- 设置宽度
+	txtLose:SetHeight(20) -- 设置高度 
+	txtLose:SetPoint("LEFT", 250, 0)
+	txtLose.Text = txtLose:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+	txtLose.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+	txtLose.Text:SetText(lose) -- 设置材质路径 
+	txtLose.Text:SetPoint("CENTER", txtLose, "CENTER", 0, 0)
+	
+	
+	local txtRate= CreateFrame("Frame",nil,line)
+	txtRate:SetWidth(80) -- 设置宽度
+	txtRate:SetHeight(20) -- 设置高度 
+	txtRate:SetPoint("LEFT", 320, 0)
+	txtRate.Text = txtRate:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+	txtRate.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+	txtRate.Text:SetText(rate) -- 设置材质路径 
+	txtRate.Text:SetPoint("CENTER", txtRate, "CENTER", 0, 0)
+
+end
 
 --主逻辑
 function AutoBattleGround:Action()
@@ -235,28 +318,24 @@ function AutoBattleGround:Action()
 	local MainPanel =MeetingStone:GetModule('MainPanel')
 	local item = BrowsePanel.ActivityList:GetItem(1) 
 	
-	local difftime_config= 120
-	local groupmembers_config = 6
-	
-	
-	local auto = modeck:GetChecked()
-	if auto then
-		local curHour = tonumber(date("%H")) 
-		difftime_config= (curHour>=24 or curHour<=7) and 300 or 120
-		groupmembers_config = modeck:GetChecked() and 7 or 6 
-	end
+	local curHour = tonumber(date("%H")) 
+	local daynightmode = curHour>=24 or curHour<=7
+	local difftime_config= daynightmode and 400 or 200
+	local groupmembers_config = daynightmode and 7 or 6 
+	 
  
 	if IsInGroup() then
 		step = 0
 		local _, instanceType = IsInInstance()
 		local IsInBG = instanceType=="pvp"
+		if groupLeaderName=="" then groupLeaderName = GetGroupLeader() end
 		if not IsInBG then
 			if oldtime ==nil  then
 				oldtime = time()
 			end
 			local newtime = time()
 			local difftime=newtime-oldtime
-			logTime(difftime) 
+			logText("等待时间:"..difftime.."秒") 
 			if difftime>difftime_config then
 				LeaveParty()
 				logText("整整"..difftime.."秒没开打 果断离队")
@@ -271,51 +350,22 @@ function AutoBattleGround:Action()
 				LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
+			if loseNum>=5 then
+				LeaveParty()
+				logText("连跪五把了 离队换个车头")
+				return
+			end
+			
 		else
 			oldtime =nil
-			logTime(0)
-		end
-		
-		  
-		
-		if StaticPopup1Button2:IsShown() then
-			StaticPopup1Button2:Click() 
-		end
-		if LFGListInviteDialog:IsShown() then  
-			LFGListInviteDialog.AcknowledgeButton:Click()
-			logText("关闭邀请框")	
-			return
-		end
-		if LFDRoleCheckPopup:IsShown() then
-			LFDRoleCheckPopupAcceptButton:Click() 
-			logText("选择职责")
-			return
-		end  
-		  
-		
-		if PVPMatchResults:IsShown() then
-			PVPMatchResults["leaveButton"]:Click() 
-			--GetRate()
-			logText("退出战场")
-		else
-			groupLeaderName = GetGroupLeader()
-			--logText("当前车头:"..groupLeaderName)
-		end 
-		
-		if BonusRollFrame:IsShown() then
-			DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
-			logText("关闭ROLL币框")
-			return
-		end
-		
+			--logTime(0)
+		end		
 		return 
 	else
-
+		
 	
-		oldtime =nil
-		logTime(0)
-		
-		
+		oldtime = nil 
+		loseNum = 0
 		if step>0 and not MainPanel:IsShown() then
 			MeetingStone:Toggle()
 				logText("打开集合石")
@@ -335,17 +385,12 @@ function AutoBattleGround:Action()
 			     MainPanel:SelectTab(1)
 			end
 			
-			
-			if BrowsePanel.RefreshButton:IsEnabled() then
-				BrowsePanel:DoSearch() 
-				BrowsePanel.ActivityList:SetSortHandler(function(activity)
-					return activity:GetMaxMembers() - activity:GetNumMembers()
-				end)
-				step=1;
-				logText("搜索集合石队伍")
-			else
-				logText("集合石刷新中请稍等")
-			end
+			 
+			BrowsePanel.ActivityList:SetSortHandler(function(activity)
+				return activity:GetMaxMembers() - activity:GetNumMembers()
+			end)
+			step=1;
+			logText("搜索集合石队伍") 
 
 			return
 		end
@@ -355,38 +400,19 @@ function AutoBattleGround:Action()
 			BrowsePanel.ActivityList:Sort()
 			local item = BrowsePanel.ActivityList:GetItem(num) 
 			
-			local info = C_LFGList.GetSearchResultInfo(item:GetID()) -- info.leaderName info.name  info.comment
+			local info = C_LFGList.GetSearchResultInfo(item:GetID()) 
 			local winrate = GetWinRate(info.leaderName)
 			if item:IsAnyFriend() then
 				return
-			end
-			--activity:IsAnyFriend()
-			--activity:GetTitle() 
-			logText("随机选择第"..num.."队 "..winrate) 
+			end 
+			logText("随机选择第"..num.."队 "..info.name) 
+			logText("车头:"..winrate) 
 			BrowsePanel:SignUp(item)
-			step=2 
+			BrowsePanel:DoSearch() 
 			return
 		end
 			
-		if step==2 then 
-			if  LFGListApplicationDialog:IsShown() then 
-				LFGListApplicationDialog.SignUpButton:Click() 
-				step=3				
-				logText("申请加入队伍")
-			end 
-			return 
-		end 
-		
-		if step==3 then  
-			if  LFGListInviteDialog:IsShown() then 
-				LFGListInviteDialog.AcceptButton:Click() 
-				logText("自动进组")
-			else
-				step=1
-				BrowsePanel:DoSearch() 
-			end 
-			return 
-		end
+	 
 		 
 	end
   
@@ -394,13 +420,45 @@ end
 
 function AutoBattleGround:Toggle()
 	if AutoBattleGround:IsShown() then
-		AutoBattleGround:Hide() 
-		piaobtn:Show()
+		AutoBattleGround:Hide()  
 	else
-		AutoBattleGround:Show() 
-		piaobtn:Hide()
+		AutoBattleGround:Show()  
+		
 	end
+
 end
+
+function GetDrivers()
+	local drivers = {}
+	for k1,v1 in pairs(ABG_DB) do  
+        for k2,v2 in pairs(v1) do 
+			if not drivers[k2] then
+				drivers[k2] ={}
+				drivers[k2].name= k2
+				drivers[k2].win = 0
+				drivers[k2].lose = 0
+			end 
+			drivers[k2].win = drivers[k2].win + v2.win
+			drivers[k2].lose = drivers[k2].lose + v2.lose
+			drivers[k2].sum = drivers[k2].win + drivers[k2].lose
+			drivers[k2].rate = drivers[k2].win/drivers[k2].sum*100
+			drivers[k2].rateStr = string.format("%.2f",drivers[k2].rate).."%"
+		end
+    end
+	 
+	local keyTest ={}
+	for _,v in pairs(drivers) do
+		table.insert(keyTest,v) 
+	end 
+	table.sort(keyTest,function(a,b)return (tonumber(a.win) > tonumber(b.win)) end)  
+	local result = { }
+	for i,v in pairs(keyTest) do
+		table.insert(result,drivers[v.name])
+	end
+	return result
+end
+
+
 
 function GetWinRate(leaderName)
 	local win = 0
@@ -428,10 +486,16 @@ SLASH_AutoBattleGround1 = '/AutoBattleGround'
 SLASH_AutoBattleGround2 = '/abg'
 
 function GetGroupLeader()
-	for i=1,10  do 
-		name = GetRaidRosterInfo(i);   
-		if UnitIsGroupLeader(name)==true then 
-			return name
+	if GetNumGroupMembers() >=5 and  (not UnitIsGroupLeader("player") )then
+		for i=1,10  do 
+			name = GetRaidRosterInfo(i);   
+			if UnitIsGroupLeader(name)==true then 
+				if not string.find(name,"-") then
+					name = name.."-"..GetRealmName() 
+				end
+				logText("当前车头:"..name)
+				return name
+			end
 		end
 	end
 end
@@ -439,25 +503,35 @@ end
 
 function GetRate()
 	local winner=C_PvP.GetActiveMatchWinner()
-	local fatcion = GetBattlefieldArenaFaction()
-	 
-	name = groupLeaderName
-	if (not ABG_DB[pr][name]) then
-		ABG_DB[pr][name] = {};
-		ABG_DB[pr][name].win=0;
-		ABG_DB[pr][name].lose=0;
-	end 
-	if winner == fatcion then
-		ABG_DB[pr][name].win= ABG_DB[pr][name].win +1
+	local fatcion = GetBattlefieldArenaFaction() 
+	if  groupLeaderName =="" or groupLeaderName == nil then
+		logText("统计车头数据失败")
 	else
-		ABG_DB[pr][name].lose= ABG_DB[pr][name].lose+1
+		if (not ABGCharacterDB[groupLeaderName]) then
+			ABGCharacterDB[groupLeaderName] = {};
+			ABGCharacterDB[groupLeaderName].win=0;
+			ABGCharacterDB[groupLeaderName].lose=0;
+		end 
+		if winner == fatcion then
+			loseNum = 0
+			ABGCharacterDB[groupLeaderName].win= ABGCharacterDB[groupLeaderName].win +1
+		else
+			loseNum = loseNum + 1
+			ABGCharacterDB[groupLeaderName].lose= ABGCharacterDB[groupLeaderName].lose+1
+		end
 	end
+	ABG_DB[pr] = ABGCharacterDB
+	
+	if loseNum>=2 then
+		logText("连跪"..loseNum.."把了")
+	end
+	
 	ConfirmOrLeaveBattlefield()	 
  end
  
  
 function AutoBattleGround_CreateMinimapButton()
-local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AutoBattleGround", {
+	local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AutoBattleGround", {
         type = "launcher",
         label = "快乐评级",
         icon = 1322720,
@@ -471,32 +545,84 @@ end
 local abg = CreateFrame("Frame"); 
 abg:RegisterEvent("PLAYER_ENTERING_WORLD");
 function abg:OnEvent(event, arg1) 
+ 
 	if (not ABG_DB) then
-		ABG_DB = {};
+		ABG_DB = {}
 	end 
 	if ABG_DB.config then
-		ABG_DB = {};
+		ABG_DB = {}
 	end
+	if ABG_DB.marco then
+		ABG_DB = {}
+	end
+	if not ABG_CONFIG then
+		ABG_CONFIG={}
+		ABG_CONFIG.modeck=true
+		ABG_CONFIG.boxck =true
+		ABG_CONFIG.fishck = false
+	end
+	
 	if (not ABG_DB[pr]) then
-		ABG_DB[pr] = {};
+		ABG_DB[pr] = {}
 	end 
-	if not GetMacroInfo("快乐评级") then
-		ABG_DB.marco = CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
+	
+	--存储数据优化
+	if (not ABGCharacterDB) then
+		ABGCharacterDB = ABG_DB[pr]
+		ABG_DB[pr] = {}
 	end
-	modeck:SetChecked(true)
+	
+	if ABGCharacterDB then
+		ABG_DB[pr] = ABGCharacterDB
+	end
+
+	if not GetMacroInfo("快乐评级") then
+		CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
+	end
+	modeck:SetChecked(ABG_CONFIG.modeck)
+	boxck:SetChecked(ABG_CONFIG.boxck)
+	fishck:SetChecked(ABG_CONFIG.fishck)
 	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+	neckck:SetChecked(classSpell[className]=="")
+	classSPck:SetChecked(classSpell[className]~="")
 	SaveConfig()
-	AutoBattleGround_CreateMinimapButton()
-	--print(GetWinRate("奶爸空间-白银之手"))
+	AutoBattleGround:Toggle()
 end
 abg:SetScript("OnEvent", abg.OnEvent);
+AutoBattleGround_CreateMinimapButton()
 
 local abgPVPmatch = CreateFrame("Frame")
-abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE")
-function abgPVPmatch:OnEvent(event, arg1) 
+abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
+function abgPVPmatch:OnEvent(event, arg1)   
 	GetRate()
+	logText("退出战场")
 end
 abgPVPmatch:SetScript("OnEvent", abgPVPmatch.OnEvent);
+ 
+LFGListApplicationDialog:SetScript("OnShow",function() 
+	logText("申请加入队伍")
+	LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
+end)
+LFGListInviteDialog:SetScript("OnShow",function()  
+	local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID);
+	if status=="invited" then
+		groupLeaderName = ""
+		LFGListInviteDialog_Accept(LFGListInviteDialog)
+		logText("自动进组")
+	end
+	if status=="inviteaccepted" then
+		LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
+		logText("关闭邀请框")
+	end
+end)
+LFDRoleCheckPopup:SetScript("OnShow",function() 
+	LFDRoleCheckPopupAccept_OnClick()
+	logText("确认职责")
+end)
+BonusRollFrame:SetScript("OnShow",function() 
+	DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
+	logText("关闭ROLL币框")
+end)
 
  
