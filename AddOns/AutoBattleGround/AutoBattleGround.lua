@@ -1,5 +1,5 @@
 ﻿ 
-  
+local start = false  
 local step = 0;
 local oldtime = nil
 local classSpell ={
@@ -242,58 +242,61 @@ function AddRateWindow()
 	rateFrame.Title:SetText("车头胜率")
 	
 	--rateFrame:SetMovable(true)
-	rateFrame:EnableMouse(true) 
-	rateFrame:RegisterForDrag("LeftButton") 
-	rateFrame:SetScript("OnDragStart", rateFrame.StartMoving)
-	rateFrame:SetScript("OnDragStop", rateFrame.StopMovingOrSizing)
-    rateFrame:SetWidth(500)  
-	rateFrame:SetPoint("TOP", 0, -100)  
+	--rateFrame:EnableMouse(true) 
+	--rateFrame:RegisterForDrag("LeftButton") 
+	--rateFrame:SetScript("OnDragStart", rateFrame.StartMoving)
+	--rateFrame:SetScript("OnDragStop", rateFrame.StopMovingOrSizing)
+    rateFrame:SetSize(500,680)  
+	rateFrame:SetPoint("TOP", 0, -150)  
 	rateFrame:SetScript("OnHide",function() 
 		rateButton:SetEnabled(true) 
 	end)
 	 
 	
 	local index = 1
-	AddLine(rateFrame,"车头","胜场","负场","胜率",index)
+	AddLine(rateFrame,"车头","场次","胜场","负场","胜率",index)
 	for k,v in pairs(GetDrivers()) do
 		if index<= 20 then
 			index= index + 1
-			AddLine(rateFrame,v.name,v.win,v.lose,v.rateStr,index)
+			AddLine(rateFrame,v.name,v.sum ,v.win,v.lose,v.rateStr,index)
 		else
 			break
 		end
-	end
-	rateFrame:SetHeight(680)
+	end 
 end
-function AddLine(parentFrame,name,win,lose,rate,index)
+function AddLine(parentFrame,name,sum,win,lose,rate,index)
 	
 	local line = CreateFrame("Frame", nil, parentFrame)
-	line:SetWidth(490) -- 设置宽度
-	line:SetHeight(20) -- 设置高度 
+	line:SetSize(490,20)
 	line:SetPoint("TOP",   0, -30*index)
 
 	local txtDriver= CreateFrame("Frame",nil,line)
-	txtDriver:SetWidth(150) -- 设置宽度
-	txtDriver:SetHeight(20) -- 设置高度 
+	txtDriver:SetSize(150,20)
 	txtDriver:SetPoint("LEFT", 50, 0)
 	txtDriver.Text = txtDriver:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 	txtDriver.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
 	txtDriver.Text:SetText(name) -- 设置材质路径 
 	txtDriver.Text:SetPoint("CENTER", txtDriver, "CENTER", 0, 0)
 	
+	local txtSum = CreateFrame("Frame",nil,line)
+	txtSum:SetSize(50,20)
+	txtSum:SetPoint("LEFT",   200, 0)
+	txtSum.Text = txtSum:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+	txtSum.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+	txtSum.Text:SetText(sum) -- 设置材质路径 
+	txtSum.Text:SetPoint("CENTER", txtSum, "CENTER", 0, 0)
+	
 	local txtWin = CreateFrame("Frame",nil,line)
-	txtWin:SetWidth(50) -- 设置宽度
-	txtWin:SetHeight(20) -- 设置高度 
-	txtWin:SetPoint("LEFT",   200, 0)
+	txtWin:SetSize(50,20)
+	txtWin:SetPoint("LEFT",   250, 0)
 	txtWin.Text = txtWin:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 	txtWin.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
 	txtWin.Text:SetText(win) -- 设置材质路径 
 	txtWin.Text:SetPoint("CENTER", txtWin, "CENTER", 0, 0)
 	
 	local txtLose= CreateFrame("Frame",nil,line)
-	txtLose:SetWidth(50) -- 设置宽度
-	txtLose:SetHeight(20) -- 设置高度 
-	txtLose:SetPoint("LEFT", 250, 0)
+	txtLose:SetSize(50,20)
+	txtLose:SetPoint("LEFT", 300, 0)
 	txtLose.Text = txtLose:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 	txtLose.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
 	txtLose.Text:SetText(lose) -- 设置材质路径 
@@ -301,9 +304,8 @@ function AddLine(parentFrame,name,win,lose,rate,index)
 	
 	
 	local txtRate= CreateFrame("Frame",nil,line)
-	txtRate:SetWidth(80) -- 设置宽度
-	txtRate:SetHeight(20) -- 设置高度 
-	txtRate:SetPoint("LEFT", 320, 0)
+	txtRate:SetSize(80,20)
+	txtRate:SetPoint("LEFT", 350, 0)
 	txtRate.Text = txtRate:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 	txtRate.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
 	txtRate.Text:SetText(rate) -- 设置材质路径 
@@ -313,6 +315,13 @@ end
 
 --主逻辑
 function AutoBattleGround:Action()
+	if not start then
+		start = true
+		logText("评级小助手启动!")
+	end
+
+
+
 	local MeetingStone = LibStub('AceAddon-3.0'):GetAddon('MeetingStone')
 	local BrowsePanel = MeetingStone:GetModule('BrowsePanel')
 	local MainPanel =MeetingStone:GetModule('MainPanel')
@@ -320,7 +329,7 @@ function AutoBattleGround:Action()
 	
 	local curHour = tonumber(date("%H")) 
 	local daynightmode = curHour>=24 or curHour<=7
-	local difftime_config= daynightmode and 400 or 200
+	local difftime_config= daynightmode and 200 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	 
  
@@ -408,7 +417,7 @@ function AutoBattleGround:Action()
 			logText("随机选择第"..num.."队 "..info.name) 
 			logText("车头:"..winrate) 
 			BrowsePanel:SignUp(item)
-			BrowsePanel:DoSearch() 
+			--BrowsePanel:DoSearch() 
 			return
 		end
 			
@@ -450,7 +459,18 @@ function GetDrivers()
 	for _,v in pairs(drivers) do
 		table.insert(keyTest,v) 
 	end 
-	table.sort(keyTest,function(a,b)return (tonumber(a.win) > tonumber(b.win)) end)  
+	table.sort(keyTest,function(a,b)
+		if tonumber(a.sum) > tonumber(b.sum) then
+			return true
+		end
+		if tonumber(a.sum) < tonumber(b.sum) then
+			return false
+		end
+		if tonumber(a.sum) == tonumber(b.sum) then
+			return tonumber(a.win) > tonumber(b.win)
+		end
+	 
+	end)  
 	local result = { }
 	for i,v in pairs(keyTest) do
 		table.insert(result,drivers[v.name])
@@ -515,9 +535,11 @@ function GetRate()
 		if winner == fatcion then
 			loseNum = 0
 			ABGCharacterDB[groupLeaderName].win= ABGCharacterDB[groupLeaderName].win +1
+			logText(groupLeaderName.." 胜场+1")
 		else
 			loseNum = loseNum + 1
 			ABGCharacterDB[groupLeaderName].lose= ABGCharacterDB[groupLeaderName].lose+1
+			logText(groupLeaderName.." 负场+1")
 		end
 	end
 	ABG_DB[pr] = ABGCharacterDB
@@ -541,10 +563,8 @@ function AutoBattleGround_CreateMinimapButton()
     })
     LibStub("LibDBIcon-1.0"):Register("AutoBattleGround", ldb);
 end
-
-local abg = CreateFrame("Frame"); 
-abg:RegisterEvent("PLAYER_ENTERING_WORLD");
-function abg:OnEvent(event, arg1) 
+ 
+function AutoBattleGround:Init() 
  
 	if (not ABG_DB) then
 		ABG_DB = {}
@@ -587,42 +607,58 @@ function abg:OnEvent(event, arg1)
 	neckck:SetChecked(classSpell[className]=="")
 	classSPck:SetChecked(classSpell[className]~="")
 	SaveConfig()
+	AutoBattleGround_CreateMinimapButton()
 	AutoBattleGround:Toggle()
-end
-abg:SetScript("OnEvent", abg.OnEvent);
-AutoBattleGround_CreateMinimapButton()
+end 
+AutoBattleGround:Init() 
 
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
-function abgPVPmatch:OnEvent(event, arg1)   
-	GetRate()
-	logText("退出战场")
+abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
+function abgPVPmatch:OnEvent(event, arg1)  
+	if start then
+		if event == "PVP_MATCH_COMPLETE" then
+			GetRate()
+			logText("退出战场") 
+		end
+		if event == "GROUP_ROSTER_UPDATE" then
+			oldtime = nil
+		end
+	end
 end
 abgPVPmatch:SetScript("OnEvent", abgPVPmatch.OnEvent);
  
 LFGListApplicationDialog:SetScript("OnShow",function() 
-	logText("申请加入队伍")
-	LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
+	if start then
+		logText("申请加入队伍")
+		LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
+	end
 end)
 LFGListInviteDialog:SetScript("OnShow",function()  
-	local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID);
-	if status=="invited" then
-		groupLeaderName = ""
-		LFGListInviteDialog_Accept(LFGListInviteDialog)
-		logText("自动进组")
-	end
-	if status=="inviteaccepted" then
-		LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
-		logText("关闭邀请框")
+	if start then
+		local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID);
+		if status=="invited" then
+			groupLeaderName = ""
+			LFGListInviteDialog_Accept(LFGListInviteDialog)
+			logText("自动进组")
+		end
+		if status=="inviteaccepted" then
+			LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
+			logText("关闭邀请框")
+		end
 	end
 end)
 LFDRoleCheckPopup:SetScript("OnShow",function() 
-	LFDRoleCheckPopupAccept_OnClick()
-	logText("确认职责")
+	if start then
+		LFDRoleCheckPopupAccept_OnClick()
+		logText("确认职责")
+	end
 end)
 BonusRollFrame:SetScript("OnShow",function() 
-	DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
-	logText("关闭ROLL币框")
+	if start then
+		DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
+		logText("关闭ROLL币框")
+	end
 end)
 
  
