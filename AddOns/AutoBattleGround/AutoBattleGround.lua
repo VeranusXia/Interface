@@ -115,7 +115,7 @@ function logTime(difftime)
 	if difftime>0 then
 		timeico.Text:SetText("等待时间: "..difftime)  
 	else
-		timeico.Text:SetText("战场中...")
+		timeico.Text:SetText("")
 	end
 end
 
@@ -392,6 +392,16 @@ function AutoBattleGround:Action()
   
 end
 
+function AutoBattleGround:Toggle()
+	if AutoBattleGround:IsShown() then
+		AutoBattleGround:Hide() 
+		piaobtn:Show()
+	else
+		AutoBattleGround:Show() 
+		piaobtn:Hide()
+	end
+end
+
 function GetWinRate(leaderName)
 	local win = 0
 	local lose =0  
@@ -409,10 +419,10 @@ function GetWinRate(leaderName)
 		return leaderName.."("..string.format("%.2f",win/(win+lose)*100).."%)"
 	end
 end
-	
+
+
 function SlashCmdList.AutoBattleGround(msg)
-	AutoBattleGround:Show() 
-	piaobtn:Hide()
+	AutoBattleGround:Toggle()
 end
 SLASH_AutoBattleGround1 = '/AutoBattleGround'
 SLASH_AutoBattleGround2 = '/abg'
@@ -444,6 +454,19 @@ function GetRate()
 	end
 	ConfirmOrLeaveBattlefield()	 
  end
+ 
+ 
+function AutoBattleGround_CreateMinimapButton()
+local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AutoBattleGround", {
+        type = "launcher",
+        label = "快乐评级",
+        icon = 1322720,
+        iconCoords = {0.08, 0.92, 0.08, 0.92},
+        OnClick = function(s,b) AutoBattleGround:Toggle() end,
+		OnTooltipShow = function(tooltip) tooltip:AddLine("快乐评级", 1, 1, 1, 1) end
+    })
+    LibStub("LibDBIcon-1.0"):Register("AutoBattleGround", ldb);
+end
 
 local abg = CreateFrame("Frame"); 
 abg:RegisterEvent("PLAYER_ENTERING_WORLD");
@@ -464,6 +487,7 @@ function abg:OnEvent(event, arg1)
 	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
 	SaveConfig()
+	AutoBattleGround_CreateMinimapButton()
 	--print(GetWinRate("奶爸空间-白银之手"))
 end
 abg:SetScript("OnEvent", abg.OnEvent);
