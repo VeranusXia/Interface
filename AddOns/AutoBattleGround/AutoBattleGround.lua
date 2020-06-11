@@ -21,11 +21,9 @@ local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[className]
 local pr= UnitName("player") .. "-" .. GetRealmName()
 local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
 local macrotxt = ""
-local signUpNum = 5
 local groupLeaderName = ""
 local rateFrame  
 local loseNum=0
- 
 
 
 local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent)
@@ -332,6 +330,22 @@ function AutoBattleGround:Action()
 	local difftime_config= daynightmode and 200 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	 
+	 if LFGListInviteDialog:IsShown() then
+		if start then
+			local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID)
+			if status=="invited" then
+				groupLeaderName = ""
+				LFGListInviteDialog.AcceptButton:Click()
+				logText("自动进组")
+				return
+			end
+			if status=="inviteaccepted" then
+				LFGListInviteDialog.AcknowledgeButton:Click()
+				logText("关闭邀请框")
+				return
+			end
+		end
+	end	 
  
 	if IsInGroup() then
 		step = 0
@@ -371,7 +385,6 @@ function AutoBattleGround:Action()
 		end		
 		return 
 	else
-		
 	
 		oldtime = nil 
 		loseNum = 0
@@ -393,19 +406,25 @@ function AutoBattleGround:Action()
 			if  MainPanel:GetSelectedTab()~=nil and MainPanel:GetSelectedTab()>1 then
 			     MainPanel:SelectTab(1)
 			end
-			
-			 
 			BrowsePanel.ActivityList:SetSortHandler(function(activity)
 				return activity:GetMaxMembers() - activity:GetNumMembers()
 			end)
-			step=1;
-			logText("搜索集合石队伍") 
+			step=1; 
 
 			return
 		end
+		if  step==1 then
+			if BrowsePanel.RefreshButton:IsEnabled() then
+				BrowsePanel:DoSearch() 
+				logText("搜索集合石队伍")
+			else 
+				logText("集合石搜索中") 
+			end
+			step = 2
+		end
 			
-		if step==1 then 
-			local num = math.random(signUpNum)  
+		if step==2 then 
+			local num = math.random(#BrowsePanel.ActivityList.filterList)  
 			BrowsePanel.ActivityList:Sort()
 			local item = BrowsePanel.ActivityList:GetItem(num) 
 			
@@ -414,13 +433,13 @@ function AutoBattleGround:Action()
 			if item:IsAnyFriend() then
 				return
 			end 
-			logText("随机选择第"..num.."队 "..info.name) 
+			logText("随机选择 "..info.name) 
 			logText("车头:"..winrate) 
 			BrowsePanel:SignUp(item)
-			--BrowsePanel:DoSearch() 
 			return
 		end
 			
+
 	 
 		 
 	end
@@ -634,20 +653,21 @@ LFGListApplicationDialog:SetScript("OnShow",function()
 		LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
 	end
 end)
-LFGListInviteDialog:SetScript("OnShow",function()  
-	if start then
-		local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID);
-		if status=="invited" then
-			groupLeaderName = ""
-			LFGListInviteDialog_Accept(LFGListInviteDialog)
-			logText("自动进组")
-		end
-		if status=="inviteaccepted" then
-			LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
-			logText("关闭邀请框")
-		end
-	end
-end)
+
+-- LFGListInviteDialog:SetScript("OnShow",function(self) 
+	 --if start then
+		-- local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID)
+		-- if status=="invited" then
+			-- groupLeaderName = ""
+			-- LFGListInviteDialog_Accept(LFGListInviteDialog)
+			-- logText("自动进组")
+		-- end
+		-- if status=="inviteaccepted" then
+			-- LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
+			-- logText("关闭邀请框")
+		-- end
+	 --end
+-- end)
 LFDRoleCheckPopup:SetScript("OnShow",function() 
 	if start then
 		LFDRoleCheckPopupAccept_OnClick()
