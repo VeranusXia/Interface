@@ -1,8 +1,10 @@
 # <DBM> Dragon Soul
 
-## [r207](https://github.com/DeadlyBossMods/DBM-Cataclysm/tree/r207) (2020-05-24)
-[Full Changelog](https://github.com/DeadlyBossMods/DBM-Cataclysm/compare/r206...r207)
+## [r208](https://github.com/DeadlyBossMods/DBM-Cataclysm/tree/r208) (2020-06-11)
+[Full Changelog](https://github.com/DeadlyBossMods/DBM-Cataclysm/compare/r207...r208)
 
-- Fix luacheck  
-- Update to be compatible with DBM-Core Locales restructure  
-- Change UNIT\_HEALTH\_FREQUENT to UNIT\_HEALTH  
+- Fix firelands not showing timewalking stats  
+- Possible fixes  
+- Update LuaCheck to find broken stuff  
+- Sync editorconfig from DeadlyBossMods  
+- Fix ultraxion's combat start timer icon  

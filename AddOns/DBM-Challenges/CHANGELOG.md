@@ -1,7 +1,8 @@
 # <DBM> Challenges
 
-## [r129](https://github.com/DeadlyBossMods/DBM-Challenges/tree/r129) (2020-05-24)
-[Full Changelog](https://github.com/DeadlyBossMods/DBM-Challenges/compare/r128...r129)
+## [r130](https://github.com/DeadlyBossMods/DBM-Challenges/tree/r130) (2020-06-10)
+[Full Changelog](https://github.com/DeadlyBossMods/DBM-Challenges/compare/r129...r130)
 
-- Fix luacheck  
-- Update to be compatible with DBM-Core Locales restructure  
+- Possible fixes  
+- Update LuaCheck to find broken stuff  
+- Sync editorconfig from DeadlyBossMods  
