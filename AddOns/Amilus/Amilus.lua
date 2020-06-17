@@ -88,7 +88,7 @@ local Corruptions = {
 local realmName
 Amilus:SetScript("OnEvent", function(self, event, ...)
 	if event=="ITEM_SEARCH_RESULTS_UPDATED" then 
-		Amilus:ResultUpdate()
+		--Amilus:ResultUpdate()
 	end
 	realmName = GetRealmName();
 	if event=="PLAYER_ENTERING_WORLD" then
