@@ -549,9 +549,11 @@ end
 function GetGroupAssistantNum()
 	local num = 0
 	for i=1,10  do 
-		name = GetRaidRosterInfo(i);   
-		if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true then 
-			num = num + 1
+		name = GetRaidRosterInfo(i);  
+		if name~=nil then
+			if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true then 
+				num = num + 1
+			end
 		end
 	end
 	return num
