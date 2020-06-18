@@ -11,7 +11,7 @@ local classSpell ={
 	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
 	["SHAMAN"] = "", --Shaman
 	["MAGE"] = "", --Mage
-	["WARLOCK"] = "/cast 黑暗契约\n/use 治疗石\n/cast 制造治疗石\n",--Warlock
+	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
 	["MONK"] = "",--Monk
 	["DRUID"] = "",--Druid
 	["DEMON HUNTER"] = "",--Demon Hunter
@@ -329,6 +329,7 @@ function AutoBattleGround:Action()
 	local daynightmode = curHour>=24 or curHour<=7
 	local difftime_config= daynightmode and 200 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
+	local groupassistantnum_config = daynightmode and 9 or 7
 	 
 	 if LFGListInviteDialog:IsShown() then
 		if start then
@@ -337,12 +338,12 @@ function AutoBattleGround:Action()
 				groupLeaderName = ""
 				LFGListInviteDialog.AcceptButton:Click()
 				logText("自动进组")
-				return
+				--return
 			end
 			if status=="inviteaccepted" then
 				LFGListInviteDialog.AcknowledgeButton:Click()
 				logText("关闭邀请框")
-				return
+				--return
 			end
 		end
 	end	 
@@ -358,7 +359,9 @@ function AutoBattleGround:Action()
 			end
 			local newtime = time()
 			local difftime=newtime-oldtime
-			logText("等待时间:"..difftime.."秒") 
+			if difftime%5==0 then
+				logText("等待时间:"..difftime.."秒") 
+			end
 			if difftime>difftime_config then
 				LeaveParty()
 				logText("整整"..difftime.."秒没开打 果断离队")
@@ -373,12 +376,16 @@ function AutoBattleGround:Action()
 				LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
-			if loseNum>=5 then
+			if loseNum>=3 then
 				LeaveParty()
-				logText("连跪五把了 离队换个车头")
+				logText("连跪三把了 离队换个车头")
 				return
 			end
-			
+			if GetGroupAssistantNum()> groupassistantnum_config then
+				LeaveParty()
+				logText("这个队伍A太多了 果断换一个")
+				return
+			end
 		else
 			oldtime =nil
 			--logTime(0)
@@ -537,6 +544,17 @@ function GetGroupLeader()
 			end
 		end
 	end
+end
+
+function GetGroupAssistantNum()
+	local num = 0
+	for i=1,10  do 
+		name = GetRaidRosterInfo(i);   
+		if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true then 
+			num = num + 1
+		end
+	end
+	return num
 end
 
 
