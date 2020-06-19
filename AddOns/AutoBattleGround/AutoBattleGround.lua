@@ -341,8 +341,7 @@ function AutoBattleGround:Action()
 	local groupmembers_config = daynightmode and 7 or 6 
 	local groupassistantnum_config = daynightmode and 9 or 7
 	 
-	 if blck:GetChecked() then
-	 print(1)
+	 if blck:GetChecked() then 
 		difftime_config = 300
 		groupassistantnum_config = 9
 	 end
