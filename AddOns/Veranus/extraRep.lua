@@ -1,8 +1,6 @@
-﻿
-
---声望显示格式修改为：某声望名(现在声望值/总体）：（+本次增加）
-local SR_REP_MSG = "%s(%d/%d)：%+d";
+﻿local SR_REP_MSG = "%s(%d/%d)：%+d";
 local SR_REP_MSG2 = "|cffee80ee%s(%d/巅峰)：%+d|r";
+local SR_REP_MSG3 = "|cffff4500%s(%d/巅峰)：%+d，已满请兑换！|r";
 local rep = {};
 local extraRep = {};
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
@@ -21,10 +19,15 @@ local function SR_Update()
           value = value + threshold
         end
         local extraChange = value - extraRep[name];
-        if(extraChange > 0) then 
+        if extraChange > 0 and value < 10000 then
           extraRep[name] = value
           local extra_msg = string.format(SR_REP_MSG2, name, value, extraChange)
           createMessage(extra_msg);
+        end
+        if extraChange ~= 0 and value > 10000 then
+          extraRep[name] = value
+          local extra_msg2 = string.format(SR_REP_MSG3, name, value, extraChange)
+          createMessage(extra_msg2);
         end
       end
     elseif name and (not isHeader) or (hasRep) then
@@ -66,8 +69,56 @@ function initExtraRep(factionID, name)
   end
 end
 
-local frame3 = CreateFrame("Frame");
-frame3:RegisterEvent("UPDATE_FACTION");
-frame3:SetScript("OnEvent", SR_Update);
+local frame = CreateFrame("Frame");
+frame:RegisterEvent("UPDATE_FACTION");
+frame:SetScript("OnEvent", SR_Update);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_COMBAT_FACTION_CHANGE", function() return true; end);
 
+local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
+local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
+hooksecurefunc("ReputationFrame_Update", function(self, elapsed)
+	ReputationFrame.paragonFramesPool:ReleaseAll()
+	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+	for n=1,NUM_FACTIONS_DISPLAYED,1 do
+		local factionIndex = factionOffset+n
+		local factionRow = _G["ReputationBar"..n]
+		local factionBar = _G["ReputationBar"..n.."ReputationBar"]
+		local factionStanding = _G["ReputationBar"..n.."ReputationBarFactionStanding"]
+		if factionIndex <= GetNumFactions() then
+			local name,_,_,_,_,_,_,_,_,_,_,_,_,factionID = GetFactionInfo(factionIndex)
+			if factionID and C_Reputation.IsFactionParagon(factionID) then
+				local currentValue,threshold,rewardQuestID,hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+				factionRow.questID = rewardQuestID
+				if currentValue then
+					local count = floor(currentValue/threshold)
+					local value = currentValue - count*10000
+				    if hasRewardPending then count = count-1 end
+					if hasRewardPending then
+						local paragonFrame = ReputationFrame.paragonFramesPool:Acquire()
+						paragonFrame.factionID = factionID
+						paragonFrame:SetPoint("RIGHT",factionRow,11,0)
+						paragonFrame.Glow:SetShown(true)
+						paragonFrame.Check:SetShown(true)
+						paragonFrame:Show()
+						value = value+threshold
+					end
+					factionBar:SetMinMaxValues(0,threshold)
+					factionBar:SetValue(value)
+					factionRow.rolloverText = format(REPUTATION_PROGRESS_FORMAT,BreakUpLargeNumbers(value),BreakUpLargeNumbers(threshold))
+						factionStanding:SetText(" "..BreakUpLargeNumbers(value).."/".."巅峰("..count..")")
+						factionRow.standingText = (" "..BreakUpLargeNumbers(value).."/".."巅峰("..count..")")
+						factionRow.rolloverText = nil					
+					if factionIndex == GetSelectedFaction() and ReputationDetailFrame:IsShown() then
+						if count > 0 then
+							ReputationDetailFactionName:SetText(name.."\n|cff00ff00(已开"..count.."个巅峰箱子)|r")
+						end
+					end
+				end
+			else
+				factionRow.questID = nil
+			end
+		else
+			factionRow:Hide()
+		end
+	end
+end)

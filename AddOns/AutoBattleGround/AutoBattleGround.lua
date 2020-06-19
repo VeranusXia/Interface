@@ -201,6 +201,15 @@ neckck:SetScript("OnClick", function()
 	SaveConfig() 
 end)
 
+local blck = CreateFrame("CheckButton", nil, line4, "UICheckButtonTemplate")
+blck.text = blck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+blck.text:SetPoint("LEFT", blck, "RIGHT", 0, 1)
+blck:SetPoint("LEFT", 110, 0)
+blck.text:SetText("部落模式")
+blck:SetScript("OnClick", function() 
+	SaveConfig() 
+end)
+
 --第N行 显示log
 local content = CreateFrame("Frame", nil, AutoBattleGround)
 content:SetSize(330,40) 
@@ -229,6 +238,7 @@ function SaveConfig()
 	ABG_CONFIG.modeck = modeck:GetChecked()
 	ABG_CONFIG.boxck = boxck:GetChecked()
 	ABG_CONFIG.fishck = fishck:GetChecked()
+	ABG_CONFIG.blck = blck:GetChecked()
 	
 	--print(macrotxt)
 end
@@ -330,6 +340,12 @@ function AutoBattleGround:Action()
 	local difftime_config= daynightmode and 200 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	local groupassistantnum_config = daynightmode and 9 or 7
+	 
+	 if blck:GetChecked() then
+	 print(1)
+		difftime_config = 300
+		groupassistantnum_config = 9
+	 end
 	 
 	 if LFGListInviteDialog:IsShown() then
 		if start then
@@ -619,6 +635,7 @@ function AutoBattleGround:Init()
 		ABG_CONFIG.modeck=true
 		ABG_CONFIG.boxck =true
 		ABG_CONFIG.fishck = false
+		ABG_CONFIG.blck = false
 	end
 	
 	if (not ABG_DB[pr]) then
@@ -634,13 +651,16 @@ function AutoBattleGround:Init()
 	if ABGCharacterDB then
 		ABG_DB[pr] = ABGCharacterDB
 	end
-
-	if not GetMacroInfo("快乐评级") then
+	 
+	if  not GetMacroInfo("快乐评级") then
 		CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
+		logText("初始化评级宏")
 	end
 	modeck:SetChecked(ABG_CONFIG.modeck)
 	boxck:SetChecked(ABG_CONFIG.boxck)
 	fishck:SetChecked(ABG_CONFIG.fishck)
+	blck:SetChecked(ABG_CONFIG.blck)
+	
 	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
 	neckck:SetChecked(classSpell[className]=="")
@@ -649,7 +669,12 @@ function AutoBattleGround:Init()
 	AutoBattleGround_CreateMinimapButton()
 	AutoBattleGround:Toggle()
 end 
-AutoBattleGround:Init() 
+
+local abgEvent = CreateFrame("Frame")
+abgEvent:RegisterEvent("PLAYER_LOGIN") 
+abgEvent:SetScript("OnEvent", AutoBattleGround.Init) 
+
+
 
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
