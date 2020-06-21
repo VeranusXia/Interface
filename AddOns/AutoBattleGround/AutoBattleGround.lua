@@ -336,15 +336,11 @@ function AutoBattleGround:Action()
 	local item = BrowsePanel.ActivityList:GetItem(1) 
 	
 	local curHour = tonumber(date("%H")) 
-	local daynightmode = curHour>=24 or curHour<=7
-	local difftime_config= daynightmode and 200 or 120
+	local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
+	local difftime_config= daynightmode and 300 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	local groupassistantnum_config = daynightmode and 9 or 7
-	 
-	 if blck:GetChecked() then 
-		difftime_config = 300
-		groupassistantnum_config = 9
-	 end
+	  
 	 
 	 if LFGListInviteDialog:IsShown() then
 		if start then
@@ -374,9 +370,9 @@ function AutoBattleGround:Action()
 			end
 			local newtime = time()
 			local difftime=newtime-oldtime
-			if difftime%5==0 then
+			--if difftime%5==0 then
 				logText("等待时间:"..difftime.."秒") 
-			end
+			--end
 			if difftime>difftime_config then
 				LeaveParty()
 				logText("整整"..difftime.."秒没开打 果断离队")
@@ -416,7 +412,28 @@ function AutoBattleGround:Action()
 			return
 		end
 		
-		
+		BrowsePanel.inUpdateFilters = true
+		for _, box in ipairs(BrowsePanel.filters) do
+			local key = box.key
+			if key=="ItemLevel" then
+				box.MinBox:SetText('1')
+				box.MaxBox:SetText('100')
+				box.Check:SetChecked(true)
+			end
+			if key=="Age" then
+				box.MinBox:SetText('0')
+				box.MaxBox:SetText('10')
+				box.Check:SetChecked(true)
+			end
+			if key=="Members" then
+				box.MinBox:SetText('7')
+				box.MaxBox:SetText(daynightmode and '9' or '8')
+				box.Check:SetChecked(true)
+			end
+		end
+		C_Timer.After(0, function()
+			BrowsePanel.inUpdateFilters = false
+		end)
 		if step==0 then
 			if MainPanel:IsShown() then
 				--logText("集合石已打开")
@@ -424,6 +441,10 @@ function AutoBattleGround:Action()
 				MeetingStone:Toggle()
 				logText("打开集合石")
 			end 
+			 
+			
+		 
+		
 			
 			if  MainPanel:GetSelectedTab()~=nil and MainPanel:GetSelectedTab()>1 then
 			     MainPanel:SelectTab(1)
@@ -564,9 +585,9 @@ end
 function GetGroupAssistantNum()
 	local num = 0
 	for i=1,10  do 
-		name = GetRaidRosterInfo(i);  
+		name,_,_,_,_,_,_,online = GetRaidRosterInfo(i)
 		if name~=nil then
-			if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true then 
+			if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true or (not online) then 
 				num = num + 1
 			end
 		end
