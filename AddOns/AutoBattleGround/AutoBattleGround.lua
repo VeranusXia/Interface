@@ -526,7 +526,7 @@ function GetGroupAssistantNum()
 			end
 		end
 	end
-	logText("队伍A的数量:"..num)
+	--logText("队伍A的数量:"..num)
 	 
 	return num
 end
