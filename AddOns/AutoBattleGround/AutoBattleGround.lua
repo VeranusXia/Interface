@@ -331,7 +331,7 @@ function AutoBattleGround:Action()
 	
  	local curHour = tonumber(date("%H")) 
 	local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
-	local difftime_config= daynightmode and 300 or 120
+	local difftime_config= daynightmode and 400 or 180
 	local groupmembers_config = daynightmode and 7 or 6 
 	local groupassistantnum_config = daynightmode and 9 or 7
 
@@ -634,13 +634,13 @@ abgEvent:SetScript("OnEvent", AutoBattleGround.Init)
 
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
-abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
+--abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
 abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
 		local curHour = tonumber(date("%H")) 
 		local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
-		local difftime_config= daynightmode and 300 or 120
+		local difftime_config= daynightmode and 400 or 180
 		local groupmembers_config = daynightmode and 7 or 6 
 		--local groupassistantnum_config = daynightmode and 9 or 7
 		
@@ -649,7 +649,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 			logText("退出战场") 
 			return
 		end
-		if event == "GROUP_ROSTER_UPDATE" then
+		--if event == "GROUP_ROSTER_UPDATE" then
 			-- if GetGroupAssistantNum()> groupassistantnum_config   then
 				-- LeaveParty()
 				-- logText("这个队伍A太多了 果断换一个")
@@ -660,8 +660,8 @@ function abgPVPmatch:OnEvent(event, arg1)
 				-- logText("人数过少 果断离队")
 				-- return
 			-- end
-		    oldtime = nil
-		end
+		    --oldtime = nil
+		--end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
 			local temp = {}
