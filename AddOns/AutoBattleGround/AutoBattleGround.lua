@@ -408,9 +408,9 @@ function AutoBattleGround:Action()
 			return
 		end
 		if  step==1 then
-			logText("搜索队伍中...")
-			C_Timer.After(3, function()
-				C_LFGList.Search(9, 0, 19)
+			C_LFGList.Search(9, 0, 19)
+			C_Timer.After(1, function()
+				logText("搜索队伍中...")
 			end) 
 		 
 		end
@@ -642,7 +642,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 		local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
 		local difftime_config= daynightmode and 300 or 120
 		local groupmembers_config = daynightmode and 7 or 6 
-		local groupassistantnum_config = daynightmode and 9 or 7
+		--local groupassistantnum_config = daynightmode and 9 or 7
 		
 		if event == "PVP_MATCH_COMPLETE" then
 			GetRate()
@@ -679,25 +679,24 @@ function abgPVPmatch:OnEvent(event, arg1)
 					local numMembers = result.numMembers
 					local numBNetFriends = result.numBNetFriends
 					--local numCharFriends = result.numCharFriends
-					--local numGuildMates = result.numGuildMates
+					local numGuildMates = result.numGuildMates
 					--local isDelisted = result.isDelisted
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					
 					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>groupmembers_config     then
 						table.insert(temp,result)
 					end
 					
 					
 				end 
-				
-				local num = math.random(#temp) 
-				local item = temp[num]
-				logText("随机选择:"..item.name.."("..num.."/"..#temp..")")
-				logText("车头:"..GetWinRate(item.leaderName)) 
-				LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
-					 
+			    if #temp>0 then
+					local num = math.random(#temp) 
+						local item = temp[num]
+					logText("随机选择:"..item.name.."("..num.."/"..#temp..")")
+					logText("车头:"..GetWinRate(item.leaderName)) 
+					LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
+				end 
 				  
 			end
 		end
