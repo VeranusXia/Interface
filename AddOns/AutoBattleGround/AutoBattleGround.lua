@@ -327,19 +327,16 @@ function AutoBattleGround:Action()
 		start = true
 		logText("评级小助手启动!")
 	end
-
-
-
-	local MeetingStone = LibStub('AceAddon-3.0'):GetAddon('MeetingStone')
-	local BrowsePanel = MeetingStone:GetModule('BrowsePanel')
-	local MainPanel =MeetingStone:GetModule('MainPanel')
-	local item = BrowsePanel.ActivityList:GetItem(1) 
 	
-	local curHour = tonumber(date("%H")) 
+	
+ 	local curHour = tonumber(date("%H")) 
 	local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
 	local difftime_config= daynightmode and 300 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	local groupassistantnum_config = daynightmode and 9 or 7
+
+
+
 	  
 	 
 	 if LFGListInviteDialog:IsShown() then
@@ -369,10 +366,9 @@ function AutoBattleGround:Action()
 				oldtime = time()
 			end
 			local newtime = time()
-			local difftime=newtime-oldtime
-			--if difftime%5==0 then
-				logText("等待时间:"..difftime.."秒") 
-			--end
+			local difftime=newtime-oldtime 
+			logText("等待时间:"..difftime.."秒") 
+			 
 			if difftime>difftime_config then
 				LeaveParty()
 				logText("整整"..difftime.."秒没开打 果断离队")
@@ -398,90 +394,28 @@ function AutoBattleGround:Action()
 				return
 			end
 		else
-			oldtime =nil
-			--logTime(0)
+			oldtime =nil 
 		end		
 		return 
 	else
 	
 		oldtime = nil 
 		loseNum = 0
-		if step>0 and not MainPanel:IsShown() then
-			MeetingStone:Toggle()
-				logText("打开集合石")
-			return
-		end
-		
-		BrowsePanel.inUpdateFilters = true
-		for _, box in ipairs(BrowsePanel.filters) do
-			local key = box.key
-			if key=="ItemLevel" then
-				box.MinBox:SetText('1')
-				box.MaxBox:SetText('100')
-				box.Check:SetChecked(true)
-			end
-			if key=="Age" then
-				box.MinBox:SetText('0')
-				box.MaxBox:SetText('10')
-				box.Check:SetChecked(true)
-			end
-			if key=="Members" then
-				box.MinBox:SetText('7')
-				box.MaxBox:SetText(daynightmode and '9' or '8')
-				box.Check:SetChecked(true)
-			end
-		end
-		C_Timer.After(0, function()
-			BrowsePanel.inUpdateFilters = false
-		end)
+	 
 		if step==0 then
-			if MainPanel:IsShown() then
-				--logText("集合石已打开")
-			else
-				MeetingStone:Toggle()
-				logText("打开集合石")
-			end 
-			 
-			
-		 
-		
-			
-			if  MainPanel:GetSelectedTab()~=nil and MainPanel:GetSelectedTab()>1 then
-			     MainPanel:SelectTab(1)
-			end
-			BrowsePanel.ActivityList:SetSortHandler(function(activity)
-				return activity:GetMaxMembers() - activity:GetNumMembers()
-			end)
+			C_LFGList.SetSearchToActivity(19)
 			step=1; 
-
 			return
 		end
 		if  step==1 then
-			if BrowsePanel.RefreshButton:IsEnabled() then
-				BrowsePanel:DoSearch() 
-				logText("搜索集合石队伍")
-			else 
-				logText("集合石搜索中") 
-			end
-			step = 2
+			logText("搜索队伍中...")
+			C_Timer.After(3, function()
+				C_LFGList.Search(9, 0, 19)
+			end) 
+		 
 		end
 			
-		if step==2 then 
-			local num = math.random(#BrowsePanel.ActivityList.filterList)  
-			BrowsePanel.ActivityList:Sort()
-			local item = BrowsePanel.ActivityList:GetItem(num) 
-			
-			local info = C_LFGList.GetSearchResultInfo(item:GetID()) 
-			local winrate = GetWinRate(info.leaderName)
-			if item:IsAnyFriend() then
-				return
-			end 
-			logText("随机选择 "..info.name) 
-			logText("车头:"..winrate) 
-			BrowsePanel:SignUp(item)
-			return
-		end
-			
+ 
 
 	 
 		 
@@ -568,7 +502,7 @@ SLASH_AutoBattleGround1 = '/AutoBattleGround'
 SLASH_AutoBattleGround2 = '/abg'
 
 function GetGroupLeader()
-	if GetNumGroupMembers() >=5 and  (not UnitIsGroupLeader("player") )then
+	if GetNumGroupMembers() >=5 and  (not UnitIsGroupLeader("player"))  then
 		for i=1,10  do 
 			name = GetRaidRosterInfo(i);   
 			if UnitIsGroupLeader(name)==true then 
@@ -584,13 +518,16 @@ end
 
 function GetGroupAssistantNum()
 	local num = 0
-	for i=1,10  do 
-		name,_,_,_,_,_,_,online = GetRaidRosterInfo(i)
-		if name~=nil then
-			if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true or (not online) then 
-				num = num + 1
+	if IsInGroup() then
+		for i=1,10  do 
+			name,_,_,_,_,_,_,online = GetRaidRosterInfo(i)
+			if name~=nil then
+				if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true or (not online) then 
+					num = num + 1
+				end
 			end
 		end
+		logText("队伍A的数量:"..num)
 	end
 	return num
 end
@@ -699,14 +636,71 @@ abgEvent:SetScript("OnEvent", AutoBattleGround.Init)
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
 abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
+abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
+		local curHour = tonumber(date("%H")) 
+		local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
+		local difftime_config= daynightmode and 300 or 120
+		local groupmembers_config = daynightmode and 7 or 6 
+		local groupassistantnum_config = daynightmode and 9 or 7
+		
 		if event == "PVP_MATCH_COMPLETE" then
 			GetRate()
 			logText("退出战场") 
+			return
 		end
 		if event == "GROUP_ROSTER_UPDATE" then
+			if GetGroupAssistantNum()> groupassistantnum_config   then
+				LeaveParty()
+				logText("这个队伍A太多了 果断换一个")
+				return
+			end
+			if  GetNumGroupMembers()<=groupmembers_config and IsInGroup()   then
+				LeaveParty()
+				logText("人数过少 果断离队")
+				return
+			end
 			oldtime = nil
+		end
+		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
+			numResults, resultIDTable = C_LFGList.GetSearchResults();
+			local temp = {}
+			if numResults> 0 then
+				for k,v in pairs(resultIDTable) do
+					local result  = C_LFGList.GetSearchResultInfo(v);
+					local searchResultID = result.searchResultID
+					--local activityID = result.activityID
+					local leaderName = result.leaderName
+					local name = result.name
+					--local comment = result.comment
+					--local voiceChat = result.voiceChat
+					local requiredItemLevel = result.requiredItemLevel
+					--local requiredHonorLevel = result.requiredHonorLevel
+					local numMembers = result.numMembers
+					local numBNetFriends = result.numBNetFriends
+					--local numCharFriends = result.numCharFriends
+					--local numGuildMates = result.numGuildMates
+					--local isDelisted = result.isDelisted
+					--local autoAccept = result.autoAccept
+					local age = result.age
+					--local questID = result.questID
+					
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>groupmembers_config     then
+						table.insert(temp,result)
+					end
+					
+					
+				end 
+				
+				local num = math.random(#temp) 
+				local item = temp[num]
+				logText("随机选择:"..item.name.."("..num.."/"..#temp..")")
+				logText("车头:"..GetWinRate(item.leaderName)) 
+				LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
+					 
+				  
+			end
 		end
 	end
 end
@@ -719,20 +713,20 @@ LFGListApplicationDialog:SetScript("OnShow",function()
 	end
 end)
 
--- LFGListInviteDialog:SetScript("OnShow",function(self) 
-	 --if start then
-		-- local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID)
-		-- if status=="invited" then
-			-- groupLeaderName = ""
-			-- LFGListInviteDialog_Accept(LFGListInviteDialog)
-			-- logText("自动进组")
-		-- end
-		-- if status=="inviteaccepted" then
-			-- LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
-			-- logText("关闭邀请框")
-		-- end
-	 --end
--- end)
+LFGListInviteDialog:SetScript("OnShow",function(self) 
+	 if start then
+		local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID)
+		if status=="invited" then
+			groupLeaderName = ""
+			LFGListInviteDialog_Accept(LFGListInviteDialog)
+			logText("自动进组")
+		end
+		if status=="inviteaccepted" then
+			LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
+			logText("关闭邀请框")
+		end
+	 end
+end)
 LFDRoleCheckPopup:SetScript("OnShow",function() 
 	if start then
 		LFDRoleCheckPopupAccept_OnClick()
@@ -746,4 +740,7 @@ BonusRollFrame:SetScript("OnShow",function()
 	end
 end)
 
+
+ 
+ 
  
