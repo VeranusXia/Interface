@@ -517,18 +517,17 @@ function GetGroupLeader()
 end
 
 function GetGroupAssistantNum()
-	local num = 0
-	if IsInGroup() then
-		for i=1,10  do 
-			name,_,_,_,_,_,_,online = GetRaidRosterInfo(i)
-			if name~=nil then
-				if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true or (not online) then 
-					num = num + 1
-				end
+	local num = 0 
+	for i=1,10  do 
+		name,_,_,_,_,_,_,online = GetRaidRosterInfo(i)
+		if name~=nil then
+			if UnitIsGroupAssistant(name)==true or UnitIsGroupLeader(name)==true or (not online) then 
+				num = num + 1
 			end
 		end
-		logText("队伍A的数量:"..num)
 	end
+	logText("队伍A的数量:"..num)
+	 
 	return num
 end
 
@@ -635,7 +634,7 @@ abgEvent:SetScript("OnEvent", AutoBattleGround.Init)
 
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
-abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
+--abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
 abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
@@ -650,19 +649,19 @@ function abgPVPmatch:OnEvent(event, arg1)
 			logText("退出战场") 
 			return
 		end
-		if event == "GROUP_ROSTER_UPDATE" then
-			if GetGroupAssistantNum()> groupassistantnum_config   then
-				LeaveParty()
-				logText("这个队伍A太多了 果断换一个")
-				return
-			end
-			if  GetNumGroupMembers()<=groupmembers_config and IsInGroup()   then
-				LeaveParty()
-				logText("人数过少 果断离队")
-				return
-			end
-			oldtime = nil
-		end
+		-- if event == "GROUP_ROSTER_UPDATE" then
+			-- if GetGroupAssistantNum()> groupassistantnum_config   then
+				-- LeaveParty()
+				-- logText("这个队伍A太多了 果断换一个")
+				-- return
+			-- end
+			-- if  GetNumGroupMembers()<=groupmembers_config and IsInGroup()   then
+				-- LeaveParty()
+				-- logText("人数过少 果断离队")
+				-- return
+			-- end
+			-- oldtime = nil
+		-- end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
 			local temp = {}
