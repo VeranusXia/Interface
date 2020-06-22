@@ -634,7 +634,7 @@ abgEvent:SetScript("OnEvent", AutoBattleGround.Init)
 
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
---abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
+abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
 abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
@@ -649,7 +649,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 			logText("退出战场") 
 			return
 		end
-		-- if event == "GROUP_ROSTER_UPDATE" then
+		if event == "GROUP_ROSTER_UPDATE" then
 			-- if GetGroupAssistantNum()> groupassistantnum_config   then
 				-- LeaveParty()
 				-- logText("这个队伍A太多了 果断换一个")
@@ -660,8 +660,8 @@ function abgPVPmatch:OnEvent(event, arg1)
 				-- logText("人数过少 果断离队")
 				-- return
 			-- end
-			-- oldtime = nil
-		-- end
+		    oldtime = nil
+		end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
 			local temp = {}
