@@ -333,7 +333,9 @@ function AutoBattleGround:Action()
 	local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
 	local difftime_config= daynightmode and 300 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
-	local groupassistantnum_config = daynightmode and 9 or 7
+	
+		local groupmembersMin_config = daynightmode and 7 or 6 
+		local groupmembersMax_config = daynightmode and 9 or 8 
 
 
 
@@ -374,7 +376,7 @@ function AutoBattleGround:Action()
 				logText("整整"..difftime.."秒没开打 果断离队")
 				return
 			end
-			if  GetNumGroupMembers()<=groupmembers_config then
+			if  GetNumGroupMembers()<=groupmembersMin_config then
 				LeaveParty()
 				logText("人数过少 果断离队")
 				return
@@ -388,9 +390,15 @@ function AutoBattleGround:Action()
 				logText("连跪三把了 离队换个车头")
 				return
 			end
-			if GetGroupAssistantNum()> groupassistantnum_config then
+			local gaNum=GetGroupAssistantNum()
+			if gaNum> groupassistantnum_config  then
 				LeaveParty()
 				logText("这个队伍A太多了 果断换一个")
+				return
+			end
+			if gaNum == 1  then
+				LeaveParty()
+				logText("这个队伍活人队 果断换一个")
 				return
 			end
 		else
@@ -641,7 +649,8 @@ function abgPVPmatch:OnEvent(event, arg1)
 		local curHour = tonumber(date("%H")) 
 		local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
 		local difftime_config= daynightmode and 300 or 120
-		local groupmembers_config = daynightmode and 7 or 6 
+		local groupmembersMin_config = daynightmode and 7 or 6 
+		local groupmembersMax_config = daynightmode and 9 or 8 
 		--local groupassistantnum_config = daynightmode and 9 or 7
 		
 		if event == "PVP_MATCH_COMPLETE" then
@@ -684,7 +693,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>groupmembers_config     then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>groupmembersMin_config and numMembers<groupmembersMax_config   then
 						table.insert(temp,result)
 					end
 					
