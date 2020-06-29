@@ -24,8 +24,8 @@ local macrotxt = ""
 local groupLeaderName = ""
 local rateFrame  
 local loseNum=0
-local readyCheck=false;
-
+local readyCheck=false
+local isSearching=false
 
 local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent)
 piaobtn:SetSize(50, 50)
@@ -418,11 +418,11 @@ function AutoBattleGround:Action()
 			step=1; 
 			return
 		end
-		if  step==1 then
+		if  step==1 and isSearching==false then
+			logText("搜索队伍中...")
 			C_LFGList.Search(9, 0, 19)
-			C_Timer.After(1, function()
-				logText("搜索队伍中...")
-			end) 
+			isSearching=true
+	
 		 
 		end
 			
@@ -646,6 +646,26 @@ abgEvent:RegisterEvent("PLAYER_LOGIN")
 abgEvent:SetScript("OnEvent", AutoBattleGround.Init) 
 
 
+function signUp(searchResultInfo)
+	if ( searchResultInfo.activityID ~= LFGListApplicationDialog.LFGListApplicationDialog ) then
+		C_LFGList.ClearApplicationTextFields();
+	end
+	local _, tank, healer, dps = GetLFGRoles(); 
+	--local signUpMarcoText = string.format("/script C_LFGList.ApplyToGroup(%s,%s,%s,%s)",searchResultInfo.searchResultID, tank and "true" or "false", healer and "true" or "false", dps and "true" or "false")
+	C_LFGList.ApplyToGroup(searchResultInfo.searchResultID, tank, healer, dps);
+	--print(signUpMarcoText) 
+	
+	-- local name, icon, body, isLocal = GetMacroInfo("快乐评级自动申请")
+	-- if not name     then
+		-- CreateMacro("快乐评级自动申请", "1322720", signUpMarcoText, nil, nil) 
+	-- else
+		-- EditMacro("快乐评级自动申请", "快乐评级自动申请",  "1322720", signUpMarcoText, nil, nil)
+	-- end
+ 
+	
+end
+
+
 local gnumBase = 0;
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
@@ -684,6 +704,9 @@ function abgPVPmatch:OnEvent(event, arg1)
 			end
 		end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
+			StaticPopupSpecial_Hide(LFGListApplicationDialog);
+			isSearching=false
+		
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
 			local temp = {}
 			if numResults> 0 then
@@ -706,18 +729,20 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config   then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
 						table.insert(temp,result)
-					end
+					end 
 					
 					
 				end 
 			    if #temp>0 then
 					local num = math.random(#temp) 
 						local item = temp[num]
-					logText("随机选择:"..item.name.."("..num.."/"..#temp..")")
+					logText("随机选择:"..item.name.."("..num.."/"..#temp..")") 
 					logText("车头:"..GetWinRate(item.leaderName)) 
-					LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
+					signUp(item)
+					
+					--LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
 				end 
 				  
 			end
@@ -739,12 +764,12 @@ function abgPVPmatch:OnEvent(event, arg1)
 end
 abgPVPmatch:SetScript("OnEvent", abgPVPmatch.OnEvent);
  
-LFGListApplicationDialog:SetScript("OnShow",function() 
-	if start then
-		logText("申请加入队伍")
-		LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
-	end
-end)
+--LFGListApplicationDialog:SetScript("OnShow",function() 
+	--if start then
+		--logText("申请加入队伍")
+		--LFGListApplicationDialogSignUpButton_OnClick(LFGListApplicationDialog.SignUpButton)
+	--end
+--end)
 
 LFGListInviteDialog:SetScript("OnShow",function(self) 
 	 if start then
@@ -752,11 +777,11 @@ LFGListInviteDialog:SetScript("OnShow",function(self)
 		if status=="invited" then
 			groupLeaderName = ""
 			LFGListInviteDialog_Accept(LFGListInviteDialog)
-			logText("自动进组")
+			--logText("自动进组")
 		end
 		if status=="inviteaccepted" then
 			LFGListInviteDialog_Acknowledge(LFGListInviteDialog)
-			logText("关闭邀请框")
+			--logText("关闭邀请框")
 		end
 	 end
 end)
