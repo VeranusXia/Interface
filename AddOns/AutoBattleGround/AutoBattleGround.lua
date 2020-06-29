@@ -10,7 +10,7 @@ local classSpell ={
 	["PRIEST"] = "/cast 绝望祷言\n/castsequence reset=6 真言术：耀,预兆\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
 	["SHAMAN"] = "", --Shaman
-	["MAGE"] = "", --Mage
+	["MAGE"] = "/cast 寒冰护体\n", --Mage
 	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
 	["MONK"] = "",--Monk
 	["DRUID"] = "",--Druid
@@ -24,6 +24,7 @@ local macrotxt = ""
 local groupLeaderName = ""
 local rateFrame  
 local loseNum=0
+local readyCheck=false;
 
 
 local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent)
@@ -224,17 +225,20 @@ function logText(text)
 end
 
 --保存配置 重置宏
-function SaveConfig()
+function SaveConfig(normal)
 	local usewptxt = itemwp:GetChecked() and "\n/use 16\n" or ""
 	local usetktxt = itemtk:GetChecked() and "/use 13\n/use 14\n" or ""
 	local usebox = boxck:GetChecked() and "/use 黄金保险箱\n/use 钢铁保险箱\n" or ""
 	local usefish = fishck:GetChecked() and "/use 淡紫刺鳐\n/use 软泥鲭鱼\n/use 洋流鲷鱼\n/use 狂乱的利齿青鱼\n/use 赤尾泥鳅\n/use 海砂变色鱼\n/use 提拉加德鲈鱼\n/use 蝰鱼\n/use 无尽之海鲶鱼\n" or ""
 	local useneck = neckck:GetChecked() and "/targetenemy\n/cast 火红烈焰\n" or ""
 	local useclassSpell = classSPck:GetChecked() and classSpell[className] or ""
-	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell.."/run AutoBattleGround:Action()\n/click PVPReadyDialogEnterBattleButton\n"
+	local runAction = "/run AutoBattleGround:Action()\n"
+	local enterMarco = readyCheck and "/click PVPReadyDialogEnterBattleButton\n" or ""
+	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell..runAction..enterMarco
 	PVPBtn:SetAttribute("macrotext",macrotxt)
-	logText("ABG配置成功")
-	
+	if normal==nil then
+		logText("ABG配置成功")
+	end
 	ABG_CONFIG.modeck = modeck:GetChecked()
 	ABG_CONFIG.boxck = boxck:GetChecked()
 	ABG_CONFIG.fishck = fishck:GetChecked()
@@ -334,12 +338,11 @@ function AutoBattleGround:Action()
 	local difftime_config= daynightmode and 300 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	
-		local groupmembersMin_config = daynightmode and 7 or 6 
-		local groupmembersMax_config = daynightmode and 9 or 8 
+	local groupmembersMin_config = daynightmode and 7 or 6 
+	local groupmembersMax_config = daynightmode and 9 or 8 
+	local groupassistantnum_config = daynightmode and 9 or 7
 
-
-
-	  
+ 
 	 
 	 if LFGListInviteDialog:IsShown() then
 		if start then
@@ -487,14 +490,18 @@ end
 function GetWinRate(leaderName)
 	local win = 0
 	local lose =0  
-	for k1,v1 in pairs(ABG_DB) do  
-        for k2,v2 in pairs(v1) do
-			if k2==leaderName then
-				win = win + v2.win
-				lose = lose + v2.lose
+	if leaderName~= nil then 
+		for k1,v1 in pairs(ABG_DB) do  
+			for k2,v2 in pairs(v1) do
+				if k2==leaderName then
+					win = win + v2.win
+					lose = lose + v2.lose
+				end
 			end
 		end
-    end
+	else
+		return ""
+	end
 	if lose==0 and win==0 then
 		return leaderName.."(暂无胜率)"
 	else
@@ -639,11 +646,12 @@ abgEvent:RegisterEvent("PLAYER_LOGIN")
 abgEvent:SetScript("OnEvent", AutoBattleGround.Init) 
 
 
-
+local gnumBase = 0;
 local abgPVPmatch = CreateFrame("Frame")
 abgPVPmatch:RegisterEvent("PVP_MATCH_COMPLETE") 
 abgPVPmatch:RegisterEvent("GROUP_ROSTER_UPDATE") 
 abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")  
+abgPVPmatch:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
 		local curHour = tonumber(date("%H")) 
@@ -659,6 +667,8 @@ function abgPVPmatch:OnEvent(event, arg1)
 			return
 		end
 		if event == "GROUP_ROSTER_UPDATE" then
+			local tempGnum= GetNumGroupMembers()
+			if gnumBase<tempGnum then
 			-- if GetGroupAssistantNum()> groupassistantnum_config   then
 				-- LeaveParty()
 				-- logText("这个队伍A太多了 果断换一个")
@@ -669,7 +679,9 @@ function abgPVPmatch:OnEvent(event, arg1)
 				-- logText("人数过少 果断离队")
 				-- return
 			-- end
-		    oldtime = nil
+				oldtime = nil
+				gnumBase = tempGnum
+			end
 		end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
@@ -677,6 +689,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 			if numResults> 0 then
 				for k,v in pairs(resultIDTable) do
 					local result  = C_LFGList.GetSearchResultInfo(v);
+					
 					local searchResultID = result.searchResultID
 					--local activityID = result.activityID
 					local leaderName = result.leaderName
@@ -693,7 +706,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>groupmembersMin_config and numMembers<groupmembersMax_config   then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config   then
 						table.insert(temp,result)
 					end
 					
@@ -708,6 +721,19 @@ function abgPVPmatch:OnEvent(event, arg1)
 				end 
 				  
 			end
+		end
+		if event=="UPDATE_BATTLEFIELD_STATUS" then
+			local status = GetBattlefieldStatus(arg1);
+			if status=="confirm" and readyCheck==false then
+				readyCheck=true
+				SaveConfig(0)
+			else
+				if readyCheck then
+					readyCheck=false
+					SaveConfig(0)
+				end
+			end
+			
 		end
 	end
 end
@@ -747,7 +773,3 @@ BonusRollFrame:SetScript("OnShow",function()
 	end
 end)
 
-
- 
- 
- 
