@@ -334,7 +334,7 @@ function AutoBattleGround:Action()
 	
 	
  	local curHour = tonumber(date("%H")) 
-	local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
+	local daynightmode = blck:GetChecked() and true or (curHour>23 or curHour<7)
 	local difftime_config= daynightmode and 300 or 120
 	local groupmembers_config = daynightmode and 7 or 6 
 	
@@ -675,7 +675,7 @@ abgPVPmatch:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
 		local curHour = tonumber(date("%H")) 
-		local daynightmode = blck:GetChecked() and true or (curHour>=22 or curHour<=9)
+		local daynightmode = blck:GetChecked() and true or (curHour>23 or curHour<7)
 		local difftime_config= daynightmode and 300 or 120
 		local groupmembersMin_config = daynightmode and 9 or 6 
 		local groupmembersMax_config = daynightmode and 9 or 8 
@@ -753,6 +753,9 @@ function abgPVPmatch:OnEvent(event, arg1)
 				readyCheck=true
 				SaveConfig(0)
 			else
+				if status =="queued" then
+					oldtime = nil
+				end
 				if readyCheck then
 					readyCheck=false
 					SaveConfig(0)
