@@ -655,7 +655,14 @@ function FarmHudMixin:ToggleOptions()
 		ACD:Close(addon);
 	else
 		ACD:Open(addon);
-		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.4.1-release");
+		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.4.3-release");
+	end
+end
+
+function FarmHudMixin:AddChatMessage(token,msg)
+	local from = (token==ns.QuestArrowToken and "QuestArrow") or false
+	if from and type(msg)=="string" then
+		ns.print("()",from,L[msg]);
 	end
 end
 

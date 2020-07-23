@@ -1,44 +1,27 @@
-# [2.17.7](https://github.com/WeakAuras/WeakAuras2/tree/2.17.7) (2020-06-09)
+# [2.17.12](https://github.com/WeakAuras/WeakAuras2/tree/2.17.12) (2020-07-11)
 
-[Full Changelog](https://github.com/WeakAuras/WeakAuras2/compare/2.17.5...2.17.7)
+[Full Changelog](https://github.com/WeakAuras/WeakAuras2/compare/2.17.11...2.17.12)
 
 ## Highlights
 
- - New Snippet feature! Ever wondered how to get started with custom code or just sick of having to type things over and over again? We got you! You can find the Snippets button in certain custom code editor fields. 
+ - more fixes for threat trigger in classic
+- rename blacklist features
+- add more basic shape textures 
 
 ## Commits
 
-InfusOnWoW (10):
+InfusOnWoW (5):
 
-- Fix incorrect subevent registration
-- Only allow nameplate units for attaching nameplates
-- Add HasVehicleActionBar to the "Vehicle UI" load option
-- BT2: Fix smart groups by more correctly checking the unit ids
-- Fix tooltip information not being cleared if aura is missing
-- Rename "Filter by Hostility" to "Nameplate Type"
-- Fix boss5 unit
-- Revert "Don't check for state.show in ReplacePlaceHolders"
-- Fix tsu variables with syntax errors breaking the trigger page
-- Fix models on progress bars
+- Make localization easier
+- Rename Blacklist features
+- Fix WeakAuras.WA_Utf8Sub() if the size is equal to the string length
+- Add more basic shape textures
+- Fix %t with "none" formatter
 
-Stanzilla (3):
+mrbuds (4):
 
-- one more
-- revert a few breaking spelling changes
-- run spellchecker
-
-asaka-wa (1):
-
-- Add snippets (#2176)
-
-mrbuds (3):
-
-- on import, fix handling of aura's tocversion
-- remove ability to send messages to channels (which is protected) fixes #2200
-- fix nil error fixes #2198
-
-nullKomplex (2):
-
-- Remove unused slash command code.
-- Fix Profiling pprint command.
+- fix division per 0 in threat trigger
+- Add "Exact Spell Match" option to "Queued Action" trigger, fixes #2264
+- update build.yml for 1.13.5
+- Use threat value and calculted total threat as value & total (#2262)
 

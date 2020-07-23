@@ -84,7 +84,7 @@ FishLib.registered = FishLib.registered or CBH:New(FishLib, nil, nil, false)
 local SABUTTONNAME = "LibFishingSAButton";
 FishLib.UNKNOWN = "UNKNOWN";
 
-function FishLib:GetFishingSkillInfo()
+function FishLib:GetFishingSpellInfo()
     local _, _, _, fishing, _, _ = GetProfessions();
     if ( fishing ) then
         local name, _, _, _, _, _, _ = GetProfessionInfo(fishing);
@@ -211,12 +211,13 @@ end
 
 
 function FishLib:UpdateFishingSkill()
-    local fishing, _ = self:GetFishingSkillInfo();
+    local fishing, _ = self:GetFishingSpellInfo();
     if (fishing and self.havedata) then
         local continent, _ = self:GetCurrentMapContinent();
         local info = FishLib.continent_fishing[continent];
         if (info) then
             local _, _, skill, _, _, _, _, _ = GetProfessionInfo(fishing);
+            skill = skill or 0
             if (info.rank < skill) then
                 info.rank = skill
             end
@@ -226,7 +227,7 @@ end
 
 -- get the fishing skill for the specified continent
 function FishLib:GetContinentSkill(continent)
-    local fishing, _ = self:GetFishingSkillInfo();
+    local fishing, _ = self:GetFishingSpellInfo();
     if (fishing and self.havedata) then
         local info = FishLib.continent_fishing[continent];
         if (info) then
@@ -1435,11 +1436,23 @@ function FishLib:GetLocZone(mapId)
 end
 
 function FishLib:GetZoneSize(mapId)
-    return HBD:GetZoneSize(mapId);
+    return LT:GetZoneYardSize(mapId);
 end
 
 function FishLib:GetWorldDistance(zone, x1, y1, x2, y2)
     return HBD:GetWorldDistance(zone, x1, y1, x2, y2)
+end
+
+function FishLib:GetPlayerZoneCoords()
+    local px, py, pzone, mapid = LT:GetBestZoneCoordinate()
+    return px, py, pzone, mapid
+end
+
+-- Get how far away the specified location is from the player
+function FishLib:GetDistanceTo(zone, x, y)
+    local px, py, pzone, _ = self:GetPlayerZoneCoords()
+    local dist, dx, dy = LT:GetYardDistance(pzone, px, py, zone, x, y)
+    return dist
 end
 
 -- Darkmoon Island is it's own continent?
@@ -1502,7 +1515,7 @@ function FishLib:GetCurrentMapId()
     if not self:IsClassic() and select(4, GetBuildInfo()) < 80000 then
         return GetCurrentMapAreaID()
     else
-        local mapId, _ = HBD:GetPlayerZone()
+        local _, _, zone, mapId = LT:GetBestZoneCoordinate()
         return mapId or 0
     end
 end
@@ -1983,7 +1996,7 @@ function FishLib:InvokeFishing(useaction)
     if ( not btn ) then
         return;
     end
-    local _, name = self:GetFishingSkillInfo();
+    local _, name = self:GetFishingSpellInfo();
     local findid = self:GetFishingActionBarID();
     if ( not useaction or not findid ) then
         btn:SetAttribute("type", "spell");
@@ -2088,7 +2101,7 @@ function FishLib:FishingBonusPoints(item, inv)
     local points = 0;
     if ( item and item ~= "" ) then
         if ( not match ) then
-            local _, skillname = self:GetFishingSkillInfo();
+            local _, skillname = self:GetFishingSpellInfo();
             match = {};
             match[1] = "%+(%d+) "..skillname;
             match[2] = skillname.." %+(%d+)";
@@ -2294,7 +2307,7 @@ end
 
 -- Find out where the player is. Based on code from Astrolabe and wowwiki notes
 function FishLib:GetCurrentPlayerPosition()
-    local x, y, mapId, _ = HBD:GetPlayerZonePosition();
+    local x, y, _, mapId = LT:GetBestZoneCoordinate()
     local C = self:GetCurrentMapContinent();
 
     return C, mapId, x, y;

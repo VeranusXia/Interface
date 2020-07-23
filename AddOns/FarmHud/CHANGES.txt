@@ -1,12 +1,12 @@
-tag f691f20722b2e03de2be938c9d7fd3865f362f23 8.4.1-release
+tag 1441df627d314f13c4819fbf1027e04ceb58ce09 8.4.3-release
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Wed Apr 22 14:54:16 2020 +0200
+Date:	Fri Jun 26 07:47:43 2020 +0200
 
-Tagging as 8.4.1-release
+Tagging as 8.4.3-release
 
-commit 60898373bc80e653ea51288ccbd31e985f0901a9
+commit a64124ef23ea63577da55accd6e8e2d2cdfe50e2
 Author: Hizuro <hizuro@gmx.net>
-Date:   Wed Apr 22 14:53:52 2020 +0200
+Date:   Fri Jun 26 07:47:16 2020 +0200
 
-    some changes in quest arrow option
+    minor changes
 

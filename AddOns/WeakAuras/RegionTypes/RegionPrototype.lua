@@ -24,7 +24,7 @@ local SubRegionEventSystem =
   end,
 
   RemoveSubscriber = function(self, event, subRegion)
-    tremove(self.events[event], subRegion)
+    tremove(self.events[event], tIndexOf(self.events[event], subRegion))
   end,
 
   Notify = function(self, event, ...)
@@ -53,12 +53,12 @@ end
 -- Adjusted Duration
 
 function WeakAuras.regionPrototype.AddAdjustedDurationToDefault(default)
-  default.useAdjustedMax = false;
-  default.useAdjustedMin = false;
+  default.useAdjustededMax = false;
+  default.useAdjustededMin = false;
 end
 
 function WeakAuras.regionPrototype.AddAdjustedDurationOptions(options, data, order)
-  options.useAdjustedMin = {
+  options.useAdjustededMin = {
     type = "toggle",
     width = WeakAuras.normalWidth,
     name = L["Set Minimum Progress"],
@@ -84,7 +84,7 @@ function WeakAuras.regionPrototype.AddAdjustedDurationOptions(options, data, ord
     hidden = function() return not (not data.useAdjustededMin and data.useAdjustededMax) end,
   };
 
-  options.useAdjustedMax = {
+  options.useAdjustededMax = {
     type = "toggle",
     width = WeakAuras.normalWidth,
     name = L["Set Maximum Progress"],
@@ -118,7 +118,7 @@ local screenWidth, screenHeight = math.ceil(GetScreenWidth() / 20) * 20, math.ce
 function WeakAuras.GetAnchorsForData(parentData, type)
   local result
   if not parentData.controlledChildren then
-    if not WeakAuras.regionOptions[parentData.regionType].getAnchors then
+    if not WeakAuras.regionOptions[parentData.regionType] or not WeakAuras.regionOptions[parentData.regionType].getAnchors then
       return
     end
 
@@ -278,7 +278,8 @@ local function SendChat(self, options)
   if (not options or WeakAuras.IsOptionsOpen()) then
     return
   end
-  WeakAuras.HandleChatAction(options.message_type, options.message, options.message_dest, options.message_channel, options.r, options.g, options.b, self, options.message_custom);
+
+  WeakAuras.HandleChatAction(options.message_type, options.message, options.message_dest, options.message_channel, options.r, options.g, options.b, self, options.message_custom, nil, options.message_formaters);
 end
 
 local function RunCode(self, func)
@@ -500,9 +501,9 @@ function WeakAuras.regionPrototype.modify(parent, region, data)
   if (defaultsForRegion and defaultsForRegion.alpha) then
     region:SetRegionAlpha(data.alpha);
   end
-  local hasAdjustedMin = defaultsForRegion and defaultsForRegion.useAdjustedMin ~= nil and data.useAdjustededMin
+  local hasAdjustedMin = defaultsForRegion and defaultsForRegion.useAdjustededMin ~= nil and data.useAdjustededMin
         and data.adjustedMin;
-  local hasAdjustedMax = defaultsForRegion and defaultsForRegion.useAdjustedMax ~= nil and data.useAdjustededMax
+  local hasAdjustedMax = defaultsForRegion and defaultsForRegion.useAdjustededMax ~= nil and data.useAdjustededMax
         and data.adjustedMax;
 
   region.adjustedMin = nil
@@ -548,6 +549,23 @@ function WeakAuras.regionPrototype.modify(parent, region, data)
       WeakAuras.AnchorFrame(data, region, parent);
     end
   end
+
+  region.startFormatters = WeakAuras.CreateFormatters(data.actions.start.message, function(key, default)
+    local fullKey = "message_format_" .. key
+    if data.actions.start[fullKey] == nil then
+      data.actions.start[fullKey] = default
+    end
+    return data.actions.start[fullKey]
+  end)
+
+  region.finishFormatters = WeakAuras.CreateFormatters(data.actions.finish.message, function(key, default)
+    local fullKey = "message_format_" .. key
+    if data.actions.finish[fullKey] == nil then
+      data.actions.finish[fullKey] = default
+    end
+    return data.actions.finish[fullKey]
+  end)
+
 end
 
 function WeakAuras.regionPrototype.modifyFinish(parent, region, data)
