@@ -1,4 +1,7 @@
-﻿
+﻿ConsoleExec("portal TW")
+ConsoleExec("profanityFilter 0")
+
+
  
 --进出入战斗提示  test 20171029
 local MyAddon = CreateFrame("Frame") 
