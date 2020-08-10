@@ -1,0 +1,10 @@
+﻿## Interface: 80300
+## Title: [Veranus]EasyDelete 
+## Notes-zhCN: 艾泽拉斯科学研究院EasyDelete
+## Version: 1.0
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+## Author: Veranus
+
+EasyDelete.lua
