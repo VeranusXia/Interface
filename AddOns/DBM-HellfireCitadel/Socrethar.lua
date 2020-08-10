@@ -1,10 +1,9 @@
 local mod	= DBM:NewMod(1427, "DBM-HellfireCitadel", nil, 669)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235119")
+mod:SetRevision("20200806142006")
 mod:SetCreatureID(92330)
 mod:SetEncounterID(1794)
-mod:SetZone()
 mod:SetUsedIcons(1)
 --mod.respawnTime = 20
 

@@ -1,9 +1,8 @@
 # <DBM> Draenor
 
-## [r50](https://github.com/DeadlyBossMods/DBM-WoD/tree/r50) (2020-07-15)
-[Full Changelog](https://github.com/DeadlyBossMods/DBM-WoD/compare/r49...r50) [Previous Releases](https://github.com/DeadlyBossMods/DBM-WoD/releases)
+## [r51](https://github.com/DeadlyBossMods/DBM-WoD/tree/r51) (2020-08-06)
+[Full Changelog](https://github.com/DeadlyBossMods/DBM-WoD/compare/r50...r51) [Previous Releases](https://github.com/DeadlyBossMods/DBM-WoD/releases)
 
-- Update luacheck  
-- Remove usages of DBMHudMap -> DBM.HudMap  
-- I forgot to push these mod updates, These all comply with the HudMap global rename  
-- Fixed several voice pack alerts on black furnace throwing lua errors. Also added some missing ones  
+- knew that'd find a stray LE\_PARTY\_CATEGORY\_HOME somewhere  
+- Disable LE and NUM\_LE in all luachecks  
+- Purge all unnesseary SetZone calls  

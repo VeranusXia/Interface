@@ -1,10 +1,9 @@
 local mod	= DBM:NewMod(1153, "DBM-Highmaul", nil, 477)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235119")
+mod:SetRevision("20200806142006")
 mod:SetCreatureID(79015)
 mod:SetEncounterID(1723)
-mod:SetZone()
 mod:SetUsedIcons(8, 7, 6, 3, 2, 1)--Don't know total number of icons needed yet
 --Could not find sound path on internet
 

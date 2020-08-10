@@ -1,10 +1,9 @@
 local mod	= DBM:NewMod(1203, "DBM-BlackrockFoundry", nil, 457)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235119")
+mod:SetRevision("20200806142006")
 mod:SetCreatureID(77557, 77231, 77477)
 mod:SetEncounterID(1695)
-mod:SetZone()
 mod:SetBossHPInfoToHighest()
 mod:SetUsedIcons(5, 4, 3, 2, 1)
 --mod:SetModelSound("sound\\creature\\marak\\vo_60_ironmaidens_marak_08.ogg", "sound\\creature\\marak\\vo_60_ironmaidens_marak_08.ogg")

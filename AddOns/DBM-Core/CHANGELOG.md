@@ -1,37 +1,44 @@
 # Deadly Boss Mods Core
 
-## [8.3.28](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/8.3.28) (2020-07-21)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/8.3.27...8.3.28) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [8.3.30](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/8.3.30) (2020-08-05)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/8.3.29...8.3.30) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
-- Allow localized special warnings to finally assign icons  
-    Updated Tedova as best as possible without transcriptor logs. Timers are still a mess do to spell queuing as well as not being able to update them based off energy (because no transcriptor logs)  
-- Behind schedule getting 4th dungeon finished tonight sadly. Mistcaller and Maloch updated, but last boss I will try to finish as best I can tomorrow then have a late tuesday tag for beta. Process is slow as molasses crawling through WCL and not having transcriptor logs. :\  
-- Added a transcriptoir print on combat start and end for Margrave Stradama. that mod cannot be finished without it. the phase changes are not in combat log so I can't get that data from WCLs  
-    Improved Domina bu actually adding personal warnings to ambush and prey, instead of relying entirely on generic target warning  
-- Full pass on Halls of atonement  
-     - Eshelon leap should now attempt target scanning and warning who it's on. Creature Id Fixed  
-     - Halkias timers updated but still needs further data to improve them. Creature Id Fixed  
-     - Aleez Fixate warning is no longer filtered target warning. Slight timer tweak. Creature Id Fixed  
-     - Lord Chamberlain timer updated but still need further data to improve them. Telekinetic Onslaught warning fixed, Telekinetic Toss warning added  
-- Fixed bug with Kael that'd cause add count to always be 0  
-    Fixed a bug on Maut that caused add count to always be 0  
-    Fixed a bug on Lady Inerva Darkvein that'd cause add count to always be 0  
-    Updated warnings and timers on Amarth from beta dungeon logs  
-    Updated Blightbone warnings and timers from beta dungeon logs  
-    Updated Nalthor warnings and timers from beta dungeon logs  
-    Updated Surgeon Stichflesh warnings and timers from beta dungeon logs  
-    Added two trash warnings to Necrotic Wake trash mods  
-- Flash improvements for optimization (#275)  
-- Added preliminary trash warnings to plaguefall based on recommendations.  
-- Unused, at least for now  
-- Really didn't get much done on the coding side but took a lot of notes from watching streams doing M+ with mods so I have some good notes for what to work on over weekend. Here are 3 small dungeon fixes though.  
-- Fixed a bug that caused flash on beta to look like a flashbang going off  
-- Completely redid doctor Ickus mod since blizzard completely threw old fight out window and redid it  
-- Sync  
-- Revert "Fix strFromTime not being DBM namespaced (#273)"  
-- Fix strFromTime not being DBM namespaced (#273)  
-    This is required for speed clears (e.g. AQ40)  
-- Kill off beam arrows on nzoth normal and heroic. This feature wil only be supported on LFR and Mythic. Other difficulties will just not show an arrow or text for this.  
-- Fixed a logic bug where people not in raid were still shown if not mythic and user turned hide dead off. Same zone check should be explicite check and not tied to other conditions being true.  
-- Update laucheck and remove compat line  
-- Add speed clear object, which I forgot to port to retail even though all locales and variable hacks were already ported for it  
+- Also, clean this garbage up, it's for the old deleted mechanic  
+    Prep for new release  
+- Updated spellnames for Artificer Xy'Mox with tonights journal update  
+    Added two additional spellIds to Lady Inerva Darkvein for Concentrate anima do to fact that new IDs were added (likely related to the rank 2 root mechanics)  
+- Added initial drycode for Artificer Xy'Mox, will be reviewed again after build goes out  
+    Did some icon tweaks to Hungering Destroyer for compatiblity with BW, as well as ensuring no overlaps with possible number of mythic debuffs going out  
+    Updated Impale and Fatal Finesse to also use icons and icon SAY bubbles on Sire Denathrius  
+- Cleaned up invalid event in hungering destroyer  
+    Removed useless and non wrking icon option for ooze auto marking on ilgynoth  
+    Finished heroic Sire Denathrius drycode  
+- Fix dum dum mistake. (#285)  
+- Update koKR (#284)  
+    * KR Update  
+- Small tweaks to infoframe columns  
+    Enable full 30 by default for all non LFR difficulties, and set LFR to 10, which will be enough to let LFRs also test 2 colums in a 5 by 5  
+- Cleanup some complaining  
+- Sync up some work in progress stuff (that's not quite done)  
+- InfoFrame updates (#283)  
+- Updated discord urls to non partner link  
+- Remove 192 unneeded calls to SetZone, as it's already called in NewMod object. SetZone should only be called at mod level if the default values are actually changing.  
+    re-added zones filter to event handler, which will fix a few mods that don't use RegisterEventsInCombat() such as Trash mods firing where they shouldn't  
+- Push a change to auto logging to allow M+ to be flagged as non trivial, since it's not trivial.  
+- Standard game font will now be applied far more inteligently so that it's always set to correct one even if user swaps languages. Basically, the font itself is no longer saved in the option (when using one of standard game fonts) just a variable that says to apply standardFont font, to whatever it SHOULD be based on clients locales setting this session. So no more ????? warnings/timers when you change your language after DBMs initial setup (well, unless you are using a non standard font that doesn't support new language, can't do too much about that besides telling you to try other non default fonts til one works in your language)  
+- Added missing warning for dance ending on council of blood  
+    Updated Shriekwing from heroic tested  
+    Updated Stoneborne Generals from heroic testing  
+- Update localization.cn.lua (#281)  
+    Co-authored-by: Adam <MysticalOS@users.noreply.github.com>  
+- Update localization.cn.lua (#282)  
+    Co-authored-by: Adam <MysticalOS@users.noreply.github.com>  
+- Fixed a bug in DBM core where countdown yells could get scheduled with 0 or even negative numbers if a debuff duration is shorter than max announces (generally this shouldn't happen because debuffs that short don't use countdowns, but has happened in event blizz hotfixes something from 4 seconds to 2 seconds like case was during raid testing today)  
+    Updated Council of Blood post testing  
+- Another rapid fix  
+- More fixes  
+- Couple quick fixes to range check and generals  
+- Fixed a bug where legacy mods calling StartCombat without an event type could throw errors  
+    Fixed a bug with profile drop downs throwing a lua error  
+- Push finished Altimor mod from testing  
+- sync download info to retail  

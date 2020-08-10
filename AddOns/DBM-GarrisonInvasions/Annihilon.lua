@@ -1,9 +1,8 @@
 local mod	= DBM:NewMod("Annihilon", "DBM-GarrisonInvasions")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235119")
+mod:SetRevision("20200806142006")
 mod:SetCreatureID(90802)
-mod:SetZone()
 
 mod:RegisterCombat("combat")
 mod:SetMinCombatTime(15)

@@ -1,10 +1,9 @@
 local mod	= DBM:NewMod(959, "DBM-BlackrockFoundry", nil, 457)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235554")
+mod:SetRevision("20200806142006")
 mod:SetCreatureID(77325)--68168
 mod:SetEncounterID(1704)
-mod:SetZone()
 mod:SetUsedIcons(3, 2, 1)
 mod.respawnTime = 29.5
 

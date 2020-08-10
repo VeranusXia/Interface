@@ -1,10 +1,9 @@
 local mod	= DBM:NewMod(1391, "DBM-HellfireCitadel", nil, 669)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20200714235119")
+mod:SetRevision("20200806143035")
 mod:SetCreatureID(89890)
 mod:SetEncounterID(1777)
-mod:SetZone()
 mod:SetUsedIcons(8, 7, 6, 5, 4, 3, 2, 1)
 mod.respawnTime = 30
 
@@ -167,7 +166,7 @@ local function delayModCheck(self)
 	if IsInRaid() and not IsPartyLFG() then--Future proof in case solo/not in a raid
 		for i = 1, GetNumGroupMembers() do
 			local uId = "raid"..i
-			if UnitIsGroupLeader(uId, LE_PARTY_CATEGORY_HOME) then
+			if UnitIsGroupLeader(uId, 1) then
 				if self:CheckBigWigs(DBM:GetUnitFullName(uId)) then
 					leaderHasBW = true
 				end

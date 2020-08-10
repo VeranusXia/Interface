@@ -61,9 +61,9 @@ AutoBattleGround:RegisterForDrag("LeftButton")
 AutoBattleGround:SetScript("OnDragStart", AutoBattleGround.StartMoving)
 AutoBattleGround:SetScript("OnDragStop", AutoBattleGround.StopMovingOrSizing)
 AutoBattleGround:SetScript("OnHide", function()
-	if ABG_CONFIG.modeck then 
+	--if ABG_CONFIG.modeck then 
 		piaobtn:Show()
-	end
+	--end
 end) 
 AutoBattleGround:SetScript("OnShow", function()
 	if piaobtn:IsShown() then
@@ -87,12 +87,22 @@ resetButton:SetSize(90, 30)
 resetButton:SetPoint("LEFT", 10, 0)
 resetButton.Text = resetButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
 resetButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-resetButton.Text:SetText("初始化") -- 设置材质路径 
+resetButton.Text:SetText("启动插件") -- 设置材质路径 
 resetButton.Text:SetPoint("CENTER", resetButton)
 resetButton:SetScript("OnClick", function() 
 	step=0
-	oldtime=nil 
-	logText("重置step:"..step)
+	oldtime=nil  
+	
+	local txt = resetButton.Text:GetText()
+	if txt=="启动插件" then 
+		start = true
+		logText("评级小助手启动!")
+		resetButton.Text:SetText("关闭插件")
+	else
+		start = false
+		logText("评级小助手关闭!")
+		resetButton.Text:SetText("启动插件")
+	end
 end)
 --按钮2
 local rlButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
@@ -125,14 +135,25 @@ local line2 = CreateFrame("Frame", nil, AutoBattleGround)
 line2:SetSize(330,40) 
 line2:SetPoint("TOP",   0, -80) 
 
-local modeck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
-modeck.text = modeck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-modeck.text:SetPoint("LEFT", modeck, "RIGHT", 0, 1)
-modeck:SetPoint("LEFT", 5, 0)
-modeck.text:SetText("悬浮图标")
-modeck:SetScript("OnClick", function() 
+-- local modeck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+-- modeck.text = modeck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- modeck.text:SetPoint("LEFT", modeck, "RIGHT", 0, 1)
+-- modeck:SetPoint("LEFT", 5, 0)
+-- modeck.text:SetText("悬浮图标")
+-- modeck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
+
+local blck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+blck.text = blck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+blck.text:SetPoint("LEFT", blck, "RIGHT", 0, 1)
+blck:SetPoint("LEFT", 5, 0)
+blck.text:SetText("部落模式")
+blck:SetScript("OnClick", function() 
 	SaveConfig() 
 end)
+
+
 
 local itemwp = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemwp.text = itemwp:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -177,12 +198,21 @@ fishck:SetScript("OnClick", function()
 	SaveConfig() 
 end)
 
-local classSPck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
-classSPck.text = classSPck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-classSPck.text:SetPoint("LEFT", classSPck, "RIGHT", 0, 1)
-classSPck:SetPoint("LEFT", 215, 0)
-classSPck.text:SetText("职业技能")
-classSPck:SetScript("OnClick", function() 
+-- local classSPck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+-- classSPck.text = classSPck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- classSPck.text:SetPoint("LEFT", classSPck, "RIGHT", 0, 1)
+-- classSPck:SetPoint("LEFT", 215, 0)
+-- classSPck.text:SetText("职业技能")
+-- classSPck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
+
+local neckck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
+neckck:SetPoint("LEFT", 215, 0)
+neckck.text:SetText("项链精华")
+neckck:SetScript("OnClick", function() 
 	SaveConfig() 
 end)
 
@@ -193,23 +223,9 @@ local line4 = CreateFrame("Frame", nil, AutoBattleGround)
 line4:SetSize(330,40) 
 line4:SetPoint("TOP",   0, -160) 
  
-local neckck = CreateFrame("CheckButton", nil, line4, "UICheckButtonTemplate")
-neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
-neckck:SetPoint("LEFT", 5, 0)
-neckck.text:SetText("火红烈焰")
-neckck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
 
-local blck = CreateFrame("CheckButton", nil, line4, "UICheckButtonTemplate")
-blck.text = blck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-blck.text:SetPoint("LEFT", blck, "RIGHT", 0, 1)
-blck:SetPoint("LEFT", 110, 0)
-blck.text:SetText("部落模式")
-blck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
+
+
 
 --第N行 显示log
 local content = CreateFrame("Frame", nil, AutoBattleGround)
@@ -230,8 +246,8 @@ function SaveConfig(normal)
 	local usetktxt = itemtk:GetChecked() and "/use 13\n/use 14\n" or ""
 	local usebox = boxck:GetChecked() and "/use 黄金保险箱\n/use 钢铁保险箱\n" or ""
 	local usefish = fishck:GetChecked() and "/use 淡紫刺鳐\n/use 软泥鲭鱼\n/use 洋流鲷鱼\n/use 狂乱的利齿青鱼\n/use 赤尾泥鳅\n/use 海砂变色鱼\n/use 提拉加德鲈鱼\n/use 蝰鱼\n/use 无尽之海鲶鱼\n" or ""
-	local useneck = neckck:GetChecked() and "/targetenemy\n/cast 火红烈焰\n" or ""
-	local useclassSpell = classSPck:GetChecked() and classSpell[className] or ""
+	local useneck = neckck:GetChecked() and "/cast 艾泽拉斯之心精华\n" or ""
+	local useclassSpell =  classSpell[className]  
 	local runAction = "/run AutoBattleGround:Action()\n"
 	local enterMarco = readyCheck and "/click PVPReadyDialogEnterBattleButton\n" or ""
 	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell..runAction..enterMarco
@@ -239,7 +255,7 @@ function SaveConfig(normal)
 	if normal==nil then
 		logText("ABG配置成功")
 	end
-	ABG_CONFIG.modeck = modeck:GetChecked()
+	--ABG_CONFIG.modeck = modeck:GetChecked()
 	ABG_CONFIG.boxck = boxck:GetChecked()
 	ABG_CONFIG.fishck = fishck:GetChecked()
 	ABG_CONFIG.blck = blck:GetChecked()
@@ -328,8 +344,9 @@ end
 --主逻辑
 function AutoBattleGround:Action()
 	if not start then
-		start = true
-		logText("评级小助手启动!")
+		-- start = true
+		logText("插件未启动,请在主面板启动插件!")
+		return
 	end
 	
 	
@@ -603,7 +620,7 @@ function AutoBattleGround:Init()
 	end
 	if not ABG_CONFIG then
 		ABG_CONFIG={}
-		ABG_CONFIG.modeck=true
+		--ABG_CONFIG.modeck=true
 		ABG_CONFIG.boxck =true
 		ABG_CONFIG.fishck = false
 		ABG_CONFIG.blck = false
@@ -627,7 +644,7 @@ function AutoBattleGround:Init()
 		CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
 		logText("初始化评级宏")
 	end
-	modeck:SetChecked(ABG_CONFIG.modeck)
+	--modeck:SetChecked(ABG_CONFIG.modeck)
 	boxck:SetChecked(ABG_CONFIG.boxck)
 	fishck:SetChecked(ABG_CONFIG.fishck)
 	blck:SetChecked(ABG_CONFIG.blck)
@@ -635,7 +652,7 @@ function AutoBattleGround:Init()
 	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
 	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
 	neckck:SetChecked(classSpell[className]=="")
-	classSPck:SetChecked(classSpell[className]~="")
+	--classSPck:SetChecked(classSpell[className]~="")
 	SaveConfig()
 	AutoBattleGround_CreateMinimapButton()
 	AutoBattleGround:Toggle()

@@ -81,27 +81,28 @@ local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo
 local UnitAura = UnitAura
 local UnitIsUnit = UnitIsUnit
+local GameTooltip = GameTooltip
 local floor, min = math.floor, math.min
--- GLOBALS: GameTooltip
 -- end block
 
 local function UpdateTooltip(self)
+	if GameTooltip:IsForbidden() then return end
 	GameTooltip:SetUnitAura(self:GetParent().__owner.unit, self:GetID(), self.filter)
 end
 
 local function onEnter(self)
-	if(not self:IsVisible()) then return end
-
+	if GameTooltip:IsForbidden() or not self:IsVisible() then return end
 	GameTooltip:SetOwner(self, self:GetParent().tooltipAnchor)
 	self:UpdateTooltip()
 end
 
 local function onLeave()
+	if GameTooltip:IsForbidden() then return end
 	GameTooltip:Hide()
 end
 
 local function createAuraIcon(element, index)
-	local button = CreateFrame('Button', element:GetDebugName() .. 'Button' .. index, element)
+	local button = CreateFrame('Button', element:GetName() .. 'Button' .. index, element)
 	button:RegisterForClicks('RightButtonUp')
 
 	local cd = CreateFrame('Cooldown', '$parentCooldown', button, 'CooldownFrameTemplate')
@@ -506,9 +507,8 @@ local function Update(self, event, unit)
 
 	UpdateAuras(self, event, unit)
 
-	-- Assume no event means someone wants to re-anchor things. This is usually
-	-- done by UpdateAllElements and :ForceUpdate.
-	if(event == 'ForceUpdate' or not event) then
+	-- Assume no event means someone wants to re-anchor things. This is usually done by UpdateAllElements and :ForceUpdate.
+	if event == 'ForceUpdate' or event == 'ElvUI_UpdateAllElements' or not event then -- ElvUI changed
 		local buffs = self.Buffs
 		if(buffs) then
 			(buffs.SetPosition or SetPosition) (buffs, 1, buffs.createdIcons)
