@@ -27,7 +27,7 @@ ChatEmote.lua
 ##聊天物品图标
 ChatLinkIcon.lua
 ##聊天过滤
-BlockSpam.lua
+##BlockSpam.lua
 ##宠物对战经验
 PetMonitor.xml
 ##FriendsMenuXP
