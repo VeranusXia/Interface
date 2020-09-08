@@ -2,8 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local Sticky = E.Libs.SimpleSticky
 
 local _G = _G
-local type, unpack, pairs, error = type, unpack, pairs, error
-local format, split, find, ipairs = format, strsplit, strfind, ipairs
+local type, unpack, pairs, error, ipairs = type, unpack, pairs, error, ipairs
+local format, split, find, strupper = format, strsplit, strfind, strupper
 
 local CreateFrame = CreateFrame
 local IsShiftKeyDown = IsShiftKeyDown
@@ -52,7 +52,7 @@ local function UpdateCoords(self)
 	local nudgeFrame = _G.ElvUIMoverNudgeWindow
 
 	nudgeFrame:ClearAllPoints()
-	nudgeFrame:Point(nudgePoint, mover, nudgeInversePoint, coordX, coordY)
+	nudgeFrame:SetPoint(nudgePoint, mover, nudgeInversePoint, coordX, coordY)
 	E:UpdateNudgeFrame(mover, x, y)
 end
 
@@ -68,12 +68,12 @@ function E:SetMoverPoints(name, parent)
 
 	if point2 then
 		holder.mover:ClearAllPoints()
-		holder.mover:Point(point2, relativeTo2, relativePoint2, xOffset2, yOffset2)
+		holder.mover:SetPoint(point2, relativeTo2, relativePoint2, xOffset2, yOffset2)
 	end
 
 	if parent then
 		parent:ClearAllPoints()
-		parent:Point(point1, parent.mover, 0, 0)
+		parent:SetPoint(point1, parent.mover, 0, 0)
 	end
 end
 
@@ -125,7 +125,7 @@ local function OnDragStop(self)
 
 	local x2, y2, p2 = E:CalculateMoverPoints(self)
 	self:ClearAllPoints()
-	self:Point(p2, E.UIParent, p2, x2, y2)
+	self:SetPoint(p2, E.UIParent, p2, x2, y2)
 
 	E:SaveMoverPosition(self.name)
 
@@ -241,7 +241,7 @@ local function UpdateMover(name, parent, textString, overlay, snapOffset, postdr
 
 	local fs = f:CreateFontString(nil, 'OVERLAY')
 	fs:FontTemplate()
-	fs:Point('CENTER')
+	fs:SetPoint('CENTER')
 	fs:SetText(textString or name)
 	fs:SetJustifyH('CENTER')
 	fs:SetTextColor(unpack(E.media.rgbvaluecolor))
@@ -374,11 +374,13 @@ function E:CreateMover(parent, name, textString, overlay, snapoffset, postdrag, 
 	UpdateMover(name, parent, textString, overlay, snapoffset, postdrag, shouldDisable, configString, perferCorners, ignoreSizeChanged)
 end
 
-function E:ToggleMovers(show, moverType)
+function E:ToggleMovers(show, which)
 	self.configMode = show
 
+	local upperText = strupper(which)
 	for _, holder in pairs(E.CreatedMovers) do
-		if show and holder.types[moverType] then
+		local isName = (holder.mover.name == which) or strupper(holder.mover.textString) == upperText
+		if show and (isName or holder.types[upperText]) then
 			holder.mover:Show()
 		else
 			holder.mover:Hide()
@@ -433,7 +435,7 @@ function E:EnableMover(name)
 end
 
 function E:ResetMovers(arg)
-	local all = not arg or arg == ""
+	local all = not arg or arg == ''
 	if all then self.db.movers = nil end
 
 	for name, holder in pairs(E.CreatedMovers) do
@@ -443,7 +445,7 @@ function E:ResetMovers(arg)
 			local frame = holder.mover
 			if point then
 				frame:ClearAllPoints()
-				frame:Point(point, anchor, secondaryPoint, x, y)
+				frame:SetPoint(point, anchor, secondaryPoint, x, y)
 			end
 
 			HandlePostDrag(frame)

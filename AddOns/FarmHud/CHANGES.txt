@@ -1,12 +1,12 @@
-tag 1441df627d314f13c4819fbf1027e04ceb58ce09 8.4.3-release
+tag 9cbc56a5c4938eff79fe6591f5ea771fd4657bf0 8.4.5-release
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Fri Jun 26 07:47:43 2020 +0200
+Date:	Mon Aug 24 17:53:02 2020 +0200
 
-Tagging as 8.4.3-release
+Tagging as 8.4.5-release
 
-commit a64124ef23ea63577da55accd6e8e2d2cdfe50e2
+commit d0faaa1f63dc92d5f9c0e5c634f91825d58c7def
 Author: Hizuro <hizuro@gmx.net>
-Date:   Fri Jun 26 07:47:16 2020 +0200
+Date:   Mon Aug 24 17:52:45 2020 +0200
 
-    minor changes
+    fix missing minimap button and option panel
 
