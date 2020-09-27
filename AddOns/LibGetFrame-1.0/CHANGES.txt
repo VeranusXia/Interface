@@ -1,10 +1,10 @@
-lightweight tag 02d91c17ebeccad43f5883a0dab8968c00f0925a 1.5.3
+lightweight tag fbf871a4dd2015075d3531d8af7c57fdc28f4adc 1.5.4
 Author:	Buds <mrbouyou@gmail.com>
-Date:	Fri Sep 4 00:10:13 2020 +0200
+Date:	Sat Sep 26 01:55:43 2020 +0200
 
-commit 02d91c17ebeccad43f5883a0dab8968c00f0925a
+commit fbf871a4dd2015075d3531d8af7c57fdc28f4adc
 Author: Buds <mrbouyou@gmail.com>
-Date:   Fri Sep 4 00:10:13 2020 +0200
+Date:   Sat Sep 26 01:55:43 2020 +0200
 
-    fix partyTargetFrames
+    ignore elvui'focustarget frame
 

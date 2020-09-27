@@ -1,12 +1,12 @@
-tag 9cbc56a5c4938eff79fe6591f5ea771fd4657bf0 8.4.5-release
-Author:	Hizuro <hizuro@gmx.net>
-Date:	Mon Aug 24 17:53:02 2020 +0200
+tag c0ec6a430c305df697ead26d321f1add008d371a 8.4.7-release
+Author:	hizuro <hizuro@gmx.net>
+Date:	Sun Sep 20 01:28:39 2020 +0200
 
-Tagging as 8.4.5-release
+Tagging as 8.4.7-release
 
-commit d0faaa1f63dc92d5f9c0e5c634f91825d58c7def
-Author: Hizuro <hizuro@gmx.net>
-Date:   Mon Aug 24 17:52:45 2020 +0200
+commit 7f038ae38d2283e1e21237122507305e78277c98
+Author: hizuro <hizuro@gmx.net>
+Date:   Sun Sep 20 01:27:29 2020 +0200
 
-    fix missing minimap button and option panel
+    add replacement of some minimap frame functions while FarmHud is enabled. Should prevent drag&drop problems of minimap buttons from other addons that using size, position and scale from minimap to calculate the new position around the minimap.
 
