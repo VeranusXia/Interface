@@ -334,6 +334,7 @@ end
 -- main frame functions
 
 function FarmHudMixin:SetScales(enabled)
+	local self = FarmHud;
 	local eScale = UIParent:GetEffectiveScale();
 	local width,height,size = WorldFrame:GetSize();
 	width,height = width/eScale,height/eScale;
@@ -358,6 +359,7 @@ function FarmHudMixin:SetScales(enabled)
 
 	local y = (self:GetHeight()*FarmHudDB.buttons_radius) * 0.5;
 	if (FarmHudDB.buttons_bottom) then y = -y; end
+	self.onScreenButtons:ClearAllPoints();
 	self.onScreenButtons:SetPoint("CENTER", self, "CENTER", 0, y);
 
 	self.TextFrame:SetScale(FarmHudDB.text_scale);
@@ -367,6 +369,10 @@ function FarmHudMixin:SetScales(enabled)
 	local time_y = self.TextFrame.ScaledHeight * FarmHudDB.time_radius;
 	if (FarmHudDB.coords_bottom) then coords_y = -coords_y; end
 	if (FarmHudDB.time_bottom) then time_y = -time_y; end
+
+	self.TextFrame.coords:ClearAllPoints()
+	self.TextFrame.time:ClearAllPoints()
+	self.TextFrame.mouseWarn:ClearAllPoints()
 
 	self.TextFrame.coords:SetPoint("CENTER", self, "CENTER", 0, coords_y);
 	self.TextFrame.time:SetPoint("CENTER",self,"CENTER",0, time_y);
@@ -713,7 +719,7 @@ function FarmHudMixin:ToggleOptions()
 		ACD:Close(addon);
 	else
 		ACD:Open(addon);
-		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.4.7-release");
+		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.4.9-release");
 	end
 end
 

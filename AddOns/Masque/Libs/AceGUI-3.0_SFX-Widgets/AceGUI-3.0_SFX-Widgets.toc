@@ -4,7 +4,7 @@
 ## Notes: Adds custom widgets to AceGUI-3.0 and AceConfigDialog-3.0.
 ## Notes-zhTW: 增加自訂義組件到AceGUI-3.0以及AceConfigDialog-3.0。
 
-## Version: 597ef1d
+## Version: 200db78
 ## Author: StormFX
 ## OptionalDeps: Ace3
 
