@@ -1,11 +1,8 @@
-## Interface: 80205
+## Interface: 90000
 ## Title: Rematch
 ## Notes: A pet journal alternative for managing pets and teams.
-## Title-zhCN: [Veranus]Rematch
-## Notes-zhCN: |cFF34A2F7宠物组合保存.|r
 ## Author: Gello
-## Version: 4.9.13
-## https://wow.curseforge.com/projects/rematch
+## Version: 4.10.5
 ## SavedVariables: RematchSaved, RematchSettings
 
 Localization\Rematch deDE.lua
@@ -110,5 +107,4 @@ Frames\Journal.xml
 Frames\Journal.lua
 
 Process\Battle.lua
-Process\Time.lua
-Process\PetMicroButton.lua
+

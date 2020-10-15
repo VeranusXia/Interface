@@ -319,9 +319,9 @@ local function Constructor()
 	local border = CreateFrame("Frame", nil, frame)
 	border:SetPoint("TOPLEFT", 1, -27)
 	border:SetPoint("BOTTOMRIGHT", -1, 3)
-	border:SetBackdrop(PaneBackdrop)
-	border:SetBackdropColor(0.1, 0.1, 0.1, 0.5)
-	border:SetBackdropBorderColor(0.4, 0.4, 0.4)
+	
+	
+	
 
 	local content = CreateFrame("Frame", nil, border)
 	content:SetPoint("TOPLEFT", 10, -7)

@@ -1,6 +1,6 @@
-﻿## Interface: 80300
+## Interface: 90000
 ## Title: tdBattlePetScript_Ext
-## Title-zhCN: [Veranus]tdBattlePetScript命令扩展
+## Title-zhCN: tdBattlePetScript命令扩展
 ## Author: scdhao
 ## Version: 1.0.1
 ## Dependencies: tdBattlePetScript

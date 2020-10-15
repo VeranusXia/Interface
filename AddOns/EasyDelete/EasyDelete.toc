@@ -1,4 +1,4 @@
-﻿## Interface: 80300
+﻿## Interface: 90100
 ## Title: [Veranus]EasyDelete 
 ## Notes-zhCN: 艾泽拉斯科学研究院EasyDelete
 ## Version: 1.0

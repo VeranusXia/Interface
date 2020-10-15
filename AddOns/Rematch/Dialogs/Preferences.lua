@@ -56,8 +56,8 @@ function rematch:ShowPreferencesTooltip(prefSet,prefKey,prefLoaded,info)
 		expectedDD,fromTab = rematch:GetPrefStatValue("expectedDD",prefSet,prefKey,prefLoaded)
 		override = override or fromTab
 		if expectedDD then -- expected damage taken
-			tinsert(info,format(L["  For %s pets1: %s%d%s"],rematch:PetTypeAsText(rematch.hintsOffense[expectedDD][1]),rematch.hexWhite,minHP*1.5,fromTab and tabIcon or ""))
-			tinsert(info,format(L["  For %s pets2: %s%d%s"],rematch:PetTypeAsText(rematch.hintsOffense[expectedDD][2]),rematch.hexWhite,minHP*2/3,fromTab and tabIcon or ""))
+			tinsert(info,format(L["  For %s pets: %s%d%s"],rematch:PetTypeAsText(rematch.hintsOffense[expectedDD][1]),rematch.hexWhite,minHP*1.5,fromTab and tabIcon or ""))
+			tinsert(info,format(L["  For %s pets: %s%d%s"],rematch:PetTypeAsText(rematch.hintsOffense[expectedDD][2]),rematch.hexWhite,minHP*2/3,fromTab and tabIcon or ""))
 		end
 		allowMM,fromTab = rematch:GetPrefStatValue("allowMM",prefSet,prefKey,prefLoaded)
 		override = override or fromTab
@@ -279,8 +279,8 @@ function rematch:PreferencesExpectedDDOnEnter()
 		wipe(info)
 		tinsert(info,format("%s: %s",L["Damage expected"],rematch:PetTypeAsText(petType)))
 		tinsert(info,format("%s: \124cffffd200%s",L["Minimum Health"],minHP))
-		tinsert(info,format(L["  For %s pets1: \124cffffd200%d"],rematch:PetTypeAsText(rematch.hintsOffense[petType][1]),minHP*1.5))
-		tinsert(info,format(L["  For %s pets2: \124cffffd200%d"],rematch:PetTypeAsText(rematch.hintsOffense[petType][2]),minHP*2/3))
+		tinsert(info,format(L["  For %s pets: \124cffffd200%d"],rematch:PetTypeAsText(rematch.hintsOffense[petType][1]),minHP*1.5))
+		tinsert(info,format(L["  For %s pets: \124cffffd200%d"],rematch:PetTypeAsText(rematch.hintsOffense[petType][2]),minHP*2/3))
 		rematch:ShowTableTooltip(self,info)
 	end
 end

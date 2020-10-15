@@ -343,7 +343,7 @@ function rematch:PLAYER_TARGET_CHANGED()
 			end
 			-- if PromptToLoad enabled, and this team isn't loaded, and target panel not on screen, and we can swap pets, prompt to load
 			if settings.PromptToLoad or settings.AutoLoad then
-				if saved[npcID] and not (InCombatLockdown() or C_PetBattles.IsInBattle() or C_PetBattles.GetPVPMatchmakingInfo()) then
+				if saved[npcID] and settings.loadedTeam~=npcID and (npcID~=rematch.lastInteractNpcID or settings.PromptAlways) and not (InCombatLockdown() or C_PetBattles.IsInBattle() or C_PetBattles.GetPVPMatchmakingInfo()) then
 					if settings.PromptToLoad and (not rematch.LoadoutPanel:IsVisible() and not rematch.MiniPanel:IsVisible()) then
 						if settings.PromptWithMinimized then
 							rematch:AutoShow()
@@ -358,7 +358,7 @@ function rematch:PLAYER_TARGET_CHANGED()
 						if settings.AutoLoadShow and (not rematch.LoadoutPanel:IsVisible() and not rematch.MiniPanel:IsVisible()) then
 							rematch:AutoShow()
 						end
-						rematch:loadSimilarTeam(npcID)
+						rematch:LoadTeam(npcID)
 						rematch:SetLastInteractNpcID(npcID)
 					end
 				end
@@ -391,7 +391,7 @@ function rematch:UPDATE_MOUSEOVER_UNIT()
 				if settings.AutoLoadShow and (not rematch.LoadoutPanel:IsVisible() and not rematch.MiniPanel:IsVisible()) then
 					rematch:AutoShow()
 				end
-				rematch:loadSimilarTeam(npcID) -- then load it
+				rematch:LoadTeam(npcID) -- then load it
 				rematch:SetLastInteractNpcID(npcID)
 			end
 		end
@@ -521,7 +521,6 @@ function rematch:PET_BATTLE_CLOSE()
 			frame:Show() -- this is for standalone being open and dismissed when battle started
 		end
 		if settings.ShowAfterBattle and (not settings.ShowAfterPVEOnly or not rematch.wasInPVP) then
-			--print("showing")
 			rematch:AutoShow() -- this is the "Show After Pet Battle" option
 		end
 		if rematch.Notes:IsVisible() and not rematch.Notes.Content.ScrollFrame.EditBox:HasFocus() then
@@ -534,7 +533,7 @@ function rematch:PET_BATTLE_CLOSE()
 			-- then wait a bit and load healthiest pets
 			C_Timer.After(0.75,rematch.LoadHealthiestOfLoadedPets)
 		end
-                rematch.wasInPVP = nil
+		rematch.wasInPVP = nil
 	end
 end
 
@@ -562,7 +561,7 @@ function rematch:CHAT_MSG_SYSTEM(message)
 		-- if "%s has been added to your pet journal!" and %s is a pet link
 		local petLink = message:match(patternNewPet)
 		if petLink then
-			local _,petID = petLink:match("battlepet:(%d+):.+:(BattlePet%-.-)\124h")
+			local _,petID = petLink:match("battlepet:(%d+):.+:(BattlePet%-.-):(%d+)\124h") -- 1/20/20 added :(%d+) before |h
 			if petID and rematch:PetCanLevel(petID) then
 				local addID
 				local speciesID,_,level,_,_,_,_,name = C_PetJournal.GetPetInfoByPetID(petID)
@@ -651,149 +650,15 @@ function rematch:PET_BATTLE_FINAL_ROUND(winner)
 end
 
 function rematch:ADDON_LOADED(addon)
-    if addon=="Blizzard_PetBattleUI" then
+	if addon=="Blizzard_Collections" then
+		rematch.Journal:Blizzard_Collections()
+	elseif addon=="Blizzard_PetBattleUI" then
 		rematch.Battle:Blizzard_PetBattleUI()
 	end
 end
-function rematch:ADDON_LOADED(addon)
-	if addon=="Blizzard_Collections" then
-		rematch:UnregisterEvent("ADDON_LOADED")
-		C_Timer.After(0.5,function()
-			if not settings.HideJournalButton then
-				rematch:CreateJournalButton()
-			end
-			local parent = PetJournalEnhancedPetMenu or PetJournalPetOptionsMenu
-			rematch.oldDropDownInit = parent.initialize
-			parent.initialize = rematch.NewPetMenuDropDownInit
-		end)
-	end
-end
-
-function rematch:NewPetMenuDropDownInit(level)
-	local petID = PetJournal.menuPetID
-	if petID then
-	  local info = UIDropDownMenu_CreateInfo()
-	  info.notCheckable = true
-		info.arg1 = petID
-		if rematch:PetCanLevel(petID) then
-			local isLeveling = rematch:IsPetLeveling(petID)
-			if petID~=rematch:GetIDType(petID)~="pet" or not C_PetJournal.PetIsTradable(petID) then
-				info.text = "开始升级"
-				info.func = rematch.DropDownStartLeveling
-				UIDropDownMenu_AddButton(info,level)
-			end
-			if not isLeveling then
-				info.text = "加入升级队列"
-				info.func = rematch.DropDownAddToQueue
-				UIDropDownMenu_AddButton(info,level)
-			end
-			if isLeveling then
-				info.text = "停止升级"
-				info.func = rematch.DropDownStopLeveling
-			  UIDropDownMenu_AddButton(info,level)
-			end
-		end
-	end
-	rematch.oldDropDownInit(self,level)
-end
-
-function rematch:DropDownStartLeveling(petID)
-	rematch:InsertPetToQueue(1,petID)
-end
-
-function rematch:DropDownAddToQueue(petID)
-	rematch:InsertPetToQueue(#settings.LevelingQueue+1,petID)
-end
-
-function rematch:DropDownStopLeveling(petID)
-	rematch:RemovePetFromQueue(petID)
-end
-
-function rematch:CreateJournalButton()
-	if RematchJournalButton then return end
-	local lastAnchor
-	local function findAnchor(anchoredTo,...)
-		lastAnchor = anchoredTo
-		for i=1,select("#",...) do
-			local button = select(i,...)
-			if select(2,button:GetPoint())==anchoredTo then
-				findAnchor(button,PetJournal:GetChildren())
-				return
-			end
-		end
-	end
-	findAnchor(PetJournalFindBattle,PetJournal:GetChildren())
-	local button = CreateFrame("Button","RematchJournalButton",PetJournal,"UIPanelButtonTemplate")
-	button:SetSize(100,22)
-	button:SetText("宠物组合")
-	button:SetScript("OnClick",RematchFrame.Toggle)
-	button:SetScript("OnEnter",RematchFrame.ToggleTooltip)
-	button:SetScript("OnLeave",RematchFrame.ToggleTooltipHide)
-	button:SetPoint("RIGHT",lastAnchor,"LEFT",-2,1)
-	local yoff = floor(button:GetBottom())-floor(PetJournal:GetBottom())-4
-	button:SetPoint("RIGHT",lastAnchor,"LEFT",-2,-yoff)
-end
-
-function rematch:UpdateLevelingMarkers()
-	if self==rematch and PetJournal then
-		self = PetJournalEnhancedListScrollFrame or PetJournalListScrollFrame
-	end
-	if self==PetJournalListScrollFrame or self==PetJournalEnhancedListScrollFrame then
-		for i=1,#self.buttons do
-			local petID = self.buttons[i].petID
-			local showIcon
-			local icon = self.buttons[i].rematchLevelingPet
-			if petID and rematch:IsPetLeveling(petID) then
-				if not icon then
-					self.buttons[i].rematchLevelingPet = self.buttons[i]:CreateTexture(nil,"ARTWORK")
-					icon = self.buttons[i].rematchLevelingPet
-					icon:SetSize(24,24)
-					icon:SetPoint("RIGHT",-6,0)
-					icon:SetTexture("Interface\\AddOns\\Rematch\\Textures\\footnotes")
-					icon:SetTexCoord(0.125,0.25,0,0.25)
-				end
-				showIcon = true
-			end
-			if icon then
-				icon:SetShown(showIcon)
-			end
-		end
-	end
-
-end
-
-function rematch:UpdateInTeamsMarkers()
-	if self==rematch and PetJournal then
-		self = PetJournalEnhancedListScrollFrame or PetJournalListScrollFrame
-	end
-	if self==PetJournalListScrollFrame or self==PetJournalEnhancedListScrollFrame then
-		for i=1,#self.buttons do
-			local petID = self.buttons[i].petID
-			local showIcon
-			local icon = self.buttons[i].rematchInTeamsPet
-			if RematchSettings.ShowInTeamsFootnotes and rematch.petsInTeams[petID] then
-				if not icon then
-					self.buttons[i].rematchInTeamsPet = self.buttons[i]:CreateTexture(nil,"ARTWORK")
-					icon = self.buttons[i].rematchInTeamsPet
-					icon:SetSize(22,22)
-					icon:SetPoint("RIGHT",-6,0)
-					icon:SetTexture("Interface\\AddOns\\Rematch\\Textures\\footnotes")
-					icon:SetTexCoord(0.5,0.625,0.5,0.75)
-				end
-				showIcon = true
-			end
-			if icon then
-				icon:SetShown(showIcon)
-			end
-		end
-	end
-
-end
-hooksecurefunc("HybridScrollFrame_Update",rematch.UpdateInTeamsMarkers)
-hooksecurefunc("HybridScrollFrame_Update",rematch.UpdateLevelingMarkers)
-
 
 --[[ Timer Management ]]
+
 rematch.timerFuncs = {} -- indexed by arbitrary name, the func to run when timer runs out
 rematch.timerTimes = {} -- indexed by arbitrary name, the duration to run the timer
 rematch.timersRunning = {} -- indexed numerically, timers that are running

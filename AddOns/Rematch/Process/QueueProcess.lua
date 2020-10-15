@@ -450,7 +450,7 @@ function rematch:FillQueue(countOnly,fillMore)
 					tinsert(petTable,petID)
 				end
 				count = count + 1
-				--speciesInQueue[speciesID] = true
+				speciesInQueue[speciesID] = true
 			end
 		end
 	end

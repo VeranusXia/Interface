@@ -307,7 +307,7 @@
 			</Button>
 			<Button parentArray="Buttons" parentKey="Import" inherits="RematchToolbarButtonTemplate">
 				<KeyValues>
-					<KeyValue key="defaultIcon" value="Interface\AddOns\Rematch\Textures\Import.blp"/>
+					<KeyValue key="defaultIcon" value="Interface\Icons\Ability_Vehicle_LoadSelfCatapult.blp"/>
 				</KeyValues>
 				<Scripts>
 					<OnClick>

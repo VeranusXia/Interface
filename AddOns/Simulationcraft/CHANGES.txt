@@ -1,22 +1,10 @@
-lightweight tag 566a425442c0000329b31cdddd41d60d2a25bcc6 v8.3.0
+lightweight tag f2a0ce75ab7b14b3c56793ac29a2b90664843470 v9.0.1-01
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Thu Oct 8 15:13:26 2020 -0700
+Date:	Tue Oct 13 08:19:58 2020 -0700
 
-commit 566a425442c0000329b31cdddd41d60d2a25bcc6
+commit f2a0ce75ab7b14b3c56793ac29a2b90664843470
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Thu Oct 8 15:13:26 2020 -0700
+Date:   Tue Oct 13 08:19:58 2020 -0700
 
-    Initial Shadowlands Support
-    
-    * Covenant and Soulbinds are exported if available
-    * Great Vault rewards are included as gear comments
-    * Frame is now resizable and location is persistent across logins
-    * UI Frames are now handled in code rather than XML
-    
-    This version is compatible with both 8.3 and 9.0 so will work on retail,
-    PTR, and beta. Addon will also have version bumps as retail is updated
-    to avoid out-of-date addon warnings.
-    
-    Addon version numbering will now follow the WoW client version more
-    closely as well.
+    9.0.1 prepatch version compatibility bump
 

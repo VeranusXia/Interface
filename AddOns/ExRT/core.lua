@@ -1,8 +1,8 @@
---	28.09.2020
+--	11.10.2020
 
 local GlobalAddonName, ExRT = ...
 
-ExRT.V = 4300
+ExRT.V = 4330
 ExRT.T = "R"
 
 ExRT.OnUpdate = {}		--> таймеры, OnUpdate функции
@@ -543,6 +543,10 @@ ExRT.frame:SetScript("OnEvent",function (self, event, ...)
 			ExRT.ModulesLoaded[i] = true
 			
 			ExRT.F.dprint("ADDON_LOADED",i,ExRT.Modules[i].name)
+		end
+
+		if not VExRT.Addon.DisableHideESC then
+			tinsert(UISpecialFrames, "ExRTOptionsFrame")
 		end
 
 		VExRT.Addon.Version = ExRT.V

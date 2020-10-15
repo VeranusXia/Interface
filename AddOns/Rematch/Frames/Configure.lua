@@ -32,7 +32,7 @@ function frame:ConfigureFrame()
 
 	-- if PetJournal is up, then it needs to hide before standalone frame can show
 	if rematch.Journal:IsVisible() or (PetJournal and PetJournal:IsVisible()) then
-		--HideUIPanel(CollectionsJournal)
+		HideUIPanel(CollectionsJournal)
 	end
 
 	-- to start, hide all the things

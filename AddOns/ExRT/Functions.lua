@@ -6,6 +6,8 @@ local UnitName, GetTime, GetCursorPosition, UnitIsUnit = UnitName, GetTime, GetC
 local select, floor, tonumber, tostring, string_sub, string_find, string_len, bit_band, type, unpack, pairs, format, strsplit = select, floor, tonumber, tostring, string.sub, string.find, string.len, bit.band, type, unpack, pairs, format, strsplit
 local string_gsub, string_match = string.gsub, string.match
 local RAID_CLASS_COLORS, COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_SPECIAL_MASK = RAID_CLASS_COLORS, COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_SPECIAL_MASK
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned or ExRT.NULLfunc
+local GetRaidRosterInfo = GetRaidRosterInfo
 
 do
 	local antiSpamArr = {}
@@ -44,7 +46,7 @@ do
 			return 0.8,0.8,0.8
 		end
 	end
-	
+
 	function ExRT.F.classColorByGUID(guid)
 		local class,_ = ""
 		if guid and guid ~= "" and guid ~= "0000000000000000" then
@@ -89,15 +91,15 @@ function ExRT.F.splitLongLine(text,maxLetters,SpellLinksEnabled)
 				lettersNow = lastC - 1
 			end
 		end
-		
+
 		local utf8pos = 1
 		local textLen = string.len(text)
 		while true do
 			local char = string.sub(text,utf8pos,utf8pos)
 			local c = char:byte()
-			
+
 			local lastPos = utf8pos
-			
+
 			if c > 0 and c <= 127 then
 				utf8pos = utf8pos + 1
 			elseif c >= 194 and c <= 223 then
@@ -109,14 +111,14 @@ function ExRT.F.splitLongLine(text,maxLetters,SpellLinksEnabled)
 			else
 				utf8pos = utf8pos + 1
 			end
-			
+
 			if utf8pos > lettersNow then
 				lettersNow = lastPos - 1
 				break
 			elseif utf8pos >= textLen then
 				break
-			end		
-		end		
+			end
+		end
 		result[#result + 1] = string.sub(text,1,lettersNow)
 		text = string.sub(text,lettersNow+1)
 	until string.len(text) < maxLetters
@@ -221,7 +223,7 @@ function ExRT.F.GetRaidDiffMaxGroup()
 		return 8
 	else
 		return 5
-	end	
+	end
 end
 
 function ExRT.F.GetDifficultyForCooldownReset()
@@ -288,22 +290,22 @@ function ExRT.F.GetUnitInfoByUnitFlag(unitFlag,infoType)
 	if infoType == 1 then
 		return bit_band(unitFlag,COMBATLOG_OBJECT_TYPE_MASK)
 		--[1024]="player", [2048]="NPC", [4096]="pet", [8192]="GUARDIAN", [16384]="OBJECT"
-		
+
 	--> CONTROL
 	elseif infoType == 2 then
 		return bit_band(unitFlag,COMBATLOG_OBJECT_CONTROL_MASK)
 		--[256]="by players", [512]="by NPC",
-		
+
 	--> REACTION
 	elseif infoType == 3 then
 		return bit_band(unitFlag,COMBATLOG_OBJECT_REACTION_MASK)
 		--[16]="FRIENDLY", [32]="NEUTRAL", [64]="HOSTILE"
-		
+
 	--> Controller affiliation
 	elseif infoType == 4 then
 		return bit_band(unitFlag,COMBATLOG_OBJECT_AFFILIATION_MASK)
 		--[1]="player", [2]="PARTY", [4]="RAID", [8]="OUTSIDER"
-		
+
 	--> Special
 	elseif infoType == 5 then
 		return bit_band(unitFlag,COMBATLOG_OBJECT_SPECIAL_MASK)
@@ -584,7 +586,7 @@ function ExRT.F.IsPlayerRLorOfficer(unitName)
 			end
 		end
 	end
-	
+
 	-- nil: not in party or raid
 	-- false: no rl, no officer
 	-- 1: officer
@@ -594,23 +596,11 @@ end
 function ExRT.F.GetPlayerParty(unitName)
 	for i=1,GetNumGroupMembers() do
 		local name,_,subgroup = GetRaidRosterInfo(i)
-		if name == unitName then
+		if UnitIsUnit(name,unitName) then
 			return subgroup
 		end
 	end
-	return 9
-end
-
-function ExRT.F._unp(str)
-	if not str or #str < 4 then
-		return 0
-	end
-	local c = strbyte(str, 1) + strbyte(str, 2)
-	local d = 0
-	for i=3,#str do
-		d = d + strbyte(str, 1)
-	end
-	return d * 1000 + c
+	return 0
 end
 
 function ExRT.F.CreateAddonMsg(...)
@@ -766,13 +756,13 @@ end
 
 do
 	-- UTF8
-	
+
 	-- returns the number of bytes used by the UTF-8 character at byte i in s
 	-- also doubles as a UTF-8 character validator
 	local function utf8charbytes(s, i)
 		-- argument defaults
 		i = i or 1
-	
+
 		-- argument checking
 		if type(s) ~= "string" then
 			error("bad argument #1 to 'utf8charbytes' (string expected, got ".. type(s).. ")")
@@ -780,39 +770,39 @@ do
 		if type(i) ~= "number" then
 			error("bad argument #2 to 'utf8charbytes' (number expected, got ".. type(i).. ")")
 		end
-	
+
 		local c = strbyte(s, i)
-	
+
 		-- determine bytes needed for character, based on RFC 3629
 		-- validate byte 1
 		if c > 0 and c <= 127 then
 			-- UTF8-1
 			return 1
-	
+
 		elseif c >= 194 and c <= 223 then
 			-- UTF8-2
 			local c2 = strbyte(s, i + 1)
-	
+
 			if not c2 then
 				error("UTF-8 string terminated early")
 			end
-	
+
 			-- validate byte 2
 			if c2 < 128 or c2 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			return 2
-	
+
 		elseif c >= 224 and c <= 239 then
 			-- UTF8-3
 			local c2 = strbyte(s, i + 1)
 			local c3 = strbyte(s, i + 2)
-	
+
 			if not c2 or not c3 then
 				error("UTF-8 string terminated early")
 			end
-	
+
 			-- validate byte 2
 			if c == 224 and (c2 < 160 or c2 > 191) then
 				error("Invalid UTF-8 character")
@@ -821,24 +811,24 @@ do
 			elseif c2 < 128 or c2 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			-- validate byte 3
 			if c3 < 128 or c3 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			return 3
-	
+
 		elseif c >= 240 and c <= 244 then
 			-- UTF8-4
 			local c2 = strbyte(s, i + 1)
 			local c3 = strbyte(s, i + 2)
 			local c4 = strbyte(s, i + 3)
-	
+
 			if not c2 or not c3 or not c4 then
 				error("UTF-8 string terminated early")
 			end
-	
+
 			-- validate byte 2
 			if c == 240 and (c2 < 144 or c2 > 191) then
 				error("Invalid UTF-8 character")
@@ -847,75 +837,75 @@ do
 			elseif c2 < 128 or c2 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			-- validate byte 3
 			if c3 < 128 or c3 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			-- validate byte 4
 			if c4 < 128 or c4 > 191 then
 				error("Invalid UTF-8 character")
 			end
-	
+
 			return 4
-	
+
 		else
 			error("Invalid UTF-8 character")
 		end
 	end
-	
+
 	function ExRT.F:utf8len(s)
 		local pos = 1
 		local bytes = strlen(s)
 		local len = 0
-	
+
 		while pos <= bytes do
 			len = len + 1
 			pos = pos + utf8charbytes(s, pos)
 		end
-	
+
 		return len
 	end
-	
+
 	-- functions identically to string.sub except that i and j are UTF-8 characters
 	-- instead of bytes
 	function ExRT.F:utf8sub(s, i, j)
 		-- argument defaults
 		j = j or -1
-	
+
 		local pos = 1
 		local bytes = strlen(s)
 		local len = 0
-	
+
 		-- only set l if i or j is negative
 		local l = (i >= 0 and j >= 0) or ExRT.F:utf8len(s)
 		local startChar = (i >= 0) and i or l + i + 1
 		local endChar   = (j >= 0) and j or l + j + 1
-	
+
 		-- can't have start before end!
 		if startChar > endChar then
 			return ""
 		end
-	
+
 		-- byte offsets to pass to string.sub
 		local startByte, endByte = 1, bytes
-	
+
 		while pos <= bytes do
 			len = len + 1
-	
+
 			if len == startChar then
 				startByte = pos
 			end
-	
+
 			pos = pos + utf8charbytes(s, pos)
-	
+
 			if len == endChar then
 				endByte = pos - 1
 				break
 			end
 		end
-	
+
 		return strsub(s, startByte, endByte)
 	end
 end
@@ -942,13 +932,13 @@ do
 		chatWindow:SetScript("OnDragStop", function(self) 
 			self:StopMovingOrSizing() 
 		end)
-		
+
 		chatWindow.border = ExRT.lib:Shadow(chatWindow,20)
-		
+
 		chatWindow.title:SetText(ExRT.L.ChatwindowName)
-		
+
 		chatWindow.box = ExRT.lib:MultiEdit(chatWindow):Size(230,265):Point(10,-23):Font('x',11)
-		
+
 		local chats = {
 			{"ME",ExRT.L.ChatwindowChatSelf},
 			{"SAY",ExRT.L.ChatwindowChatSay},
@@ -978,12 +968,12 @@ do
 				end
 			}
 		end
-		
+
 		chatWindow.target = ExRT.lib:Edit(chatWindow):Size(130,20):Point(255,-115):OnChange(function (self)
 			activeName = self:GetText()
 		end)
 		chatWindow.targetText = ExRT.lib:Text(chatWindow,ExRT.L.ChatwindowNameEB,10):Size(350,14):Point("BOTTOMLEFT",chatWindow.target,"TOPLEFT",5,2):Bottom():Color():Shadow()
-		
+
 		chatWindow.button = ExRT.lib:Button(chatWindow,ExRT.L.ChatwindowSend):Size(130,22):Point(255,-150):OnClick(function (self)
 			local lines = {strsplit("\n", chatWindow.box.EditBox:GetText())}
 			local channel = activeChat
@@ -1014,9 +1004,9 @@ do
 			end
 			chatWindow:Hide()
 		end)
-		
+
 		chatWindow.helpText = ExRT.lib:Text(chatWindow,ExRT.L.ChatwindowHelp,10):Size(130,100):Point("TOP",chatWindow.button,"BOTTOM",0,-10):Top():Color():Shadow()
-		
+
 		chatWindow.chk1 = ExRT.lib:Check(chatWindow,"Option 1"):Point(255,-260):OnClick(function()
 			UpdateLines()
 		end)
@@ -1076,9 +1066,9 @@ do
 	local alertArg1 = nil
 	local function CreateWindow()
 		alertWindow = ExRT.lib:Popup():Size(500,65)
-		
+
 		alertWindow.EditBox = ExRT.lib:Edit(alertWindow):Size(480,16):Point("TOP",0,-20)
-		
+
 		alertWindow.OK = ExRT.lib:Button(alertWindow,ACCEPT):Size(130,20):Point("TOP",0,-40):OnClick(function (self)
 			alertWindow:Hide()
 			local input = alertWindow.EditBox:GetText()

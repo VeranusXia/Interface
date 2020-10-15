@@ -27,7 +27,7 @@ local loseNum=0
 local readyCheck=false
 local isSearching=false
 
-local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent)
+local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent, "BackdropTemplate")
 piaobtn:SetSize(50, 50)
 piaobtn:SetBackdrop({bgFile = "Interface\\AddOns\\AutoBattleGround\\AutoBattleGround"})
 piaobtn.Text = piaobtn:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层

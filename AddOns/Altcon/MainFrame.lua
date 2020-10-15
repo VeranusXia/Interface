@@ -15,7 +15,7 @@ local L = addon.L
 
 local RESOUCE_WIDTH = 36
 
-local frame = CreateFrame("Frame", "AltconFrame", UIParent)
+local frame = CreateFrame("Frame", "AltconFrame", UIParent, "BackdropTemplate")
 addon.frame = frame
 frame:Hide()
 frame:SetSize(560 + #addon.RESOURCE_WATCH * RESOUCE_WIDTH + 30, 330)
@@ -129,7 +129,7 @@ function list:OnButtonCreated(button)
 	local prevGroup = keystone
 	local _, res
 	for _, res in ipairs(addon.RESOURCE_WATCH) do
-		local _, amount, texture = GetCurrencyInfo(res.id)
+		local _, amount, texture = C_CurrencyInfo.GetCurrencyInfo(res.id)
 		local group = CreateButtonIconText(button, texture, RESOUCE_WIDTH, prevGroup.text, res.id)
 		button[res.key] = group
 		prevGroup = group

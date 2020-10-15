@@ -10,9 +10,13 @@
 
 ]]
 
--- GLOBALS: LibStub, ReloadUI
-
 local MASQUE, Core = ...
+
+----------------------------------------
+-- WoW API
+---
+
+local ReloadUI = ReloadUI
 
 ----------------------------------------
 -- Locals

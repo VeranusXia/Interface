@@ -1,5 +1,5 @@
-## Interface: 80100
-## Title: [Veranus]tdBattlePetScript
+## Interface: 90000
+## Title: tdBattlePetScript
 ## Description: 自动宠物战斗
 ## Author: DengSir
 ## Version: 80100.01

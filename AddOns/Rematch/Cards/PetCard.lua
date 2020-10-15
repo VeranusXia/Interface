@@ -80,8 +80,7 @@ function rematch:ShowPetCard(parent,petID,force)
 	end
 
 	if settings.ClickPetCard and not force then
-			card.delayedParent = parent
-			card.delayedPetID = petID
+		return
 	end
 
 	if petID==rematch.petInfo.petID then
@@ -197,7 +196,8 @@ function rematch:ShowPetCard(parent,petID,force)
 	-- possible breeds
 	info.PossibleBreeds:Hide()
 	if petInfo.possibleBreedNames then
-		local possibleBreeds = table.concat(petInfo.possibleBreedNames,rematch:GetBreedSource()=="PetTracker_Breeds" and " " or ", ")
+		local breedSource = rematch:GetBreedSource()
+		local possibleBreeds = table.concat(petInfo.possibleBreedNames,rematch:GetBreedFormat()=="icon" and " " or ", ")
 		info.PossibleBreeds:SetText(format("%s: \124cffffffff%s",L["Possible Breeds"],possibleBreeds))
 		info.PossibleBreeds:ClearAllPoints()
 		info.PossibleBreeds:SetPoint("BOTTOMLEFT",8,ybottom)
@@ -221,7 +221,7 @@ function rematch:ShowPetCard(parent,petID,force)
 				end
 			end
 		end
-		info.Collected:SetText(format("%s: %s",collected,table.concat(collectedPets,rematch:GetBreedSource()=="PetTracker_Breeds" and " " or ", ")))
+		info.Collected:SetText(format("%s: %s",collected,table.concat(collectedPets,rematch:GetBreedFormat()=="icon" and " " or ", ")))
 		info.Collected:ClearAllPoints()
 		info.Collected:SetPoint("BOTTOMLEFT",info,"BOTTOMLEFT",8,ybottom)
 		ybottom = ybottom + info.Collected:GetStringHeight()+4
@@ -571,21 +571,17 @@ function card:OnHide()
 end
 
 function card:CurrentPetIDIsDifferent(petID)
-    if petID then
-	    if not CollectionsJournal then
-			UIParentLoadAddOn("Blizzard_Collections")
+	if type(petID)~="table" then -- if passed/card petIDs are not a table
+		return petID~=card.petID -- simply return true if they inequal
+	elseif type(card.petID)~="table" then -- if card petID is not a table
+		return true -- then it's automatically different (since passed is a table)
+	else -- both passed and card petID are tables, compare its values
+		for k,v in pairs(card.petID) do
+			if petID[k]~=v then
+				return true
+			end
 		end
-		if not CollectionsJournal:IsShown() then
-			ShowUIPanel(CollectionsJournal)
-		elseif PetJournalPetCard.petID==self.petID or PetJournalPetCard.speciesID==self.petID then
-			HideUIPanel(CollectionsJournal)
-		end
-		CollectionsJournal_SetTab(CollectionsJournal,2)
-		if type(self.petID)=="string" then
-			PetJournal_SelectPet(PetJournal,self.petID)
-	    else
-			PetJournal_SelectSpecies(PetJournal,self.petID)
-		end
+		return false
 	end
 end
 
@@ -596,11 +592,11 @@ function rematch:LockPetCard(parent,petID)
 		end
 		rematch:ShowPetCard(parent,petID,true)
 	elseif petID then
-		--card.locked = not card.locked
-		--card:UpdateLockState() 
-		--if settings.ClickPetCard then
-			--rematch:HidePetCard() 
-		--end
+		card.locked = not card.locked
+		card:UpdateLockState()
+		if settings.ClickPetCard then
+			rematch:HidePetCard()
+		end
 	end
 	rematch.BottomPanel:Update()
 	card:UpdateHighlights()
@@ -762,14 +758,17 @@ function card:FillBreedTable(speciesID,breeds)
 				tinsert(breeds,{rematch:GetBreedNameByID(breed),lib:GetPetPredictedStats(speciesID,breed,4,25)})
 			end
 		end
-	elseif breedSource=="PetTracker_Breeds" then
-		if PetTracker.Breeds[speciesID] then
-			for _,breed in pairs(PetTracker.Breeds[speciesID]) do
-				local health, power, speed = unpack(PetTracker.BreedStats[breed])
+	elseif breedSource=="PetTracker_Breeds" or breedSource=="PetTracker" then
+		local breedsTable = breedSource=="PetTracker_Breeds" and PetTracker.Breeds or PetTracker.SpecieBreeds
+		local statsTable = breedSource=="PetTracker_Breeds" and PetTracker.BreedStats or PetTracker.Predict.BreedStats
+		if breedsTable[speciesID] then
+			for _,breed in pairs(breedsTable[speciesID]) do
+				local health, power, speed = unpack(statsTable[breed])
 				health = health*50
 				power = power*50
 				speed = speed*50
-				tinsert(breeds,{(PetTracker:GetBreedIcon(breed,.95)),health>0 and format("%d%%",health) or "-    ",power>0 and format("%d%%",power) or "-    ",speed>0 and format("%d%%",speed) or "-    "})
+				--tinsert(breeds,{(breedSource=="PetTracker_Breeds" and PetTracker:GetBreedIcon(breed,.95) or PetTracker.Breeds:Icon(breed,.95)),health>0 and format("%d%%",health) or "-    ",power>0 and format("%d%%",power) or "-    ",speed>0 and format("%d%%",speed) or "-    "})
+				tinsert(breeds,{rematch:GetBreedNameByID(breed),health>0 and format("%d%%",health) or "-    ",power>0 and format("%d%%",power) or "-    ",speed>0 and format("%d%%",speed) or "-    "})
 			end
 		end
 	end

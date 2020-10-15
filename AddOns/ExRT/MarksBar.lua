@@ -76,6 +76,83 @@ mainFrame:SetBackdropColor(0,0,0,0.8)
 mainFrame:Hide()
 module:RegisterHideOnPetBattle(mainFrame)
 
+local function HoverCheckOnUpdate(self)
+	if not self:IsMouseOver() and (not self.wmarksbuts:IsShown() or not self.wmarksbuts:IsMouseOver()) and (not self.wmarksbuts.b:IsShown() or not self.wmarksbuts.b:IsMouseOver()) then
+		local alpha = (VExRT.MarksBar.ShowOnHoverAlpha or 0) * (VExRT.MarksBar.Alpha or 100)/100
+		if not VExRT.MarksBar.ShowOnHoverAnimDisable then
+			self:StopAnim(alpha)
+		else
+			self:SetAlpha(alpha)
+		end
+		self:SetScript("OnUpdate",nil)
+	end
+end
+
+function mainFrame:OnEnter()
+	if VExRT.MarksBar.ShowOnHover then
+		local alpha = (VExRT.MarksBar.Alpha or 100)/100
+		if not VExRT.MarksBar.ShowOnHoverAnimDisable then
+			self:StartAnim(alpha)
+		else
+			self:SetAlpha(alpha)
+		end
+		self:SetScript("OnUpdate",HoverCheckOnUpdate)
+	end
+end
+function mainFrame:OnLeave()
+
+end
+
+mainFrame:SetScript("OnEnter",function(self)
+	self:OnEnter()
+end)
+mainFrame:SetScript("OnLeave",function(self)
+	self:OnLeave()
+end)
+
+mainFrame.anim = mainFrame:CreateAnimationGroup()
+mainFrame.anim:SetLooping("NONE")
+mainFrame.anim.timer = mainFrame.anim:CreateAnimation()
+mainFrame.anim.timer:SetDuration(.25)
+mainFrame.anim.timer.main = mainFrame
+mainFrame.anim.timer:SetScript("OnUpdate", function(self,elapsed) 
+	local p = self:GetProgress()
+	local cA = self.fA + (self.tA - self.fA) * p
+	self.cA = cA
+	self.main:SetAlpha(cA)
+end)
+
+function mainFrame:StartAnim(toAlpha)
+	if self.anim:IsPlaying() then
+		self.anim:Stop()
+	end
+	local t = self.anim.timer
+	t.cA = t.cA or ((VExRT.MarksBar.ShowOnHoverAlpha or 0) * (VExRT.MarksBar.Alpha or 100)/100)
+	t.fA = t.cA
+	t.tA = toAlpha
+	self.anim:Play()
+end
+function mainFrame:StopAnim(toAlpha)
+	if self.anim:IsPlaying() then
+		self.anim:Stop()
+	end
+	local t = self.anim.timer
+	t.fA = t.cA
+	t.tA = toAlpha
+	self.anim:Play()
+end
+
+function mainFrame:CheckAlpha()
+	local alpha
+	if VExRT.MarksBar.ShowOnHover then
+		alpha = (VExRT.MarksBar.ShowOnHoverAlpha or 0) * (VExRT.MarksBar.Alpha or 100)/100
+	else
+		alpha = (VExRT.MarksBar.Alpha or 100)/100
+	end
+	self:SetAlpha(alpha)
+end
+
+
 mainFrame.edge = CreateFrame("Frame",nil,mainFrame, BackdropTemplateMixin and "BackdropTemplate")
 mainFrame.edge:SetPoint("TOPLEFT", 1, -1)
 mainFrame.edge:SetPoint("BOTTOMRIGHT", -1, 1)
@@ -232,6 +309,14 @@ local function MainFrameWMOnEvent(self, event, ...)
 	self[event](self, event, ...)
 end
 
+mainFrame.wmarksbuts:SetScript("OnEnter",function()
+	mainFrame:OnEnter()
+end)
+mainFrame.wmarksbuts:SetScript("OnLeave",function()
+	mainFrame:OnLeave()
+end)
+
+
 do
 	local wmarksbuts_backdrop = {bgFile = "",edgeFile = ExRT.F.defBorder,tile = false,edgeSize = 6}
 	for i=1,9 do
@@ -281,6 +366,13 @@ end
 local function MainFrameWMKind2OnLeave(self)
 	self.t:SetVertexColor(module.db.wm_color[self._i].r,module.db.wm_color[self._i].g,module.db.wm_color[self._i].b,1)
 end
+
+mainFrame.wmarksbuts.b:SetScript("OnEnter",function()
+	mainFrame:OnEnter()
+end)
+mainFrame.wmarksbuts.b:SetScript("OnLeave",function()
+	mainFrame:OnLeave()
+end)
 
 for i=1,9 do
 	local frame = CreateFrame("Button","ExRT_MarksBar_WorldMarkers_Kind2_"..i,mainFrame.wmarksbuts.b,"SecureActionButtonTemplate")	--FrameStack Fix
@@ -662,8 +754,8 @@ local function EnableMarksBar()
 	VExRT.MarksBar.enabled = true
 	module.frame:Show()
 	module:RegisterEvents('RAID_TARGET_UPDATE')
-	if VExRT.MarksBar.DisableOutsideRaid then
-		module:RegisterEvents('GROUP_ROSTER_UPDATE')
+	module:RegisterEvents('GROUP_ROSTER_UPDATE')
+	if VExRT.MarksBar.DisableOutsideRaid or VExRT.MarksBar.DisableWithoutAssist then
 		module:GroupRosterUpdate()
 	end
 end
@@ -711,13 +803,52 @@ function module.options:Load()
 			end
 		else
 			VExRT.MarksBar.DisableOutsideRaid = nil
-			if VExRT.MarksBar.enabled and not module.frame:IsShown() then
-				module.frame:Show()
+			if VExRT.MarksBar.enabled then
+				module:GroupRosterUpdate()
 			end
 		end
 	end)
+
+	self.chkDisableWOAssist = ELib:Check(self,L.MarksBarDisableWOAssist,VExRT.MarksBar.DisableOutsideRaid):Point(15,-130):OnClick(function(self)
+		if self:GetChecked() then
+			VExRT.MarksBar.DisableWithoutAssist = true
+			if VExRT.MarksBar.enabled then
+				module:GroupRosterUpdate()
+			end
+		else
+			VExRT.MarksBar.DisableWithoutAssist = nil
+			if VExRT.MarksBar.enabled then
+				module:GroupRosterUpdate()
+			end
+		end
+	end)
+
+	self.chkShowOnHover = ELib:Check(self,L.MarksBarShowOnHover,VExRT.MarksBar.ShowOnHover):Point(15,-155):OnClick(function(self)
+		if self:GetChecked() then
+			VExRT.MarksBar.ShowOnHover = true
+		else
+			VExRT.MarksBar.ShowOnHover = nil
+		end
+		mainFrame:CheckAlpha()
+	end)
+
+	self.SliderShowOnHover= ELib:Slider(self,L.marksbaralpha):Size(200):Point("LEFT",self.chkShowOnHover,"RIGHT",250,0):Range(0,100):SetTo((VExRT.MarksBar.ShowOnHoverAlpha or 0)*100):OnChange(function(self,event) 
+		event = event - event%1
+		VExRT.MarksBar.ShowOnHoverAlpha = event / 100
+		mainFrame:CheckAlpha()
+		self.tooltipText = event
+		self:tooltipReload(self)
+	end)
+
+	self.chkShowOnHoverAnim = ELib:Check(self,ANIMATION or "Animation",not VExRT.MarksBar.ShowOnHoverAnimDisable):Point("LEFT",self.chkShowOnHover,"LEFT",500,0):OnClick(function(self)
+		if self:GetChecked() then
+			VExRT.MarksBar.ShowOnHoverAnimDisable = nil
+		else
+			VExRT.MarksBar.ShowOnHoverAnimDisable = true
+		end
+	end)
 	
-	self.TabViewOptions = ELib:OneTab(self):Size(678,130):Point("TOP",0,-135)
+	self.TabViewOptions = ELib:OneTab(self):Size(678,130):Point("TOP",0,-185)
 	ELib:Border(self.TabViewOptions,0)
 
 	ELib:DecorationLine(self):Point("BOTTOM",self.TabViewOptions,"TOP",0,0):Point("LEFT",self):Point("RIGHT",self):Size(0,1)
@@ -803,7 +934,7 @@ function module.options:Load()
 		modifymarkbars()
 	end)
 	
-	self.SliderScale = ELib:Slider(self,L.marksbarscale):Size(660):Point("TOP",0,-315):Range(5,200):SetTo(VExRT.MarksBar.Scale or 100):OnChange(function(self,event) 
+	self.SliderScale = ELib:Slider(self,L.marksbarscale):Size(660):Point("TOP",0,-365):Range(5,200):SetTo(VExRT.MarksBar.Scale or 100):OnChange(function(self,event) 
 		event = event - event%1
 		VExRT.MarksBar.Scale = event
 		ExRT.F.SetScaleFix(module.frame,event/100)
@@ -811,7 +942,7 @@ function module.options:Load()
 		self:tooltipReload(self)
 	end)
 	
-	self.SliderAlpha = ELib:Slider(self,L.marksbaralpha):Size(660):Point("TOP",0,-345):Range(0,100):SetTo(VExRT.MarksBar.Alpha or 100):OnChange(function(self,event) 
+	self.SliderAlpha = ELib:Slider(self,L.marksbaralpha):Size(660):Point("TOP",0,-395):Range(0,100):SetTo(VExRT.MarksBar.Alpha or 100):OnChange(function(self,event) 
 		event = event - event%1
 		VExRT.MarksBar.Alpha = event
 		module.frame:SetAlpha(event/100)
@@ -820,16 +951,16 @@ function module.options:Load()
 	end)
 	
 	
-	self.htmlTimer = ELib:Text(self,L.marksbartmr,11):Size(150,20):Point(15,-275)
+	self.htmlTimer = ELib:Text(self,L.marksbartmr,11):Size(150,20):Point(15,-325)
 
-	self.editBoxTimer = ELib:Edit(self,6,true):Size(120,20):Point(200,-275):Text(VExRT.MarksBar.pulltimer or "10"):LeftText(L.MarksBarTimerLeftClick):OnChange(function(self)
+	self.editBoxTimer = ELib:Edit(self,6,true):Size(120,20):Point(200,-325):Text(VExRT.MarksBar.pulltimer or "10"):LeftText(L.MarksBarTimerLeftClick):OnChange(function(self)
 		VExRT.MarksBar.pulltimer = tonumber(self:GetText()) or 10
 	end)  
 	self.editBoxTimer_right = ELib:Edit(self,6,true):Size(120,20):Point("LEFT",self.editBoxTimer,"RIGHT",80,0):Text(VExRT.MarksBar.pulltimer_right or "10"):LeftText(L.MarksBarTimerRightClick):OnChange(function(self)
 		VExRT.MarksBar.pulltimer_right = tonumber(self:GetText()) or 10
 	end)  
 	
-	self.frameStrataDropDown = ELib:DropDown(self,275,8):Point(15,-375):Size(260):SetText(L.S_Strata)
+	self.frameStrataDropDown = ELib:DropDown(self,275,8):Point(15,-425):Size(260):SetText(L.S_Strata)
 	local function FrameStrataDropDown_SetVaule(_,arg)
 		VExRT.MarksBar.Strata = arg
 		ELib:DropDownClose()
@@ -848,7 +979,7 @@ function module.options:Load()
 		}
 	end
 	
-	self.ButtonToCenter = ELib:Button(self,L.MarksBarResetPos):Size(260,22):Point(15,-400):Tooltip(L.MarksBarResetPosTooltip):OnClick(function()
+	self.ButtonToCenter = ELib:Button(self,L.MarksBarResetPos):Size(260,22):Point(15,-450):Tooltip(L.MarksBarResetPosTooltip):OnClick(function()
 		VExRT.MarksBar.Left = nil
 		VExRT.MarksBar.Top = nil
 
@@ -856,7 +987,7 @@ function module.options:Load()
 		module.frame:SetPoint("CENTER",UIParent, "CENTER", 0, 0)
 	end) 
 	
-	self.shtml1 = ELib:Text(self,L.MarksBarHelp,12):Size(670,200):Point(15,-430):Top()
+	self.shtml1 = ELib:Text(self,L.MarksBarHelp,12):Size(670,200):Point(15,-480):Top()
 end
 
 function module.main:ADDON_LOADED()
@@ -883,6 +1014,10 @@ function module.main:ADDON_LOADED()
 
 	if VExRT.MarksBar.Alpha then module.frame:SetAlpha(VExRT.MarksBar.Alpha/100) end
 	if VExRT.MarksBar.Scale then module.frame:SetScale(VExRT.MarksBar.Scale/100) end
+
+	if VExRT.MarksBar.ShowOnHover then
+		mainFrame:CheckAlpha()
+	end
 	
 	VExRT.MarksBar.Strata = VExRT.MarksBar.Strata or "HIGH"
 	module.frame:SetFrameStrata(VExRT.MarksBar.Strata)
@@ -902,11 +1037,32 @@ function module:GroupRosterUpdate()
 		return
 	end
 
-	local n = GetNumGroupMembers() or 0
-	if n == 0 and module.frame:IsShown() then
-		module.frame:Hide()
-	elseif n > 0 and not module.frame:IsShown() then
+	local needShow = true
+	if VExRT.MarksBar.DisableOutsideRaid then
+		local n = GetNumGroupMembers() or 0
+		if n == 0 then
+			needShow = false
+		else
+			needShow = needShow and true
+		end
+	end
+	if VExRT.MarksBar.DisableWithoutAssist then
+		local playerRole
+		if not IsInRaid() then
+			playerRole = 2
+		else
+			playerRole = ExRT.F.IsPlayerRLorOfficer("player")
+		end
+		if (playerRole or 0) > 0 then
+			needShow = needShow and true
+		else
+			needShow = false
+		end
+	end
+	if needShow and not module.frame:IsShown() then
 		module.frame:Show()
+	elseif not needShow and module.frame:IsShown() then
+		module.frame:Hide()
 	end
 end
 function module.main:GROUP_ROSTER_UPDATE()

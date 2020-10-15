@@ -4,7 +4,7 @@ if not L then return end
 L["%s dies"] = "%s muere"
 L["%s on %s removed by %s"] = "%s sobre %s eliminado por %s"
 L["%s on %s removed by %s's %s"] = "%s sobre %s eliminado por %s de %s"
-L["A damage meter."] = "Un medidor de daño"
+L["A damage meter."] = "Un medidor de daño."
 L["Absorb"] = "Absorción"
 L["Absorb details"] = "Detalles de absorción"
 L["Absorb spells"] = "Absorción de hechizos"
@@ -201,10 +201,6 @@ L["Immune"] = "Inmune"
 L["Include set"] = "Incluir conjunto"
 L["Include set name in title bar"] = "Incluir nombre establecido en la barra de título"
 L["Informative tooltips"] = "Tooltips informativos"
---[[Translation missing --]]
---[[ L["Inline bar display"] = ""--]] 
---[[Translation missing --]]
---[[ L["Inline display is a horizontal window style."] = ""--]] 
 L["Instance"] = "Estancia"
 L["Interrupts"] = "Interrupciones"
 L["Keep segment"] = "Guardar fragmento"
@@ -341,8 +337,6 @@ L["Snaps the window size to best fit when resizing."] = "Ajustar el tamaño de l
 L["Sort modes by usage"] = "Ordena los Modos por usados"
 L["Spell details"] = "Detalle de hechizos"
 L["Spell list"] = "Lista de hechizos"
---[[Translation missing --]]
---[[ L["Spell school colors"] = ""--]] 
 L["Start new segment"] = "Comenzar nuevo fragmento"
 L["Stop"] = "Parar"
 L["Stop description"] = "Para o resume el segmento actual. Útil para descontar los datos después de una muerte del grupo. Puede ser establecido para que se pare automáticamente en las opciones."
@@ -392,15 +386,7 @@ L["Threat threshold"] = "Umbral de amenaza"
 L["Threat warning"] = "Aviso de amenaza"
 L["Threat: Personal Threat"] = "Amenaza: Amenaza Personal"
 L["Tick the modules you want to disable."] = "Marca los módulos que quieras deshabilitar."
---[[Translation missing --]]
---[[ L["Tile"] = ""--]] 
---[[Translation missing --]]
---[[ L["Tile size"] = ""--]] 
---[[Translation missing --]]
---[[ L["Tile the background texture."] = ""--]] 
 L["Title bar"] = "Título de la barra"
---[[Translation missing --]]
---[[ L["Title color"] = ""--]] 
 L["Title height"] = "Altura del título"
 L["Toggle window"] = "Abrir/Cerrar ventana"
 L["Toggles showing the minimap button."] = "Mostrar/No mostrar el botón del minimapa"
@@ -412,14 +398,10 @@ L["Total"] = "Total"
 L["Total healing"] = "Sanación total"
 L["TotalHealing"] = "Sanación Total"
 L["TPS"] = "APS"
---[[Translation missing --]]
---[[ L["Tweaks"] = ""--]] 
 L["Update frequency"] = "Frecuencia de actualización"
 L["Use class icons where applicable."] = "Usar iconos de clase cuando sea posible."
 L["Use focus target"] = "Usar el objetivo del foco"
 L["Use role icons where applicable."] = "Utilizar iconos de rol donde sea aplicable."
---[[Translation missing --]]
---[[ L["Use spell school colors where applicable."] = ""--]] 
 L["Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty."] = "Varios ajustes para evitar deficiencias y problemas en los registros de combate del juego. Conlleva una pequeña penalización de rendimiento."
 L["When possible, bar text will be colored according to player class."] = "Cuando sea posible, el texto será coloreado acorde con la clase del jugador."
 L["When possible, bars will be colored according to player class."] = "Cuando sea posible, las barras será coloreado acorde con la clase del jugador."

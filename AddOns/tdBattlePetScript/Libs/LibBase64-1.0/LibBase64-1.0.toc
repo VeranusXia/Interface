@@ -1,4 +1,4 @@
-## Interface: 30000
+## Interface: 90000
 ## Title: Lib: Base64-1.0
 ## Notes: A library to encode and decode Base64 strings
 ## Author: ckknight

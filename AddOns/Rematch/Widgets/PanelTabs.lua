@@ -10,7 +10,7 @@ function rematch:SetupPanelTabs(frame,activeIndex,...)
 		local button = frame.Tabs[i]
 		local label = select(i,...)
 		button.Text:SetText(label)
-		local width = max(76,button.Text:GetStringWidth()+24-(rematch.localeSquish and 8 or 0))
+		local width = max(76,button.Text:GetStringWidth()+40-(rematch.localeSquish and 8 or 0))
 		button:SetWidth(width)
 		button.width = width-16
 		totalWidth = totalWidth + button.width

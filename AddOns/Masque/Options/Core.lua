@@ -10,9 +10,15 @@
 
 ]]
 
--- GLOBALS: LibStub, InterfaceOptionsFrame, InterfaceOptionsFrame_OpenToCategory, InterfaceOptionsFrame_Show
-
 local MASQUE, Core = ...
+
+----------------------------------------
+-- WoW API
+---
+
+local InterfaceOptionsFrame = InterfaceOptionsFrame
+local InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory
+local InterfaceOptionsFrame_Show = InterfaceOptionsFrame_Show
 
 ----------------------------------------
 -- Libraries

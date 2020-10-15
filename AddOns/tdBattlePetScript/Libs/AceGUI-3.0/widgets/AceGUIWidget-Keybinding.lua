@@ -216,8 +216,8 @@ local function Constructor()
 
 	local msgframe = CreateFrame("Frame", nil, UIParent)
 	msgframe:SetHeight(30)
-	msgframe:SetBackdrop(ControlBackdrop)
-	msgframe:SetBackdropColor(0,0,0)
+
+
 	msgframe:SetFrameStrata("FULLSCREEN_DIALOG")
 	msgframe:SetFrameLevel(1000)
 	msgframe:SetToplevel(true)

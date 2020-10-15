@@ -114,11 +114,11 @@ local function EditBox_OnEnterPressed(frame)
 end
 
 local function EditBox_OnEnter(frame)
-	frame:SetBackdropBorderColor(0.5, 0.5, 0.5, 1)
+	
 end
 
 local function EditBox_OnLeave(frame)
-	frame:SetBackdropBorderColor(0.3, 0.3, 0.3, 0.8)
+	
 end
 
 --[[-----------------------------------------------------------------------------
@@ -229,7 +229,7 @@ local function Constructor()
 	slider:SetOrientation("HORIZONTAL")
 	slider:SetHeight(15)
 	slider:SetHitRectInsets(0, 0, -10, 0)
-	slider:SetBackdrop(SliderBackdrop)
+	
 	slider:SetThumbTexture("Interface\\Buttons\\UI-SliderBar-Button-Horizontal")
 	slider:SetPoint("TOP", label, "BOTTOM")
 	slider:SetPoint("LEFT", 3, 0)
@@ -255,9 +255,7 @@ local function Constructor()
 	editbox:SetWidth(70)
 	editbox:SetJustifyH("CENTER")
 	editbox:EnableMouse(true)
-	editbox:SetBackdrop(ManualBackdrop)
-	editbox:SetBackdropColor(0, 0, 0, 0.5)
-	editbox:SetBackdropBorderColor(0.3, 0.3, 0.30, 0.80)
+	
 	editbox:SetScript("OnEnter", EditBox_OnEnter)
 	editbox:SetScript("OnLeave", EditBox_OnLeave)
 	editbox:SetScript("OnEnterPressed", EditBox_OnEnterPressed)

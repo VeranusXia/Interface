@@ -200,6 +200,7 @@ local function PackageFriend(buttonType, id)
 
 	if buttonType == FRIENDS_BUTTON_TYPE_BNET then
 		temp.type = buttonType
+		print(BNGetFriendInfo(id))
 		temp.data = PackageFriendBNetCharacter({BNGetFriendInfo(id)}, id)
 
 	elseif buttonType == FRIENDS_BUTTON_TYPE_WOW then
@@ -868,7 +869,7 @@ do
 			editbox.Middle:Hide()
 			editbox.Right:Hide()
 
-			editbox.Backdrop = CreateFrame("Frame", nil, editbox)
+			editbox.Backdrop = CreateFrame("Frame", nil, editbox,"BackdropTemplate")
 			editbox.Backdrop:SetPoint("TOPLEFT", editbox, "TOPLEFT", -8, 8)
 			editbox.Backdrop:SetPoint("BOTTOMRIGHT", editbox, "BOTTOMRIGHT", 4, -10)
 

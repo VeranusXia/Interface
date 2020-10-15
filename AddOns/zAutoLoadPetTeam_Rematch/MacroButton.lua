@@ -160,7 +160,7 @@ local function createMacroText(btn)
 
     if config.selectGossip and isTeamOk and UnitExists("target") and GossipFrame and GossipFrame:IsVisible() then
       DebugPrint("执行对话")
-      macro = macro .. "\n/script SelectGossipOption(1)"
+      macro = macro .. "\n/script C_GossipInfo.SelectOption(1)"
     end
     DebugPrint(config.extraScriptCmd)
     if config.extraScript and config.extraScriptCmd and config.extraScriptCmd ~= nil then

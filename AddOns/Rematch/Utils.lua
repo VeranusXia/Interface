@@ -143,7 +143,7 @@ function rematch:SlotPet(slot,petID)
 end
 
 function rematch:CheckKeepCompanion()
-	local GCDPetID = rematch:FindGCDPetID()
+	local GCDPetID = rematch:GetGCDPetID()
 	if (GCDPetID and C_PetJournal.GetPetCooldownByGUID(GCDPetID)~=0) or InCombatLockdown() then
 		rematch:StartTimer("KeepCompanion",0.5,rematch.CheckKeepCompanion)
 	else
@@ -192,7 +192,7 @@ local references = { ["RematchFrame"]=true, ["UIParent"]=true }
 local anchorFrame = CreateFrame("Frame",nil,UIParent)
 anchorFrame:SetSize(50,50)
 --anchorFrame:SetBackdrop({bgFile="Interface\\DialogFrame\\UI-DialogBox-Background"})
-anchorFrame:SetBackdrop({bgFile="INterface\\Icons\\INV_Misc_QuestionMark"})
+
 anchorFrame:SetFrameStrata("FULLSCREEN")
 
 function rematch:SmartAnchor(frame,relativeTo,center,yfromtop,yfrombottom)
@@ -682,7 +682,7 @@ end
 -- For the toolbar cooldown display and Keep Companion option, we need to be aware
 -- of the GCD. If a GCD petID isn't already discovered, it will go through the
 -- first 8 owned pets to find one that's participating in the GCD.
-function rematch:FindGCDPetID()
+function rematch:GetGCDPetID()
 	if not rematch.GCDPetID then
 		local limit = 1
 		for petID in rematch.Roster:AllOwnedPets() do

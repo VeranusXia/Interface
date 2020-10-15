@@ -323,11 +323,11 @@ function module.options:Load()
 		for i=0,len do
 			local x = 0 + size * math.cos(2*PI/len*i)
 			local y = 0 + size * math.sin(2*PI/len*i)
-	
+
 			local o = self.tool_select_objects:CreateTexture()
 			o:SetTexture("Interface\\AddOns\\ExRT\\media\\circle256")
 			o:SetPoint("CENTER",self.tool_select_objects,"CENTER",x,-y)
-	
+
 			o:SetSize(2,2)
 		end
 	end
@@ -390,11 +390,11 @@ function module.options:Load()
 		for i=0,len do
 			local x = 5 + (20 - 5) * (i/len)
 			local y = 20 + (5 - 20) * (i/len)
-	
+
 			local o = self.tool_select_objects_line:CreateTexture()
 			o:SetTexture("Interface\\AddOns\\ExRT\\media\\circle256")
 			o:SetPoint("CENTER",self.tool_select_objects_line,"TOPLEFT",x,-y)
-	
+
 			o:SetSize(2,2)
 		end
 	end
@@ -458,7 +458,7 @@ function module.options:Load()
 	function self.curr_color_texture:SetTexture(texture)
 		if type(texture) == 'table' then
 			self:SetTexCoord(select(2,unpack(texture)))
-			self:_SetTexture(texture[1])			
+			self:_SetTexture(texture[1])
 		else
 			self:SetTexCoord(0,1,0,1)
 			self:_SetTexture(texture)
@@ -501,7 +501,7 @@ function module.options:Load()
 		else
 			self.icon_selector[i]:NewPoint("LEFT",self.icon_selector[i-1],"RIGHT",1,0)
 		end
-	end	
+	end
 
 	self.size = ELib:Slider(self,L.VisualNoteSize):Size(100):Point("TOPLEFT",150,-50):Range(3,36):SetTo(8):OnChange(function(self,val)
 		dot_size = floor(val+0.5)
@@ -615,9 +615,9 @@ function module.options:Load()
 			local layers = C_Map.GetMapArtLayers(background)
 			if layers and layers[1] then
 				local layerInfo = layers[1]
-			
+
 				local backData = C_Map.GetMapArtLayerTextures(background,1)
-			
+
 				local widthCount = ceil(layerInfo.layerWidth/layerInfo.tileWidth)
 				local heightCount = ceil(layerInfo.layerHeight/layerInfo.tileHeight)
 
@@ -663,7 +663,7 @@ function module.options:Load()
 		{L.S_ZoneT22Uldir..": "..L.bossName[2135],{1155,0.52,0.85,3}},	--Mythrax
 		{L.S_ZoneT22Uldir..": "..L.bossName[2122],{1155,0.52,0.27,2.2}},	--G'huun
 		{ICON_TAG_RAID_TARGET_SKULL3 or "white",{"Interface/Buttons/WHITE8X8"}},
-		
+
 		--11-20
 		{L.S_ZoneT22Uldir..": "..L.bossName[2135].." [S]",{"Interface/AddOns/ExRT/mediamodern/Uldir7"}},
 		{L.EJInstanceName[968],{934,0.54}},
@@ -736,7 +736,7 @@ function module.options:Load()
 		{"Map",{"Interface/AddOns/ExRT/mediaclassic/aq40.tga"}},
 		{"Entrance",{"Interface/AddOns/ExRT/mediaclassic/aq40_entrance.tga"}},
 		{"C'Thun",{"Interface/AddOns/ExRT/mediaclassic/aq40_cthun.tga"}},
-		
+
 		--71-80
 		{"Map",{"Interface/AddOns/ExRT/mediaclassic/naxx.tga"}},
 		{"Arachnid Quarter",{"Interface/AddOns/ExRT/mediaclassic/naxx_arachnid.tga"}},
@@ -884,7 +884,7 @@ function module.options:Load()
 		if not ignoreLimitations then
 			for i=1,#dots_pos_X do
 				local x2,y2 = dots_pos_X[i],dots_pos_Y[i]
-	
+
 				local dX = (x - x2)
 				local dY = (y - y2)
 				if dots_COLOR[i] == curr_color and (dX * dX + dY * dY) <= half_dot_size_sq then
@@ -920,7 +920,7 @@ function module.options:Load()
 		AddDot(x,y)
 		dot_size = a
 		curr_color = b
-		ignoreLimitations = nil	
+		ignoreLimitations = nil
 	end
 	function self:NextGroup()
 		curr_group = curr_group + 1
@@ -937,7 +937,7 @@ function module.options:Load()
 		local k = 2 / max(1,dist)
 		local x = fromX + (toX - fromX) * k
 		local y = fromY + (toY - fromY) * k
-		
+
 		if (fromX == toX and fromY == toY) or (dX == 0 and dY == 0) then
 			AddDot(toX,toY)
 			return
@@ -1020,9 +1020,9 @@ function module.options:Load()
 			local I = GetIcon()
 			I:SetPoint("CENTER",self.main.C,"TOPLEFT",x,-y)
 			I:SetSize(size,size)
-	
+
 			local p = #icon_pos_X+1
-	
+
 			icon_pos_X[p] = x
 			icon_pos_Y[p] = y
 			icon_SIZE[p] = size
@@ -1156,12 +1156,12 @@ function module.options:Load()
 			for i=0,len do
 				local x = fromX + size * math.cos(2*PI/len*i)
 				local y = fromY + size * math.sin(2*PI/len*i)
-	
+
 				local o = GetDotObj()
 				o:SetPoint("CENTER",self.main.C,"TOPLEFT",x,-y)
 				o.g = curr_group
 				o.t = nil
-	
+
 				o:SetSize(dot_size,dot_size)
 				o:SetAlpha(1)
 				o:SetVertexColor(unpack(colors[curr_color]))
@@ -1169,7 +1169,7 @@ function module.options:Load()
 		elseif curr_object == 2 then
 			size = min(max(10,toX - fromX),max(10,toY - fromY)) * 2
 
-			local o = GetDotObj()			
+			local o = GetDotObj()
 			o:SetPoint("CENTER",self.main.C,"TOPLEFT",fromX,-fromY)
 			o.g = curr_group
 			o.t = curr_trans / 100
@@ -1192,7 +1192,7 @@ function module.options:Load()
 				o:SetPoint("CENTER",self.main.C,"TOPLEFT",x,-y)
 				o.g = curr_group
 				o.t = nil
-	
+
 				o:SetSize(dot_size,dot_size)
 				o:SetAlpha(1)
 				o:SetVertexColor(unpack(colors[curr_color]))
@@ -1200,9 +1200,9 @@ function module.options:Load()
 		elseif curr_object == 4 then
 			size = curr_trans
 
-			local o = GetDotObj()	
+			local o = GetDotObj()
 			o:SetTexture()
-			o:SetColorTexture(unpack(colors[curr_color]))	
+			o:SetColorTexture(unpack(colors[curr_color]))
 			o.isC = nil
 
 			local width,height = max(5,toX-fromX),max(5,toY-fromY)
@@ -1212,7 +1212,7 @@ function module.options:Load()
 			end
 			toX = fromX + width
 			toY = fromY + height
-	
+
 			o:SetPoint("CENTER",self.main.C,"TOPLEFT",fromX+width/2,-fromY-height/2)
 			o.g = curr_group
 			o.t = curr_trans / 100
@@ -1229,7 +1229,7 @@ function module.options:Load()
 			elseif object_GROUP[i] < curr_group then
 				break
 			end
-		end	
+		end
 		if not p then
 			p = #object_pos_X+1
 		end
@@ -1293,7 +1293,7 @@ function module.options:Load()
 
 			for i=1,#dots_pos_X do
 				local x2,y2 = dots_pos_X[i],dots_pos_Y[i]
-	
+
 				local dX = (fromX - x2)
 				local dY = (fromY - y2)
 				if sqrt(dX * dX + dY * dY) <= (dots_SIZE[i]/2) and not moveObjects[ dots_GROUP[i] ] then
@@ -1317,7 +1317,7 @@ function module.options:Load()
 			end
 			for i=1,#icon_pos_X do
 				local x2,y2 = icon_pos_X[i],icon_pos_Y[i]
-	
+
 				local dX = (fromX - x2)
 				local dY = (fromY - y2)
 				if sqrt(dX * dX + dY * dY) <= (icon_SIZE[i]/2) then
@@ -1348,7 +1348,7 @@ function module.options:Load()
 			end
 			for i=1,#object_pos_X do
 				local x2,y2 = object_pos_X[i],object_pos_Y[i]
-	
+
 				if object_TYPE[i] == 1 then
 					local dX = (fromX - x2)
 					local dY = (fromY - y2)
@@ -1391,7 +1391,7 @@ function module.options:Load()
 								break
 							end
 						end
-					end				
+					end
 				elseif object_TYPE[i] == 3 then
 					if IsDotIn(fromX,fromY,x2,object_DATA1[i],object_DATA1[i],x2,y2-object_SIZE[i],object_DATA2[i]-object_SIZE[i],object_DATA2[i]+object_SIZE[i],y2+object_SIZE[i]) or
 					IsDotIn(fromX,fromY,x2-object_SIZE[i],x2+object_SIZE[i],object_DATA1[i]+object_SIZE[i],object_DATA1[i]-object_SIZE[i],y2,y2,object_DATA2[i],object_DATA2[i]) then
@@ -1607,7 +1607,7 @@ function module.options:Load()
 				local dY = (y - y2)
 				if sqrt(dX * dX + dY * dY) <= (object_SIZE[i] / 2) then
 					groups_alpha_pending[ object_GROUP[i] ] = true
-				end				
+				end
 			elseif object_TYPE[i] == 3 then
 				if IsDotIn(x,y,x2,object_DATA1[i],object_DATA1[i],x2,y2-object_SIZE[i],object_DATA2[i]-object_SIZE[i],object_DATA2[i]+object_SIZE[i],y2+object_SIZE[i]) then
 					groups_alpha_pending[ object_GROUP[i] ] = true
@@ -1799,7 +1799,7 @@ function module.options:Load()
 				tremove(object_DATA2,i)
 				tremove(object_SYNC,i)
 			end
-		end		
+		end
 
 		if isSomethingRemoved and isLiveSession then
 			module.options:GenerateString()
@@ -1848,7 +1848,7 @@ function module.options:Load()
 
 	self.main:SetScript("OnMouseWheel",function(self,delta)
 		local x,y = ExRT.F.GetCursorPos(self)
-	
+
 		local oldScale = self.C:GetScale()
 		local newScale = oldScale + delta * 0.25
 		if newScale < 1 then
@@ -1857,21 +1857,21 @@ function module.options:Load()
 			newScale = 7
 		end
 		self.C:SetScale( newScale )
-		
+
 		self.scrollH = self:GetWidth() - self:GetWidth() / newScale
 		self.scrollV = self:GetHeight() - self:GetHeight() / newScale
-		
+
 		local scrollNowH = self:GetHorizontalScroll()
 		local scrollNowV = self:GetVerticalScroll()
 
 		scrollNowH = scrollNowH + x / oldScale - x / newScale
 		scrollNowV = scrollNowV + y / oldScale - y / newScale
-		
+
 		if scrollNowH > self.scrollH then scrollNowH = self.scrollH end
 		if scrollNowH < 0 then scrollNowH = 0 end
 		if scrollNowV > self.scrollV then scrollNowV = self.scrollV end
 		if scrollNowV < 0 then scrollNowV = 0 end
-		
+
 		self:SetHorizontalScroll(scrollNowH)
 		self:SetVerticalScroll(scrollNowV)
 	end)
@@ -1937,7 +1937,7 @@ function module.options:Load()
 				if abs(diffX) >= 50 or abs(diffY) >= 50 then
 					UpdateHeader(i)
 					diffX = dots_pos_X[i] - prevX
-					diffY = dots_pos_Y[i] - prevY							
+					diffY = dots_pos_Y[i] - prevY
 				end
 				if prevDiffX == diffX and prevDiffY == diffY then
 					str = str ..string.char(254)
@@ -1993,43 +1993,43 @@ function module.options:Load()
 			if not live or not object_SYNC[i] then
 				if object_TYPE[i] == 1 then
 					str = str .. string.char(255) .. string.char(251) .. string.char(3)
-	
+
 					local p1 = object_COLOR[i] * 1000 + object_pos_X[i]
 					local p2 = object_DATA1[i] * 1000 + object_pos_Y[i]
-	
+
 					str = str .. string.char(floor(p1 / 250) + 1) .. string.char(p1 % 250 + 1) .. string.char(floor(p2 / 250) + 1) .. string.char(p2 % 250 + 1)
-	
+
 					local p3 = object_SIZE[i]
 					str = str .. string.char(floor(p3 / 250) + 1) .. string.char(p3 % 250 + 1)
 				elseif object_TYPE[i] == 2 then
 					str = str .. string.char(255) .. string.char(251) .. string.char(4)
-	
+
 					local p1 = object_COLOR[i] * 1000 + object_pos_X[i]
 					local p2 = floor(object_DATA1[i] / 2 + 0.5) * 1000 + object_pos_Y[i]
-	
+
 					str = str .. string.char(floor(p1 / 250) + 1) .. string.char(p1 % 250 + 1) .. string.char(floor(p2 / 250) + 1) .. string.char(p2 % 250 + 1)
-	
+
 					local p3 = object_SIZE[i]
 					str = str .. string.char(floor(p3 / 250) + 1) .. string.char(p3 % 250 + 1)
 				elseif object_TYPE[i] == 3 then
 					str = str .. string.char(255) .. string.char(251) .. string.char(5)
-	
+
 					local p1 = object_COLOR[i] * 1000 + object_pos_X[i]
 					local p2 = object_SIZE[i] * 1000 + object_pos_Y[i]
-	
+
 					str = str .. string.char(floor(p1 / 250) + 1) .. string.char(p1 % 250 + 1) .. string.char(floor(p2 / 250) + 1) .. string.char(p2 % 250 + 1)
-	
+
 					local p3 = object_DATA1[i]
 					local p4 = object_DATA2[i]
 					str = str .. string.char(floor(p3 / 250) + 1) .. string.char(p3 % 250 + 1) .. string.char(floor(p4 / 250) + 1) .. string.char(p4 % 250 + 1)
 				elseif object_TYPE[i] == 4 then
 					str = str .. string.char(255) .. string.char(251) .. string.char(6)
-	
+
 					local p1 = object_COLOR[i] * 1000 + object_pos_X[i]
 					local p2 = floor(object_SIZE[i] / 2 + 0.5) * 1000 + object_pos_Y[i]
-	
+
 					str = str .. string.char(floor(p1 / 250) + 1) .. string.char(p1 % 250 + 1) .. string.char(floor(p2 / 250) + 1) .. string.char(p2 % 250 + 1)
-	
+
 					local p3 = object_DATA1[i]
 					local p4 = object_DATA2[i]
 					str = str .. string.char(floor(p3 / 250) + 1) .. string.char(p3 % 250 + 1) .. string.char(floor(p4 / 250) + 1) .. string.char(p4 % 250 + 1)
@@ -2132,7 +2132,7 @@ function module.options:Load()
 		module.options:Clear()
 		module.options:SetPredefinedMap(data[2])
 		curr_data = data
-	
+
 		local pos = 3
 		local color,size
 		local X,Y
@@ -2341,11 +2341,11 @@ function module.options:Load()
 		else
 			VExRT.VisNote.DisablePopup = nil
 		end
-	end) 	
+	end) 
 
 	self.chkStopUpdate = ELib:Check(self,L.VisualNoteDisableUpdateShort):Tooltip(L.VisualNoteDisableUpdate):Point("BOTTOMRIGHT",self,"BOTTOMRIGHT",-240,5):Scale(.8):Size(10,10):Left():OnClick(function(self) 
 		curr_data.disableUpdate = self:GetChecked()
-	end) 	
+	end) 
 
 	self.copyButton = ELib:Button(self,L.BossmodsKormrokCopy):Size(100,20):Point("TOPLEFT",700,-5):OnClick(function()
 		self:SaveData()
@@ -2510,7 +2510,7 @@ function module:UnpackString(str,sender)
 
 			local x,y = p1 % 1000,p2 % 1000
 			local color,size = floor(p1 / 1000),floor(p2 / 1000)
-			
+
 			module.db.await[#module.db.await + 1] = "D"
 			module.db.await[#module.db.await + 1] = x
 			module.db.await[#module.db.await + 1] = y
@@ -2555,7 +2555,7 @@ function module:UnpackString(str,sender)
 				local p1 = (data[i]:sub(3,3):byte() - 1) * 250 + (data[i]:sub(4,4):byte() - 1)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
-				
+
 				local x,y = p1 % 1000,p2 % 1000
 				local icon_type,size = floor(p1 / 1000),p3
 
@@ -2569,7 +2569,7 @@ function module:UnpackString(str,sender)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
 				local p4 = (data[i]:sub(9,9):byte() - 1)
-			
+
 				local x,y = p1 % 1000,p2 % 1000
 				local color,size = floor(p1 / 1000),p3
 
@@ -2583,7 +2583,7 @@ function module:UnpackString(str,sender)
 				local p1 = (data[i]:sub(3,3):byte() - 1) * 250 + (data[i]:sub(4,4):byte() - 1)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
-			
+
 				local x,y = p1 % 1000,p2 % 1000
 				local color,think = floor(p1 / 1000),floor(p2 / 1000)
 				local size = p3
@@ -2600,7 +2600,7 @@ function module:UnpackString(str,sender)
 				local p1 = (data[i]:sub(3,3):byte() - 1) * 250 + (data[i]:sub(4,4):byte() - 1)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
-			
+
 				local x,y = p1 % 1000,p2 % 1000
 				local color,think = floor(p1 / 1000),floor(p2 / 1000)
 				local size = p3
@@ -2618,7 +2618,7 @@ function module:UnpackString(str,sender)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
 				local p4 = (data[i]:sub(9,9):byte() - 1) * 250 + (data[i]:sub(10,10):byte() - 1)
-			
+
 				local x,y = p1 % 1000,p2 % 1000
 				local color,size = floor(p1 / 1000),floor(p2 / 1000)
 
@@ -2635,7 +2635,7 @@ function module:UnpackString(str,sender)
 				local p2 = (data[i]:sub(5,5):byte() - 1) * 250 + (data[i]:sub(6,6):byte() - 1)
 				local p3 = (data[i]:sub(7,7):byte() - 1) * 250 + (data[i]:sub(8,8):byte() - 1)
 				local p4 = (data[i]:sub(9,9):byte() - 1) * 250 + (data[i]:sub(10,10):byte() - 1)
-			
+
 				local x,y = p1 % 1000,p2 % 1000
 				local color,size = floor(p1 / 1000),floor(p2 / 1000)
 
@@ -2662,7 +2662,7 @@ function module:addonMessage(sender, prefix, ...)
 		local _, zoneType, difficulty, _, maxPlayers, _, _, mapID = GetInstanceInfo()
 		if difficulty == 7 or difficulty == 17 then
 			return
-		end		
+		end
 		if (IsInRaid() and not ExRT.F.IsPlayerRLorOfficer(sender))
 			or sender == ExRT.SDB.charKey 
 			or sender == ExRT.SDB.charName 
@@ -2687,28 +2687,28 @@ end
 do
 	local frame = CreateFrame("Frame",nil,UIParent,BackdropTemplateMixin and "BackdropTemplate")
 	module.popup = frame
-	
+
 	frame:SetBackdrop({bgFile="Interface\\Addons\\ExRT\\media\\White"})
 	frame:SetBackdropColor(0.05,0.05,0.07,0.98)
 	frame:SetSize(250,65)
 	frame:SetPoint("RIGHT",UIParent,"CENTER",-200,0)
 	frame:SetFrameStrata("DIALOG")
 	frame:SetClampedToScreen(true)
-	
+
 	frame.border = ExRT.lib:Shadow(frame,20)
-	
+
 	frame.label = frame:CreateFontString(nil,"OVERLAY","GameFontWhiteSmall")
 	frame.label:SetFont(frame.label:GetFont(),10)
 	frame.label:SetPoint("TOP",0,-4)
 	frame.label:SetTextColor(1,1,1,1)
-	frame.label:SetText("ExRT: "..L.VisualNote)	
-	
+	frame.label:SetText("ExRT: "..L.VisualNote)
+
 	frame.player = frame:CreateFontString(nil,"OVERLAY","GameFontWhiteSmall")
 	frame.player:SetFont(frame.player:GetFont(),10)
 	frame.player:SetPoint("TOP",0,-16)
 	frame.player:SetTextColor(1,1,1,1)
-	frame.player:SetText("MyName-MyRealm")	
-	
+	frame.player:SetText("MyName-MyRealm")
+
 	frame.b1 = ELib:Button(frame,L.minimapmenuclose):Point("BOTTOMLEFT",5,5):Size(100,20):OnClick(function() frame:Hide() end)
 	frame.b3 = ELib:Button(frame,L.VisualNoteOpen):Point("BOTTOMRIGHT",-5,5):Size(100,20):OnClick(function() 
 		frame:Hide() 
@@ -2717,14 +2717,14 @@ do
 			module.options:LoadData(module.db.await) 
 		end
 	end)
-	
+
 	frame.b1.icon = frame.b1:CreateTexture(nil,"ARTWORK")
 	frame.b1.icon:SetPoint("RIGHT",frame.b1:GetTextObj(),"LEFT")
 	frame.b1.icon:SetSize(18,18)
 	frame.b1.icon:SetTexture([[Interface\AddOns\ExRT\media\DiesalGUIcons16x256x128]])
 	frame.b1.icon:SetTexCoord(0.125+(0.1875 - 0.125)*6,0.1875+(0.1875 - 0.125)*6,0.5,0.625)
 	frame.b1.icon:SetVertexColor(1,0,0,1)
-	
+
 	frame.b3.icon = frame.b3:CreateTexture(nil,"ARTWORK")
 	frame.b3.icon:SetPoint("RIGHT",frame.b3:GetTextObj(),"LEFT")
 	frame.b3.icon:SetSize(18,18)

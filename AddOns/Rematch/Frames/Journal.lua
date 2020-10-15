@@ -47,8 +47,8 @@ end)
 -- called in ADDON_LOADED of Blizzard_Collctions (or during startup if already loaded)
 local hasJournalRunBefore = false -- becomes true after the journal is started
 function journal:Blizzard_Collections()
-	--PetJournal:HookScript("OnShow",journal.ConfigureJournal)
-	--journal:SetupUseRematchButton()
+	PetJournal:HookScript("OnShow",journal.ConfigureJournal)
+	journal:SetupUseRematchButton()
 end
 
 -- this is called during the first ConfigureJournal when the journal is shown, and returns
@@ -79,7 +79,6 @@ function journal:SetupJournal()
 end
 
 function journal:SetupUseRematchButton()
---[[
 	local button = CreateFrame("CheckButton","UseRematchButton",PetJournal,"UICheckButtonTemplate,RematchTooltipScripts")
 	button:SetSize(26,26)
 	button:SetHitRectInsets(-2,-56,-2,-2)
@@ -90,7 +89,6 @@ function journal:SetupUseRematchButton()
 	button:SetScript("OnEnter",function(self) if not rematch:UIJustChanged() then rematch.ShowTooltip(self) end end)
 	button.tooltipTitle = L["Enable Rematch"]
 	button.tooltipBody = L["Check this to use Rematch in the pet journal."]
-	]]
 end
 
 -- this runs 0.1 seconds after journal:Blizzard_Collections to allow other addons to settle/do their thing
@@ -104,15 +102,15 @@ function journal:OtherAddonJournalStuff()
 		button:SetText("CollectMe")
 		button:SetScript("OnClick",function() CollectMeOpen2Button:Click() end)
 	end
-	-- PetTracker "Zone Tracker" checkbutton along bottom
+	-- PetTracker "Track Pets" checkbutton along bottom
 	if IsAddOnLoaded("PetTracker_Journal") and PetTrackerTrackToggle and GetAddOnMetadata("PetTracker","Version")~="7.1.4" then
 		journal.PetTrackerJournalButton = CreateFrame("CheckButton",nil,journal,"UICheckButtonTemplate")
 		local button = journal.PetTrackerJournalButton
 		button:SetSize(26,26)
-		button:SetHitRectInsets(-2,-80,-2,-2)
+		button:SetHitRectInsets(-2,-70,-2,-2)
 		button.text:SetFontObject("GameFontHighlight")
-		button.text:SetText("Zone Tracker")
-		button:SetPoint("RIGHT",journal.CollectMeButton or rematch.BottomPanel.SaveButton,"LEFT",-88,-1)
+		button.text:SetText("Track Pets")
+		button:SetPoint("RIGHT",journal.CollectMeButton or rematch.BottomPanel.SaveButton,"LEFT",-76,-1)
 		button:SetScript("OnClick",function(self) PetTrackerTrackToggle:Click() end)
 		hooksecurefunc(PetTrackerTrackToggle,"SetChecked",function(self,checked)
 			button:SetChecked(checked) -- follow checked state of the button
@@ -187,8 +185,8 @@ function journal:ConfigureJournal(hide)
 	end
 
 	if rematch.Frame:IsVisible() then
-		--journal.showStandaloneOnHide = true
-		--rematch.Frame:Hide() -- hide standalone Frame (Frame and Journal can't coexist)
+		journal.showStandaloneOnHide = true
+		rematch.Frame:Hide() -- hide standalone Frame (Frame and Journal can't coexist)
 	end
 
 	if UseRematchButton then

@@ -22,14 +22,6 @@ function AutoCompleteBox:Constructor()
 
     self:SetPadding(13)
     self:SetItemSpacing(5)
-    self:SetBackdrop{
-        bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
-        edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-        edgeSize = 16, tileSize = 16, tile = true,
-        insets = {left = 4, right = 4, top = 4, bottom = 4},
-    }
-    self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b)
-    self:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b)
 
     self:SetCallback('OnItemFormatting', self.OnItemFormatting)
     self:SetCallback('OnItemClick', self.OnItemClick)

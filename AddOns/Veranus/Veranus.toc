@@ -21,15 +21,10 @@ Intrusion.lua
 ##低血量报警
 LowHP.lua 
 ##战网好友名字颜色改职业颜色
-FriendListColors.lua
-##聊天表情包
-ChatEmote.lua 
+##FriendListColors.lua
+
 ##聊天物品图标
 ChatLinkIcon.lua
-##聊天过滤
-##BlockSpam.lua
-##宠物对战经验
-PetMonitor.xml
 ##FriendsMenuXP
 FriendsMenuXP.lua
 ##自动分享任务

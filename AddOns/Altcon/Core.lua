@@ -127,7 +127,7 @@ end
 function addon:CURRENCY_DISPLAY_UPDATE(...)
 	local _, data
 	for _, data in ipairs(self.RESOURCE_WATCH) do
-		local _, amount = GetCurrencyInfo(data.id)
+		local _, amount = C_CurrencyInfo.GetCurrencyInfo(data.id)
 		if amount and amount > 0 then
 			self.chardb[data.key] = amount
 		else

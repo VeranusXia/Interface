@@ -408,7 +408,7 @@ end
 
 ----> Options
 
-OptionsFrame.image = ELib:Texture(OptionsFrame,"Interface\\AddOns\\ExRT\\media\\OptionLogo2"):Point("TOPLEFT",15,5):Size(140,140):Color(.9,.9,.9,1):TexCoord(0,140/256,0,140/256)
+OptionsFrame.image = ELib:Texture(OptionsFrame,"Interface\\AddOns\\ExRT\\media\\OptionLogo2"):Point("TOPLEFT",15,5):Size(140,140):Color(.9,.9,.9,1)
 OptionsFrame.title = ELib:Text(OptionsFrame,"Exorsus Raid Tools",28):Point("LEFT",OptionsFrame.image,"RIGHT",20,0):Color()
 
 OptionsFrame.chkIconMiniMap = ELib:Check(OptionsFrame,L.setminimap1):Point(25,-155):OnClick(function(self) 
@@ -424,9 +424,27 @@ OptionsFrame.chkIconMiniMap:SetScript("OnShow", function(self,event)
 	self:SetChecked(VExRT.Addon.IconMiniMapHide) 
 end)
 
+OptionsFrame.chkHideOnEsc = ELib:Check(OptionsFrame,L.SetHideOnESC):Point(350,-155):OnClick(function(self) 
+	if self:GetChecked() then
+		VExRT.Addon.DisableHideESC = true
+		for i=1,#UISpecialFrames do
+			if UISpecialFrames[i] == "ExRTOptionsFrame" then
+				tremove(UISpecialFrames, i)
+				break
+			end
+		end
+	else
+		VExRT.Addon.DisableHideESC = nil
+		tinsert(UISpecialFrames, "ExRTOptionsFrame")
+	end
+end)
+OptionsFrame.chkHideOnEsc:SetScript("OnShow", function(self,event) 
+	self:SetChecked(VExRT.Addon.DisableHideESC) 
+end)
+
 OptionsFrame.eggBut = CreateFrame("Button",nil,OptionsFrame)  
 OptionsFrame.eggBut:SetSize(14,14) 
-OptionsFrame.eggBut:SetPoint("CENTER",OptionsFrame.image,0,12)
+OptionsFrame.eggBut:SetPoint("CENTER",OptionsFrame.image,0,0)
 OptionsFrame.eggBut:SetScript("OnClick",function(self) 
 
 end)
@@ -504,7 +522,11 @@ local function UpdateVersionCheck()
 		end
 		if not ver then
 			if VersionCheckReqSended[name] then
-				ver = "|cffff8888no addon"
+				if not UnitIsConnected(name) then
+					ver = "|cff888888offline"
+				else
+					ver = "|cffff8888no addon"
+				end
 			else
 				ver = "???"
 			end
