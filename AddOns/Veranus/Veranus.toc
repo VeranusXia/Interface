@@ -21,7 +21,7 @@ Intrusion.lua
 ##低血量报警
 LowHP.lua 
 ##战网好友名字颜色改职业颜色
-##FriendListColors.lua
+FriendListColors.lua
 
 ##聊天物品图标
 ChatLinkIcon.lua

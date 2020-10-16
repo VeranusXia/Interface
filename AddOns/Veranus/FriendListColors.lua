@@ -1,5 +1,68 @@
 local addonName, ns = ...
 
+local BNGetFriendInfo, BNGetFriendInfoByID, BNGetFriendGameAccountInfo, BNGetGameAccountInfo, BNGetGameAccountInfoByGUID, BNGetNumFriendGameAccounts
+do
+	local function getDeprecatedAccountInfo(accountInfo)
+		if accountInfo then
+			local wowProjectID = accountInfo.gameAccountInfo.wowProjectID or 0
+			local clientProgram = accountInfo.gameAccountInfo.clientProgram ~= "" and accountInfo.gameAccountInfo.clientProgram or nil
+			return 
+				accountInfo.bnetAccountID, accountInfo.accountName, accountInfo.battleTag, accountInfo.isBattleTagFriend,
+				accountInfo.gameAccountInfo.characterName, accountInfo.gameAccountInfo.gameAccountID, clientProgram,
+				accountInfo.gameAccountInfo.isOnline, accountInfo.lastOnlineTime, accountInfo.isAFK, accountInfo.isDND, accountInfo.customMessage, accountInfo.note, accountInfo.isFriend,
+				accountInfo.customMessageTime, wowProjectID, accountInfo.rafLinkType == Enum.RafLinkType.Recruit, accountInfo.gameAccountInfo.canSummon, accountInfo.isFavorite, accountInfo.gameAccountInfo.isWowMobile
+		end
+	end
+	BNGetFriendInfo = function(friendIndex)
+		local accountInfo = C_BattleNet.GetFriendAccountInfo(friendIndex)
+		return getDeprecatedAccountInfo(accountInfo)
+	end
+	BNGetFriendInfoByID = function(id)
+		local accountInfo = C_BattleNet.GetAccountInfoByID(id)
+		return getDeprecatedAccountInfo(accountInfo)
+	end
+	local function getDeprecatedGameAccountInfo(gameAccountInfo, accountInfo)
+		if gameAccountInfo and accountInfo then
+			local wowProjectID = gameAccountInfo.wowProjectID or 0
+			local characterName = gameAccountInfo.characterName or ""
+			local realmName = gameAccountInfo.realmName or ""
+			local realmID = gameAccountInfo.realmID or 0
+			local factionName = gameAccountInfo.factionName or ""
+			local raceName = gameAccountInfo.raceName or ""
+			local className = gameAccountInfo.className or ""
+			local areaName = gameAccountInfo.areaName or ""
+			local characterLevel = gameAccountInfo.characterLevel or ""
+			local richPresence = gameAccountInfo.richPresence or ""
+			local gameAccountID = gameAccountInfo.gameAccountID or 0
+			local playerGuid = gameAccountInfo.playerGuid or 0
+			return 
+				gameAccountInfo.hasFocus, characterName, gameAccountInfo.clientProgram,
+				realmName, realmID, factionName, raceName, className, "", areaName, characterLevel,
+				richPresence, accountInfo.customMessage, accountInfo.customMessageTime,
+				gameAccountInfo.isOnline, gameAccountID, accountInfo.bnetAccountID, gameAccountInfo.isGameAFK, gameAccountInfo.isGameBusy,
+				playerGuid, wowProjectID, gameAccountInfo.isWowMobile
+		end
+	end
+	BNGetFriendGameAccountInfo = function(friendIndex, accountIndex)
+		local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(friendIndex, accountIndex)
+		local accountInfo = C_BattleNet.GetFriendAccountInfo(friendIndex)
+		return getDeprecatedGameAccountInfo(gameAccountInfo, accountInfo)
+	end
+	BNGetGameAccountInfo = function(id, accountIndex)
+		local gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(id, accountIndex)
+		local accountInfo = C_BattleNet.GetAccountInfoByID(id)
+		return getDeprecatedGameAccountInfo(gameAccountInfo, accountInfo)
+	end
+	BNGetGameAccountInfoByGUID = function(guid)
+		local gameAccountInfo = C_BattleNet.GetGameAccountInfoByGUID(guid)
+		local accountInfo = C_BattleNet.GetAccountInfoByGUID(guid)
+		return getDeprecatedGameAccountInfo(gameAccountInfo, accountInfo)
+	end
+	BNGetNumFriendGameAccounts = function(friendIndex)
+		return C_BattleNet.GetFriendNumGameAccounts(friendIndex)
+	end
+end
+
 local addon = CreateFrame("Frame")
 addon:SetScript("OnEvent", function(self, event, ...) self[event](self, event, ...) end)
 
@@ -129,8 +192,8 @@ local COLORS = {
 }
 
 local config = {
-	--format = "[if=level][color=level]L[=level][/color] [/if][color=class][=characterName|name][/color][if=characterName] - [/if][=accountName]",
-	format = "[color=class][=accountName|name][if=characterName] ([=characterName])[/if][/color]",
+	format = "[color=class][=accountName|name]  [if=characterName] ( [if=level]Lv[=level] [/if][=characterName])[/if][/color]",
+	-- format = "[if=level][color=level]L[=level][/color] [/if][color=class][=accountName|characterName|name][/color]",
 }
 
 local function GetFriendInfo(friend)
@@ -200,7 +263,6 @@ local function PackageFriend(buttonType, id)
 
 	if buttonType == FRIENDS_BUTTON_TYPE_BNET then
 		temp.type = buttonType
-		print(BNGetFriendInfo(id))
 		temp.data = PackageFriendBNetCharacter({BNGetFriendInfo(id)}, id)
 
 	elseif buttonType == FRIENDS_BUTTON_TYPE_WOW then
@@ -426,8 +488,7 @@ function addon:InitAPI()
 		if type == "WHISPER" then
 			local temp = {GetFriendInfo(name)}
 
-			-- 暫時修正
-			if temp and temp[1] then
+			if temp[1] then
 				local struct = STRUCT[FRIENDS_BUTTON_TYPE_WOW]
 
 				name = ParseNote(temp[struct["notes"]]) or temp[struct["name"]] or name -- use alias name, fallback to default name
@@ -532,10 +593,10 @@ do
 			temp.type = FRIENDS_BUTTON_TYPE_BNET
 			temp.data = {
 				1234,
-				"好友名字",
+				"Ola Nordman",
 				"Ola#1234",
 				false,
-				"角色名稱",
+				"Facemelter",
 				1,
 				"WoW",
 				true,
@@ -607,8 +668,8 @@ do
 
 	local optionGroups = {
 		{
-			label = "格式",
-			description = "自訂好友名單的顯示內容。\n\n戰網好友可以使用的變數:  " .. varNamesBNet .. "\n\n魔獸世界好友可以使用的變數:  " .. varNamesWoW .. "\n\n語法範例:\n  [=accountName||name]\n  [if=battleTag][=battleTag][if=characterName] - [=characterName][/if][/if]\n  [color=class][=characterName||name][/color]\n  [color=level][=level][/color]\n",
+			label = "Format",
+			description = "Customize the appearance of your friends list.\n\nList of variables for BNet friends:  " .. varNamesBNet .. "\n\nList of variables for World of Warcraft friends:  " .. varNamesWoW .. "\n\nSyntax examples:\n  [=accountName||name]\n  [if=battleTag][=battleTag][if=characterName] - [=characterName][/if][/if]\n  [color=class][=characterName||name][/color]\n  [color=level][=level][/color]\n",
 			options = {
 				{
 					text = true,
@@ -717,7 +778,7 @@ do
 		title.text = title:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 		title.text:SetJustifyH("CENTER")
 		title.text:SetPoint("TOP", title, "TOP", 0, -20)
-		title.text:SetText("彩色好友名單")
+		title.text:SetText(name)
 
 		title.version = title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 		title.version:SetJustifyH("CENTER");
@@ -869,18 +930,20 @@ do
 			editbox.Middle:Hide()
 			editbox.Right:Hide()
 
-			editbox.Backdrop = CreateFrame("Frame", nil, editbox,"BackdropTemplate")
+			editbox.Backdrop = CreateFrame("Frame", nil, editbox, false and BackdropTemplateMixin and "BackdropTemplate") -- TODO: 9.0
 			editbox.Backdrop:SetPoint("TOPLEFT", editbox, "TOPLEFT", -8, 8)
 			editbox.Backdrop:SetPoint("BOTTOMRIGHT", editbox, "BOTTOMRIGHT", 4, -10)
 
-			editbox.Backdrop:SetBackdrop({
-				bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-				edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-				tile = true, tileSize = 16, edgeSize = 16,
-				insets = { left = 4, right = 4, top = 4, bottom = 4 }
-			})
+			if editbox.Backdrop.SetBackdrop then
+				editbox.Backdrop:SetBackdrop({
+					bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+					edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+					tile = true, tileSize = 16, edgeSize = 16,
+					insets = { left = 4, right = 4, top = 4, bottom = 4 }
+				})
 
-			editbox.Backdrop:SetBackdropColor(0, 0, 0, 1)
+				editbox.Backdrop:SetBackdropColor(0, 0, 0, 1)
+			end
 
 			editbox.Backdrop:SetFrameLevel(5)
 			editbox:SetFrameLevel(10)
@@ -1116,7 +1179,6 @@ do
 		end
 
 		loaded = CreatePanel()
-		loaded.name = "好友名單-彩色"
 		InterfaceOptions_AddCategory(loaded)
 
 		return true
