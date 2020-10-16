@@ -2,7 +2,7 @@
 Slider Widget
 Graphical Slider, like, for Range values.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Slider", 22
+local Type, Version = "Slider", 23
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -105,7 +105,7 @@ local function EditBox_OnEnterPressed(frame)
 	else
 		value = tonumber(value)
 	end
-	
+
 	if value then
 		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 		self.slider:SetValue(value)
@@ -114,11 +114,11 @@ local function EditBox_OnEnterPressed(frame)
 end
 
 local function EditBox_OnEnter(frame)
-	
+	frame:SetBackdropBorderColor(0.5, 0.5, 0.5, 1)
 end
 
 local function EditBox_OnLeave(frame)
-	
+	frame:SetBackdropBorderColor(0.3, 0.3, 0.3, 0.8)
 end
 
 --[[-----------------------------------------------------------------------------
@@ -225,11 +225,11 @@ local function Constructor()
 	label:SetJustifyH("CENTER")
 	label:SetHeight(15)
 
-	local slider = CreateFrame("Slider", nil, frame)
+	local slider = CreateFrame("Slider", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
 	slider:SetOrientation("HORIZONTAL")
 	slider:SetHeight(15)
 	slider:SetHitRectInsets(0, 0, -10, 0)
-	
+	slider:SetBackdrop(SliderBackdrop)
 	slider:SetThumbTexture("Interface\\Buttons\\UI-SliderBar-Button-Horizontal")
 	slider:SetPoint("TOP", label, "BOTTOM")
 	slider:SetPoint("LEFT", 3, 0)
@@ -247,7 +247,7 @@ local function Constructor()
 	local hightext = slider:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	hightext:SetPoint("TOPRIGHT", slider, "BOTTOMRIGHT", -2, 3)
 
-	local editbox = CreateFrame("EditBox", nil, frame)
+	local editbox = CreateFrame("EditBox", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
 	editbox:SetAutoFocus(false)
 	editbox:SetFontObject(GameFontHighlightSmall)
 	editbox:SetPoint("TOP", slider, "BOTTOM")
@@ -255,7 +255,9 @@ local function Constructor()
 	editbox:SetWidth(70)
 	editbox:SetJustifyH("CENTER")
 	editbox:EnableMouse(true)
-	
+	editbox:SetBackdrop(ManualBackdrop)
+	editbox:SetBackdropColor(0, 0, 0, 0.5)
+	editbox:SetBackdropBorderColor(0.3, 0.3, 0.30, 0.80)
 	editbox:SetScript("OnEnter", EditBox_OnEnter)
 	editbox:SetScript("OnLeave", EditBox_OnLeave)
 	editbox:SetScript("OnEnterPressed", EditBox_OnEnterPressed)
