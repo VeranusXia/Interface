@@ -192,7 +192,7 @@ local COLORS = {
 }
 
 local config = {
-	format = "[color=class][=accountName|name]  [if=characterName] ( [if=level]Lv[=level] [/if][=characterName])[/if][/color]",
+	format = "[color=class][=accountName|name][/color] [color=class][if=characterName]([/if][/color][if=level][color=class]Lv[=level][/color][/if] [color=class][if=characterName][=characterName])[/if][/color]",
 	-- format = "[if=level][color=level]L[=level][/color] [/if][color=class][=accountName|characterName|name][/color]",
 }
 

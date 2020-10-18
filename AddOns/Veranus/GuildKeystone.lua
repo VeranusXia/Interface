@@ -97,7 +97,7 @@ local function UpdateGuildBest(self)
 		dungeonframe:ClearAllPoints()
 		dungeonframe:SetPoint("BOTTOMLEFT", scheduel, "TOPLEFT", 0, 10)
 
-		self.WeeklyInfo.Child.Label:SetPoint("TOP", -135, -25)
+		--self.WeeklyInfo.Child.Label:SetPoint("TOP", -135, -25)
 		local affix = self.WeeklyInfo.Child.Affixes[1]
 		if affix then
 			affix:ClearAllPoints()
