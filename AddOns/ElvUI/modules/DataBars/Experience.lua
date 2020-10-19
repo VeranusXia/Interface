@@ -29,7 +29,7 @@ function DB:ExperienceBar_CheckQuests(questID, completedOnly)
 
 	if C_QuestLog_ShouldShowQuestRewards(questID) then
 		local isCompleted = C_QuestLog_ReadyForTurnIn(questID)
-		if completedOnly and isCompleted or (not completedOnly and not isCompleted) then
+		if not completedOnly or isCompleted then
 			QuestLogXP = QuestLogXP + GetQuestLogRewardXP()
 		end
 	end
@@ -211,6 +211,7 @@ end
 function DB:ExperienceBar()
 	local Experience = DB:CreateBar('ElvUI_ExperienceBar', 'Experience', DB.ExperienceBar_Update, DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, {'BOTTOM', E.UIParent, 'BOTTOM', 0, 43})
 	Experience.barTexture:SetDrawLayer('ARTWORK', 4)
+	DB:CreateBarBubbles(Experience)
 
 	local Rested = CreateFrame('StatusBar', 'ElvUI_ExperienceBar_Rested', Experience.holder)
 	Rested:SetStatusBarTexture(DB.db.customTexture and LSM:Fetch('statusbar', DB.db.statusbar) or E.media.normTex)

@@ -1,8 +1,14 @@
 # Deadly Boss Mods Core
 
-## [9.0.1-6-g5ec98bd](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/5ec98bdd355eb79e42fe249afd05c885113948b3) (2020-10-15)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.1...5ec98bdd355eb79e42fe249afd05c885113948b3) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.1-10-g3bcb71e](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/3bcb71e09ec5aa0a22c32dea359a6993d2132be7) (2020-10-18)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.1...3bcb71e09ec5aa0a22c32dea359a6993d2132be7) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Update version check  
+- Missed one replaccement  
+- Reworked Council of Blood mod with changes from latest build. A lot of abilities removed and added, therefor status of this mod has been changed from done back to bet since it needs to be retested  
+    Fixed a missed nameplate line usage on ghuun (was harmless but injected extra args and table for no reason)  
+- Code cleanup and security improvements on TimerTracker handling to prevent abuse (accidental or intentional) that would cause BG or M+ timer objects started by blizzard to break. Now, if an M+ or PvP timer already exists, pull timers from DBM will no longer start TimerTracker countdown objects.  
+     - In addition, another update was made to fix a niche condition for M+ where players like to do a 10 second pull timer first before activating keystone, and then after loading screen Obviously blizzard starts their own M+ timer. Blizzard added a conditional to TimerTracker code on their end that says "if a timer is already running, don't start another one". This was causing M+ blizzard timer not to activate correctly if even a fraction of a second was left on DBMs pull timer when keystone was activated. Now, any time a loading screen is triggered, DBM will wipe out TimerTracker objects that have countdown type to ensure that when blizzard runs their type 2 timer (M+), "already running" abort conditionn would be false.  
 - Es update  
 - Fixed regression to RU translations that caused them to completely erase english tables instead of doing table replacements. This was causing lua errors or missing auto translations on warnings/timers that weren't yet translated into Russian  
 - We can fix PvP timers, right? :P (#369)  

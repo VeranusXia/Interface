@@ -93,8 +93,7 @@ L["Alternate Power"] = "보조 자원"
 L["Always"] = "항상"
 L["Always active trigger"] = "항상 활성 조건 활성화"
 L["Always include realm"] = "항상 서버 포함"
---[[Translation missing --]]
-L["Always True"] = "Always True"
+L["Always True"] = "항상 참"
 L["Amount"] = "수량"
 L["And Talent selected"] = "& 선택된 특성"
 L["Animations"] = "애니메이션"
@@ -526,8 +525,7 @@ L["Include Charges"] = "충전량 포함"
 L["Incoming Heal"] = "받는 치유"
 --[[Translation missing --]]
 L["Increased Precision below 3s"] = "Increased Precision below 3s"
---[[Translation missing --]]
-L["Information"] = "Information"
+L["Information"] = "정보"
 L["Inherited"] = "상속"
 L["Instakill"] = "죽임"
 L["Instance"] = "인스턴스"
@@ -1042,6 +1040,8 @@ L["Thickness"] = "굵기"
 L["Third"] = "세 번째"
 L["Third Value of Tooltip Text"] = "툴팁 문자의 세 번째 값"
 L["This aura contains custom Lua code."] = "이 효과는 사용자 정의 Lua 코드를 포함합니다."
+--[[Translation missing --]]
+L["This aura has legacy aura trigger(s), which are no longer supported."] = "This aura has legacy aura trigger(s), which are no longer supported."
 L["This aura was created with a newer version of WeakAuras."] = "이 효과는 WeakAuras의 새로운 버전으로 만들어졌습니다."
 --[[Translation missing --]]
 L["This aura was created with the Classic version of World of Warcraft."] = "This aura was created with the Classic version of World of Warcraft."

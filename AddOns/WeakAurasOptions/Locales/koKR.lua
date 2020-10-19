@@ -92,8 +92,7 @@ local L = WeakAuras.L
 	L["Add to group %s"] = "그룹 %s에 추가"
 	L["Add to new Dynamic Group"] = "새 유동적 그룹에 추가"
 	L["Add to new Group"] = "새 그룹에 추가"
-	--[[Translation missing --]]
-	L["Add Trigger"] = "Add Trigger"
+	L["Add Trigger"] = "활성 조건 추가"
 	--[[Translation missing --]]
 	L["Additional Events"] = "Additional Events"
 	L["Addon"] = "애드온"
@@ -231,8 +230,7 @@ local L = WeakAuras.L
 	L["Common Text"] = "공통 문자"
 	--[[Translation missing --]]
 	L["Compare against the number of units affected."] = "Compare against the number of units affected."
-	--[[Translation missing --]]
-	L["Compatibility Options"] = "Compatibility Options"
+	L["Compatibility Options"] = "호환성 옵션"
 	L["Compress"] = "누르기"
 	L["Condition %i"] = "조건 %i"
 	L["Conditions"] = "조건"
@@ -531,8 +529,7 @@ Supports multiple entries, separated by commas
 	L["Ignored Spell ID"] = "Ignored Spell ID"
 	L["Import"] = "가져오기"
 	L["Import a display from an encoded string"] = "암호화된 문자열에서 디스플레이 가져오기"
-	--[[Translation missing --]]
-	L["Information"] = "Information"
+	L["Information"] = "정보"
 	L["Inner"] = "내부"
 	L["Invalid Item Name/ID/Link"] = "잘못된 아이템 이름/ID/링크"
 	L["Invalid Spell ID"] = "잘못된 주문 ID"
@@ -605,8 +602,7 @@ Supports multiple entries, separated by commas
 	L["Name Info"] = "이름 정보"
 	L["Name Pattern Match"] = "이름 패턴 일치"
 	L["Name(s)"] = "이름(s)"
-	--[[Translation missing --]]
-	L["Name:"] = "Name:"
+	L["Name:"] = "이름:"
 	L["Nameplate"] = "이름표"
 	L["Nameplates"] = "이름표"
 	L["Negator"] = "Not"
@@ -671,6 +667,8 @@ Supports multiple entries, separated by commas
 	L["Preset"] = "프리셋"
 	L["Press Ctrl+C to copy"] = "복사하려면 Ctrl+C를 누르세요"
 	--[[Translation missing --]]
+	L["Press Ctrl+C to copy the URL"] = "Press Ctrl+C to copy the URL"
+	--[[Translation missing --]]
 	L["Prevent Merging"] = "Prevent Merging"
 	L["Processed %i chars"] = "%i 문자 복사됨"
 	L["Progress Bar"] = "진행 바"
@@ -692,7 +690,7 @@ Supports multiple entries, separated by commas
 	L["Repeat After"] = "반복 횟수"
 	L["Repeat every"] = "매번 반복"
 	--[[Translation missing --]]
-	L["Report bugs our our issue tracker."] = "Report bugs our our issue tracker."
+	L["Report bugs on our issue tracker."] = "Report bugs on our issue tracker."
 	--[[Translation missing --]]
 	L["Require unit from trigger"] = "Require unit from trigger"
 	L["Required for Activation"] = "활성화에 필요"
