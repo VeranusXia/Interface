@@ -7,7 +7,7 @@ local classSpell ={
 	["PALADIN"] = "/targetfriendplayer\n/cast 殉道者之光\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
 	["ROGUE"] = "", --Rogue
-	["PRIEST"] = "/cast 绝望祷言\n/castsequence reset=6 真言术：耀,预兆\n",--Priest
+	["PRIEST"] = "/cast 绝望祷言\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
 	["SHAMAN"] = "", --Shaman
 	["MAGE"] = "/cast 寒冰护体\n", --Mage
@@ -392,32 +392,32 @@ function AutoBattleGround:Action()
 			logText("等待时间:"..difftime.."秒") 
 			 
 			if difftime>difftime_config then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("整整"..difftime.."秒没开打 果断离队")
 				return
 			end
 			if  GetNumGroupMembers()<=groupmembersMin_config then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("人数过少 果断离队")
 				return
 			end
 			if UnitIsGroupLeader("player") then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
 			if loseNum>=3 then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("连跪三把了 离队换个车头")
 				return
 			end
 			local gaNum=GetGroupAssistantNum()
 			if gaNum> groupassistantnum_config  then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("这个队伍A太多了 果断换一个")
 				return
 			end
 			if gaNum == 1  then
-				LeaveParty()
+				C_PartyInfo.LeaveParty()
 				logText("这个队伍活人队 果断换一个")
 				return
 			end
@@ -707,12 +707,12 @@ function abgPVPmatch:OnEvent(event, arg1)
 			local tempGnum= GetNumGroupMembers()
 			if gnumBase<tempGnum then
 			-- if GetGroupAssistantNum()> groupassistantnum_config   then
-				-- LeaveParty()
+				-- C_PartyInfo.LeaveParty()
 				-- logText("这个队伍A太多了 果断换一个")
 				-- return
 			-- end
 			-- if  GetNumGroupMembers()<=groupmembers_config and IsInGroup()   then
-				-- LeaveParty()
+				-- C_PartyInfo.LeaveParty()
 				-- logText("人数过少 果断离队")
 				-- return
 			-- end
@@ -746,7 +746,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<100 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<40 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
 						table.insert(temp,result)
 					end 
 					
@@ -758,7 +758,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					logText("随机选择:"..item.name.."("..num.."/"..#temp..")") 
 					logText("车头:"..GetWinRate(item.leaderName)) 
 					signUp(item)
-					
+					 
 					--LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
 				end 
 				  

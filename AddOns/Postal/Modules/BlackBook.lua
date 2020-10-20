@@ -230,7 +230,7 @@ function Postal_BlackBook:OnChar(editbox, ...)
 	local faction = UnitFactionGroup("player")
 	local player = UnitName("player")
 	local newname
-
+	
 		-- Check all alt list
 	if db.AutoCompleteAllAlts then
 		local nosptext = text:gsub("%s*","") -- ignore spaces in matching fully-qualified names

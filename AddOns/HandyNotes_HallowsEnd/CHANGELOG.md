@@ -1,8 +1,9 @@
 # HandyNotes_HallowsEnd
 
-## [v1.5-3-g7951ecf](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/tree/7951ecf96bf4bbb9a6590e3235610ad20851bd8e) (2020-10-18)
-[Full Changelog](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/compare/v1.5...7951ecf96bf4bbb9a6590e3235610ad20851bd8e) [Previous Releases](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/releases)
+## [v1.5-4-g1f8dcfa](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/tree/1f8dcfaf1340b2e127889fc1f9d52db300d721b8) (2020-10-19)
+[Full Changelog](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/compare/v1.5...1f8dcfaf1340b2e127889fc1f9d52db300d721b8) [Previous Releases](https://github.com/Ravendwyr/HandyNotes_HallowsEnd/releases)
 
+- Applied @epigramx's patch  
 - Bump Interface number to 90001.  
 - Replaced deprecated function.  
 - Tweaked build script config.  
