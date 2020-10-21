@@ -78,6 +78,8 @@ function S:MailFrame()
 	_G.SendMailSubjectEditBox:Point('TOPLEFT', _G.SendMailNameEditBox, 'BOTTOMLEFT', 0, -10)
 	_G.SendMailSubjectEditBox:Height(18)
 	_G.SendMailNameEditBox:Height(18)
+	_G.SendMailSubjectEditBox:Width(180)
+	_G.SendMailNameEditBox:Width(120)
 	_G.SendMailFrame:StripTextures()
 
 	hooksecurefunc('SendMailFrame_Update', MailFrameSkin)

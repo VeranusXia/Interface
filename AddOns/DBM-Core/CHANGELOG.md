@@ -1,8 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.0.1-10-g3bcb71e](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/3bcb71e09ec5aa0a22c32dea359a6993d2132be7) (2020-10-18)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.1...3bcb71e09ec5aa0a22c32dea359a6993d2132be7) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.2](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/9.0.2) (2020-10-20)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.1...9.0.2) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- prep new release  
+- Finish the unfinished stuff in Sanguine Dsepths  
 - Update version check  
 - Missed one replaccement  
 - Reworked Council of Blood mod with changes from latest build. A lot of abilities removed and added, therefor status of this mod has been changed from done back to bet since it needs to be retested  
