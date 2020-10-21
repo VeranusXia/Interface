@@ -3,7 +3,6 @@ local AS = CreateFrame("Frame")
 AS:RegisterEvent("QUEST_ACCEPTED")
 AS:SetScript("OnEvent", function(self, event, qid)
 	if event=="QUEST_ACCEPTED" then  
-		print(qid)
 		if GetNumGroupMembers() < 1 then
 			return
 		end
