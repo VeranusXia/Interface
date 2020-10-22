@@ -62,7 +62,9 @@ local function work_out_label(point)
         fallback = 'npc:'..point.npc
     end
     if point.currency then
-        local name, _, texture = GetCurrencyInfo(point.currency)
+		local info = C_CurrencyInfo.GetCurrencyInfo(point.currency);
+		if not info then return end
+        local name, texture = info.name, info.iconFileID
         if name then
             return name
         end
@@ -72,13 +74,13 @@ end
 local function work_out_texture(point)
     if point.atlas then
         if not icon_cache[point.atlas] then
-            local texture, _, _, left, right, top, bottom = GetAtlasInfo(point.atlas)
+			local info = C_Texture.GetAtlasInfo("GreenCross")
             icon_cache[point.atlas] = {
-                icon = texture,
-                tCoordLeft = left,
-                tCoordRight = right,
-                tCoordTop = top,
-                tCoordBottom = bottom,
+                icon = info.file,
+				tCoordLeft = info.leftTexCoord,
+				tCoordRight = info.rightTexCoord,
+				tCoordTop = info.topTexCoord,
+				tCoordBottom = info.bottomTexCoord,
             }
         end
         return icon_cache[point.atlas]
@@ -90,7 +92,9 @@ local function work_out_texture(point)
         end
     end
     if point.currency then
-        local texture = select(3, GetCurrencyInfo(point.currency))
+		local info = C_CurrencyInfo.GetCurrencyInfo(point.currency);
+		if not info then return end
+		local texture = info.iconFileID
         if texture then
             return trimmed_icon(texture)
         end
@@ -103,38 +107,38 @@ local function work_out_texture(point)
     end
     if point.follower then
         if not follower_texture then
-            local texture, _, _, left, right, top, bottom = GetAtlasInfo("GreenCross")
+			local info = C_Texture.GetAtlasInfo("GreenCross")
             follower_texture = {
-                icon = texture,
-                tCoordLeft = left,
-                tCoordRight = right,
-                tCoordTop = top,
-                tCoordBottom = bottom,
+				icon = info.file,
+				tCoordLeft = info.leftTexCoord,
+				tCoordRight = info.rightTexCoord,
+				tCoordTop = info.topTexCoord,
+				tCoordBottom = info.bottomTexCoord,
             }
         end
         return follower_texture
     end
     if point.npc then
         if not npc_texture then
-            local texture, _, _, left, right, top, bottom = GetAtlasInfo("DungeonSkull")
+			local info = C_Texture.GetAtlasInfo("DungeonSkull")
             npc_texture = {
-                icon = texture,
-                tCoordLeft = left,
-                tCoordRight = right,
-                tCoordTop = top,
-                tCoordBottom = bottom,
+                icon = info.file,
+				tCoordLeft = info.leftTexCoord,
+				tCoordRight = info.rightTexCoord,
+				tCoordTop = info.topTexCoord,
+				tCoordBottom = info.bottomTexCoord,
             }
         end
         return npc_texture
     end
     if not default_texture then
-        local texture, _, _, left, right, top, bottom = GetAtlasInfo("VignetteLoot")
+		local info = C_Texture.GetAtlasInfo("VignetteLoot")
         default_texture = {
-            icon = texture,
-            tCoordLeft = left,
-            tCoordRight = right,
-            tCoordTop = top,
-            tCoordBottom = bottom,
+            icon = info.file,
+            tCoordLeft = info.leftTexCoord,
+            tCoordRight = info.rightTexCoord,
+            tCoordTop = info.topTexCoord,
+            tCoordBottom = info.bottomTexCoord,
         }
     end
     return default_texture
