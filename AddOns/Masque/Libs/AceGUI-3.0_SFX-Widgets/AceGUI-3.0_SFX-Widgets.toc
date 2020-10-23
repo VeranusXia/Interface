@@ -5,7 +5,7 @@
 ## Notes-ruRU: Добавляет настраиваемые виджеты для AceGUI-3.0 и AceConfigDialog-3.0.
 ## Notes-zhTW: 增加自訂義組件到AceGUI-3.0以及AceConfigDialog-3.0。
 
-## Version: 1.0.4
+## Version: d0f36b6
 ## Author: StormFX
 ## OptionalDeps: Ace3
 

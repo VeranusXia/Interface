@@ -1,8 +1,16 @@
 ------------------------------------------------------------------------
-r413 | the_original_manbot | 2020-01-15 16:37:21 +0000 (Wed, 15 Jan 2020) | 1 line
+r419 | Zimzarina | 2020-10-22 05:12:38 +0000 (Thu, 22 Oct 2020) | 1 line
 Changed paths:
+   M /trunk/Modules/BlackBook.lua
+   M /trunk/Postal.lua
+
+Updated for 9.0.1
+------------------------------------------------------------------------
+r415 | Zimzarina | 2020-10-21 19:16:37 +0000 (Wed, 21 Oct 2020) | 1 line
+Changed paths:
+   M /trunk/Modules/BlackBook.lua
    M /trunk/Postal.toc
 
-version number update after testing features
+Updated for WOW 9.0.1 release.
 ------------------------------------------------------------------------
 

@@ -38,18 +38,18 @@ local defaults = {
 			MultiItemTooltip = true,
 		},
 		BlackBook = {
-			AutoFill = false,
+			AutoFill = true,
 			contacts = {},
 			recent = {},
-			AutoCompleteAlts = false,
-			AutoCompleteAllAlts = false,
-			AutoCompleteRecent = false,
-			AutoCompleteContacts = false,
-			AutoCompleteFriends = false,
-			AutoCompleteGuild = false,
+			AutoCompleteAlts = true,
+			AutoCompleteAllAlts = true,
+			AutoCompleteRecent = true,
+			AutoCompleteContacts = true,
+			AutoCompleteFriends = true,
+			AutoCompleteGuild = true,
 			ExcludeRandoms = false,
 			DisableBlizzardAutoComplete = false,
-			UseAutoComplete = false,
+			UseAutoComplete = true,
 		},
 	},
 	global = {
@@ -450,7 +450,7 @@ function Postal:CreateAboutFrame()
 		aboutFrame.editBox = Chatter:GetModule("Chat Copy").editBox
 	end
 	if not aboutFrame or not aboutFrame.editBox then
-		aboutFrame = CreateFrame("Frame", "PostalAboutFrame", UIParent)
+		aboutFrame = CreateFrame("Frame", "PostalAboutFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		tinsert(UISpecialFrames, "PostalAboutFrame")
 		aboutFrame:SetBackdrop({
 			bgFile = [[Interface\DialogFrame\UI-DialogBox-Background]],
