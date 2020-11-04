@@ -1,18 +1,12 @@
-tag 8816f1424ecabce5bba76c28058d4d31fbe5f4db 8.4.9-release
+tag e14d6e462992cebbf0748c3cff40d0c387e35f01 8.5.1-release
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Wed Oct 7 04:09:35 2020 +0200
+Date:	Tue Nov 3 23:49:59 2020 +0100
 
-Tagging as 8.4.9-release
+Tagging as 8.5.1-release
 
-commit 42ec37862ea2b1e7d04e8075eb4f7b9d74895293
+commit a9b942c8a1abb607cf3bc0d431652b4a7d51d0be
 Author: Hizuro <hizuro@gmx.net>
-Date:   Wed Oct 7 04:08:59 2020 +0200
+Date:   Tue Nov 3 23:49:45 2020 +0100
 
-    minor changes
-
-commit eab9bec0f83a70e18270c1cd35a4453f8c230d19
-Author: Hizuro <hizuro@gmx.net>
-Date:   Wed Oct 7 04:06:22 2020 +0200
-
-    udpate FarmHud_QuestArrow for shadowlands
+    fix missing table
 
