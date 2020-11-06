@@ -1,0 +1,10 @@
+﻿## Interface: 90100
+## Title: [Veranus]暗影国度手册Hook
+## Notes-zhCN: 暗影国度手册Hook
+## Version: 1.0
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+## Author: Veranus
+
+EJShowSL.lua
