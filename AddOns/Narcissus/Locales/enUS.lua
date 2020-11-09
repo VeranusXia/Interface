@@ -5,7 +5,7 @@ local L = Narci.L
 NARCI_GRADIENT = "|cffA236EFN|cff9448F1a|cff865BF2r|cff786DF4c|cff6A80F6i|cff5D92F7s|cff4FA4F9s|cff41B7FAu|cff33C9FCs|r"
 MYMOG_GRADIENT = "|cffA236EFM|cff9448F1y |cff865BF2T|cff786DF4r|cff6A80F6a|cff5D92F7n|cff4FA4F9s|cff41B7FAm|cff33C9FCo|cff32c9fbg|r"
 
-NARCI_VERSION_INFO = "1.1.0b";
+NARCI_VERSION_INFO = "1.1.0c";
 NARCI_DEVELOPER_INFO = "Designed by Peterodox";
 
 NARCI_NEW_ENTRY_PREFIX = "|cff40C7EB";
@@ -177,7 +177,7 @@ L["Use Escape Button"] = "Esc Key";
 L["Use Escape Button Description1"] = "Press the Escape key to exit.";
 L["Use Escape Button Description2"] = "Exit by clicking the hidden X button on the top-right of your screen.";
 L["Show Module Panel Gesture"] = "Show Module Panel On Mouseover";
-L["Independent"] = "Unaffected By Other Addons";
+L["Independent Minimap Button"] = "Unaffected By Other Addons";
 L["AFK Screen"] = "AFK Screen";
 L["Keep Standing"] = "Keep Standing";
 L["Keep Standing Description"] = "Cast /stand every now and then when you go AFK. This will not prevent AFK logout.";
@@ -262,15 +262,15 @@ L["Show More options"] = "Show More options";
 L["Show Less Options"] = "Show Less Options";
 L["Shadow"] = "Shadow";
 L["Light Source"] = "Light Source";
-L["Independent"] = "Independent";
-L["Interconnected"] = "Interconnected";
+L["Light Source Independent"] = "Independent";
+L["Light Source Interconnected"] = "Interconnected";
 
 
 --Animation Browser--
 L["Animation"] = "Animation";
 L["Animation Tooltip"] = "Browse, search animations";
 L["Animation Variation"] = "Animation Variation";
-
+L["Reset Slider"] = "Reset to zero";
 
 
 --Spell Visual Browser--
@@ -389,7 +389,7 @@ L["Visibility"] = "Visibility";
 
 --Achievement Frame--
 L["Use Achievement Panel"] = "Use As Primary Achievement Panel";
-L["Use Achievement Panel Description"] = "Replace the default achievement toast. Click tracked achievements to open this panel.";
+L["Use Achievement Panel Description"] = "Replace the default achievement toast. Enable tooltip enhancement. Click tracked achievements to open this panel.";
 L["Incomplete First"] = "Incomplete First";
 L["Earned First"] = "Earned First";
 L["Settings"] = "Settings";
@@ -468,8 +468,8 @@ L["Flavored Text"] = "Visit any Yogg Salon in major cities today to recieve a 10
 
 --Project Details--
 NARCI_ALL_PROJECTS = "All Projects";
-NARCI_PROJECT_DETAILS = "|cFFFFD100Developer: Peterodox\nRelease Date: October 20, 2020|r\n\nThank you for trying this add-on! If you have any issues, suggestions, ideas, please leave a comment on the curseforge page or contact me on...";
-NARCI_PROJECT_AAA_TITLE = "|cff008affA|cff0d8ef2z|cff1a92e5e|cff2696d9r|cff339acco|cff409ebft|cff4da1b2h |cff59a5a6A|cff66a999d|cff73ad8cv|cff7fb180e|cff8cb573n|cff99b966t|cffa6bd59u|cffb2c14dr|cffbfc440e |cffccc833A|cffd9cc26l|cffe5d01ab|cfff2d40du|cffffd800m|r"..NARCI_COLOR_RED_MILD.." [Currently Unavailable]";
+NARCI_PROJECT_DETAILS = "|cFFFFD100Developer: Peterodox\nRelease Date: October 26, 2020|r\n\nThank you for trying this add-on! If you have any issues, suggestions, ideas, please leave a comment on the curseforge page or contact me on...";
+NARCI_PROJECT_AAA_TITLE = "|cff008affA|cff0d8ef2z|cff1a92e5e|cff2696d9r|cff339acco|cff409ebft|cff4da1b2h |cff59a5a6A|cff66a999d|cff73ad8cv|cff7fb180e|cff8cb573n|cff99b966t|cffa6bd59u|cffb2c14dr|cffbfc440e |cffccc833A|cffd9cc26l|cffe5d01ab|cfff2d40du|cffffd800m|r";
 NARCI_PROJECT_AAA_SUMMARY = "Explore places of interest and collect lores and photos from all across Azeroth.|cff636363";
 NARCI_PROJECT_NARCISSUS_SUMMARY = "An immersive character pane and your ultimate screenshot tool.";
 

@@ -14,6 +14,7 @@ end});
 
 L["AddOnLoaded"] = "AddOn loaded..."
 L["AddOnLoadedDesc"] = "Show 'AddOn loaded...' message on login"
+L["AnotherAddOnsHijackedFunc"] = "Warning: Another addon has hijacked some essential functions. See following List:"
 L["BgTransparency"] = "Background transparency"
 L["Black player dot"] = "Black player dot"
 L["Blizzards player arrow"] = "Blizzards player arrow"
@@ -36,6 +37,9 @@ L["CoordsShow"] = "Show coordinations"
 L["CoordsShowDesc"] = "Show player coordinations on HUD"
 L["DataBrokerOptions"] = "to open FarmHud options"
 L["DataBrokerToggle"] = "to toggle FarmHud"
+L["DebugOptFrames"] = "Print unwanted elements"
+L["DebugOptFramesDesc"] = "Print a list of unwanted elements anchored on Minimap if FarmHud enabled."
+L["DebugOptInfo"] = "This section contains options to help tracking problems with other addons."
 L["E"] = "E"
 L["ExtraAddOnLoaded"] = "The extra addon '%s' is enabled!"
 L["ExtraAddOnNotLoaded"] = "The extra addon '%s' must be enabled for this option!"
@@ -50,6 +54,7 @@ L["HudSize"] = "HUD Size"
 L["HudSizeDesc"] = "Sets the HUD size to a percentage of screen height"
 L["HudSymbolScale"] = "HUD symbol scale"
 L["HudSymbolScaleDesc"] = "Scale the symbols on HUD"
+L["IncompatibleAddOnDetected"] = "ERROR: FarmHud can't be opened. There are incompatible addons active. Disable the following list of AddOns:"
 L["KeyBindBackground"] = "Toggle FarmHud's minimap background"
 L["KeyBindBackgroundDesc"] = "Set the keybinding to show minimap background."
 L["KeyBindMouse"] = "Toggle FarmHud's tooltips (Can't click through Hud)"
@@ -222,7 +227,7 @@ end
 
 if LOCALE_esES then
 L["AddOnLoaded"] = "AddOn Cargado..."
-L["AddOnLoadedDesc"] = "Muestra el mensaje \"AddOn Cargado\" después del Login"
+L["AddOnLoadedDesc"] = "Mostrar el mensaje \"AddOn Cargado\" después del Login"
 
 end
 

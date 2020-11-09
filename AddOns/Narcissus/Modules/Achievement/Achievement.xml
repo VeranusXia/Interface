@@ -1,4 +1,5 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+	<Script file="Data.lua"/>
 	<Script file="RewardModelSceneMixin.lua"/>
 	<Script file="StatusBarMixin.lua"/>
 	<Script file="TabButtonMixin.lua"/>
@@ -7,6 +8,7 @@
 	<Script file="Settings.lua"/>
 	<Script file="AchievementFrame.lua"/>
 	<Script file="DIY.lua"/>
+	<Script file="DevTool.lua"/>
 
 	<Frame name="NarciAchievementEditorFrameTemplate" virtual="true" mixin="ExpansionTransitionBackdropTemplateMixin">
 		<Size x="232" y="60"/>
@@ -2088,7 +2090,11 @@
 							<Anchor point="CENTER"  relativeKey="$parent" relativePoint="CENTER"/>
 						</Anchors>
 						<Frames>
-							<!--Frame inherits="NarciFrameDispersiveShadowTemplate" frameLevel="11" ignoreParentAlpha="true"/-->
+							<Button inherits="NarciAchievementChainButton" parentKey="ParentAchievmentButton">
+								<Anchors>
+									<Anchor point="RIGHT" relativeKey="$parent.icon" relativePoint="LEFT" x="-12"/>
+								</Anchors>
+							</Button>
 						</Frames>
 					</Button>
 
@@ -2425,6 +2431,38 @@
 							<OnEnter method="OnEnter"/>
 							<OnLeave method="OnLeave"/>
 							<OnClick method="OnClick"/>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="GoToCategoryButton" frameLevel="18" hidden="false" mixin="NarciAchievementGoToCategoryButtonMixin">
+						<Size x="80" y="40"/>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="0" y="-18"/>
+						</Anchors>
+						<Layers>
+							<Layer level="OVERLAY" textureSubLevel="2">
+								<Texture parentKey="Icon" Alpha="0.4" file="Interface\AddOns\Narcissus\Art\Modules\Achievement\Shared\ReturnIcon">
+									<TexCoords left="0" right="0.5" top="0" bottom="1"/>
+									<Size x="40" y="40"/>
+									<Anchors>
+										<Anchor point="LEFT" relativeKey="$parent" relativePoint="LEFT" x="18" y="0"/>
+									</Anchors>
+								</Texture>
+							</Layer>
+							<Layer level="OVERLAY">
+								<FontString inherits="NarciAchievementText" parentKey="Label" justifyH="LEFT" justifyV="CENTER" hidden="false" Alpha="1">
+									<Size x="0"/>
+									<Anchors>
+										<Anchor point="LEFT" relativeKey="$parent" relativePoint="LEFT" x="56" y="0"/>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad method="OnLoad"/>
+							<OnClick method="OnClick"/>
+							<OnEnter method="OnEnter"/>
+							<OnLeave method="OnLeave"/>
 						</Scripts>
 					</Button>
 
@@ -3205,4 +3243,20 @@
 			<OnClick function="NarciAchievementAlertFrame_OnClick"/>
 		</Scripts>
   	</ContainedAlertFrame>
+
+	  <Button name="NarciAchievementTooltipButtonTemplate" mixin="NarciAchievementExtraTooltipMixin" hidden="true" virtual="true">
+		<Size x="12" y="12"/>
+		<Layers>
+			
+		</Layers>
+		<HighlightTexture file="Interface\AddOns\Narcissus\Art\Modules\Achievement\Shared\TooltipButtonHighlight" parentKey="Highlight" alphaMode="ADD" Alpha="0.8">
+
+		</HighlightTexture>
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnClick method="OnClick"/>
+			<OnDragStart method="OnDragStart"/>
+			<OnDragStop method="OnDragStop"/>
+		</Scripts>
+	  </Button>
 </Ui>

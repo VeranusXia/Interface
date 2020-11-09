@@ -710,7 +710,7 @@ local Structure = {
         { name = "MinimapButton", type = "header", localizedName = L["Minimap Button"], },
         { name = "ShowMinimapButton", type = "checkbox", localizedName = ENABLE, valueFunc = MinimapButtonSwitch_SetState, onShowFunc = MinimapButtonSwitch_OnShow, parentButton = true, },
         { name = "ShowModulePanelOnMouseOver", type = "checkbox", localizedName = NARCI_NEW_ENTRY_PREFIX..L["Show Module Panel Gesture"], valueFunc = ModulePanelSwitch_SetState, childButton = true,},
-        { name = "IndependentMinimapButton", type = "checkbox", localizedName = L["Independent"], valueFunc = MinimapButtonParentSwitch_SetState, childButton = true, },
+        { name = "IndependentMinimapButton", type = "checkbox", localizedName = L["Independent Minimap Button"], valueFunc = MinimapButtonParentSwitch_SetState, childButton = true, },
         { name = "FadeButton", type = "checkbox", localizedName = L["Fade Out"], description = L["Fade Out Description"], valueFunc = FadeOutSwitch_SetState, childButton = true, },
         { name = "Space", type = "space", height = -16},
         { name = "HotkeyHeader", type = "header", localizedName = L["Hotkey"], },
@@ -1621,7 +1621,7 @@ end
 -----------------
 local function SetCreditList()
     local ACIVE_COLOR = "|cffd9ccb4";
-    local ACTIVE_PATRONS = {"Elexys", "Ben Ashley", "Andrew Phoenix", "Solanya", "Erik Shafer", "Nantangitan", "Blastflight", "Pierre-Yves Bertolus", "Adrien Le Texier", "Lars Norberg", };
+    local ACTIVE_PATRONS = {"Elexys", "Ben Ashley", "Andrew Phoenix", "Solanya", "Erik Shafer", "Nantangitan", "Blastflight", "Pierre-Yves Bertolus", "Adrien Le Texier", "Lars Norberg",  "Ernaldo Kalaja", "Alex Boehm"};
     local FORMER_PATRONS = {"Adam Stribley", "Valnoressa", "Ellypse", "Stephen Berry", "Mccr Karl", "Christian Williamson", "Tzutzu", "Psyloken", "Victor Torres", }
     local RawList = {};
     for i = 1, #ACTIVE_PATRONS do

@@ -159,7 +159,7 @@ L["Use Escape Button"] = "Esc键";
 L["Use Escape Button Description1"] = "按下Esc键来退出插件。";
 L["Use Escape Button Description2"] = "点击屏幕右上角的X按钮来退出插件。";
 L["Show Module Panel Gesture"] = "鼠标悬停时显示模块面板";
-L["Independent"] = "不受其他插件控制";
+L["Independent Minimap Button"] = "不受其他插件控制";
 L["AFK Screen"] = "AFK画面";
 L["Keep Standing"] = "保持站立";
 L["Keep Standing Description"] = "当你AFK后定时使用/站立表情。此选项不会中断自动登出。"
@@ -238,15 +238,15 @@ L["Show More options"] = "显示更多选项";
 L["Show Less Options"] = "隐藏更多选项";
 L["Shadow"] = "阴影";
 L["Light Source"] = "光源";
-L["Independent"] = "独立";
-L["Interconnected"] = "关联";
+L["Light Source Independent"] = "独立";
+L["Light Source Interconnected"] = "关联";
 
 
 --Animation Browser--
 L["Animation"] = "角色动画";
 L["Animation Tooltip"] = "浏览和搜索动画";
 L["Animation Variation"] = "子类型";
-
+L["Reset Slider"] = "重置为零";
 
 --Spell Visual Browser--
 L["Visuals"] = "法术效果";
@@ -428,7 +428,7 @@ L["Flavored Text"] = "在主城内的优格沙龙使用美容美发服务即可�
 
 --Project Details--
 NARCI_ALL_PROJECTS = "全部项目";
-NARCI_PROJECT_DETAILS = "|cFFFFD100插件作者: Peterodox\n更新日期: 2020.10.20|r\n\n感谢你使用此插件！如果你遇到任何问题，或者有任何想法或建议，请在CurseForge项目主页上留言，或者在以下网站上联系我。";
+NARCI_PROJECT_DETAILS = "|cFFFFD100插件作者: Peterodox\n更新日期: 2020.10.26|r\n\n感谢你使用此插件！如果你遇到任何问题，或者有任何想法或建议，请在CurseForge项目主页上留言，或者在以下网站上联系我。";
 NARCI_PROJECT_AAA_SUMMARY = "探索艾泽拉斯上的不同景点，并收集各种故事和照片。";
 NARCI_PROJECT_NARCISSUS_SUMMARY = "沉浸式角色面板；你最好的截图助手。"
 

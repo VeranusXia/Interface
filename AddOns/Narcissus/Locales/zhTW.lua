@@ -153,7 +153,7 @@ L["Use Escape Button"] = "Esc鍵";
 L["Use Escape Button Description1"] = "按下Esc鍵來退出模組。";
 L["Use Escape Button Description2"] = "點擊屏幕右上角的X按鈕來退出模組。";
 L["Show Module Panel Gesture"] = "鼠標懸停時顯示模塊面板";
-L["Independent"] = "不受其他模組控制";
+L["Independent Minimap Button"] = "不受其他模組控制";
 L["AFK Screen"] = "AFK画面";
 L["Keep Standing"] = "保持站立";
 L["Keep Standing Description"] = "當妳AFK後定時使用/站立表情。此選項不會中斷自動登出。"
@@ -227,9 +227,14 @@ L["Show More options"] = "顯示更多選項";
 L["Show Less Options"] = "隱藏更多選項";
 L["Shadow"] = "陰影";
 L["Light Source"] = "光源";
-L["Independent"] = "獨立";
-L["Interconnected"] = "關聯";
+L["Light Source Independent"] = "獨立";
+L["Light Source Interconnected"] = "關聯";
 
+--Animation Browser--
+L["Animation"] = "角色動畫";
+L["Animation Tooltip"] = "瀏覽和搜索動畫";
+L["Animation Variation"] = "子類型";
+L["Reset Slider"] = "重置為零";
 
 --Spell Visual Browser--
 L["Visuals"] = "法術效果";
@@ -416,7 +421,7 @@ L["Splash Content8 Description"] = "按住Shift並拖動此按鈕可使其脫離
 
 --Project Details--
 NARCI_ALL_PROJECTS = "全部項目";
-NARCI_PROJECT_DETAILS = "|cFFFFD100模組作者: Peterodox\n更新日期: 2020.10.20|r\n\n感謝妳使用此模組！如果妳遇到任何問題，或者有任何想法或建議，請在CurseForge項目主頁上留言，或者在以下網站上聯系我。";
+NARCI_PROJECT_DETAILS = "|cFFFFD100模組作者: Peterodox\n更新日期: 2020.10.26|r\n\n感謝妳使用此模組！如果妳遇到任何問題，或者有任何想法或建議，請在CurseForge項目主頁上留言，或者在以下網站上聯系我。";
 NARCI_PROJECT_AAA_SUMMARY = "探索艾澤拉斯上的不同景點，並收集各種故事和照片。";
 NARCI_PROJECT_NARCISSUS_SUMMARY = "沈浸式角色面板；妳最好的截圖助手。"
 

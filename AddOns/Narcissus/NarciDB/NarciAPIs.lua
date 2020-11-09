@@ -3137,7 +3137,7 @@ function NarciNonEditableEditBoxMixin:OnLoad()
 end
 
 function NarciNonEditableEditBoxMixin:SelectText()
-    self:SetCursorPosition(0);
+    self:SetCursorPosition(self.defaultCursorPosition or 0);
     self:HighlightText();
 end
 

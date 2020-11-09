@@ -25,6 +25,7 @@ local GetPreviousAchievement = GetPreviousAchievement;
 local GetNextAchievement = GetNextAchievement;
 local SetFocusedAchievement = SetFocusedAchievement;    --Requset guild achievement progress from server, will fire "CRITERIA_UPDATE" after calling GetAchievementCriteriaInfo()
 local FadeFrame = NarciAPI_FadeFrame;
+local GetParentAchievementID = NarciAPI_GetParentAchievementID;
 local L = Narci.L;
 
 local function linear(t, b, e, d)
@@ -123,7 +124,7 @@ local function ReskinButton(button)
 end
 
 
-local MainFrame, InspectionFrame, MountPreview, Tooltip, ReturnButton, SummaryButton;
+local MainFrame, InspectionFrame, MountPreview, Tooltip, ReturnButton, SummaryButton, GoToCategoryButton;
 local CategoryContainer, AchievementContainer, DIYContainer, EditorContainer, SummaryFrame, AchievementCards, ResultFrame, ResultButtons, TabButtons;
 
 local CategoryButtons = {
@@ -405,6 +406,8 @@ function animFlyOut:Play()
     InspectionFrame.HotkeyShiftClick:Hide();
     InspectionFrame.HotkeyMouseWheel:Hide();
     InspectionFrame.GetLink:Hide();
+    InspectionFrame.GoToCategoryButton:Hide();
+    self.Card.ParentAchievmentButton:Hide();
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -792,8 +795,9 @@ local function InspectAchievement(id)
     end
 
     InspectionFrame:UpdateChain(id, completed);
+    InspectionFrame:FindParentAchievementID(id);
+    GoToCategoryButton:SetAchievement(id, isGuild);
 
-    
     return completed, AchievementCards[-1]:GetHeight()/2
 end
 
@@ -1337,6 +1341,27 @@ local function CategoryButton_OnClick(button, mouse)
     ToggleFeatOfStrenghtText(button);
 end
 
+local function ExpandCategoryButtonNoAnimation(button)
+    if not button then return end;
+
+    if not button.expanded then
+        button.progress:Show();
+        button.percentSign:Hide();
+        button.value:Hide();
+
+        local expandedHeight = button.expandedHeight;
+        if expandedHeight ~= 32 then
+            button.box:SetHeight(expandedHeight);
+            button.drawer:Show();
+            button.drawer:SetAlpha(1);
+        end
+        button.expanded = true;
+
+        UpdateCategoryScrollRange();
+        ToggleFeatOfStrenghtText(button);
+    end
+end
+
 local function BuildCategoryStructure(isGuild)
     local GUILD_FEAT_OF_STRENGTH_ID = 15093;
     local GUILD_CATEGORY_ID = 15076;
@@ -1699,6 +1724,14 @@ function NarciAchievementInspectionFrameMixin:OnMouseDown()
     animFlyOut:Play();
 end
 
+function NarciAchievementInspectionFrameMixin:ScrollToCategoryButton(button)
+    if button then
+        local topButton =  CategoryButtons.player.buttons[1];
+        local offset = max(0, topButton:GetTop() -  button:GetTop() - (CategoryContainer:GetHeight()/2 or 32) +32); --Attempt to position it to the vertical center
+        CategoryContainer.scrollBar:SetValue(offset);
+    end
+end
+
 function NarciAchievementInspectionFrameMixin:ScrollToButton(button)
     if button then
         local offset = AchievementCards[1]:GetTop() -  button:GetTop();
@@ -1914,6 +1947,30 @@ local function FormatStatusBars(container, data, count, completed)
     end
     for i = numBars + 1, #bars do
         bars[i]:Hide();
+    end
+end
+
+function NarciAchievementInspectionFrameMixin:FindParentAchievementID(achievementID)
+    local parentAchievementID = GetParentAchievementID(achievementID);
+    local button = AchievementCards[-1].ParentAchievmentButton;
+    if parentAchievementID then
+        local _, name, _, completed, month, day, year, _, _, icon = DataProvider:GetAchievementInfo(parentAchievementID);
+        if completed then
+            button:SetAlpha(1);
+        else
+            button:SetAlpha(0.60);
+        end
+        button.name = name;
+        button.id = parentAchievementID;
+        button.icon:SetTexture(icon);
+        button.icon:SetDesaturated(not completed);
+        button:Show();
+        if not button.hasInitialized then
+            button.hasInitialized = true;
+            button.border:SetTexture("Interface\\AddOns\\Narcissus\\Art\\Modules\\Achievement\\Shared\\IconBorderMiniPointRight");
+        end
+    else
+        button:Hide();
     end
 end
 
@@ -2148,6 +2205,63 @@ function NarciAchievementInspectionFrameMixin:ShowOrHideChainDates()
 end
 
 
+------------------------------------------------------------------------------
+NarciAchievementGoToCategoryButtonMixin = {};
+
+function NarciAchievementGoToCategoryButtonMixin:OnLoad()
+    GoToCategoryButton = self;
+    self:OnLeave();
+end
+
+function NarciAchievementGoToCategoryButtonMixin:OnEnter()
+    self.Label:SetTextColor(0.8, 0.8, 0.8);
+    self.Icon:SetTexCoord(0.5, 1, 0, 1);
+    self.Icon:SetAlpha(0.6);
+end
+
+function NarciAchievementGoToCategoryButtonMixin:OnLeave()
+    self.Label:SetTextColor(0.6, 0.6, 0.6);
+    self.Icon:SetTexCoord(0, 0.5, 0, 1);
+    self.Icon:SetAlpha(0.4);
+end
+
+function NarciAchievementGoToCategoryButtonMixin:OnClick()
+    if self.categoryID then
+        local categoryButton = DataProvider:GetCategoryButtonByID(self.categoryID, self.isGuild);
+        if categoryButton and (self.categoryID ~= DataProvider.currentCategory) then
+            if not categoryButton.isParentButton then
+                local parentCategoryButton = DataProvider:GetCategoryButtonByID(self.parentCategoryID, self.isGuild);
+                ExpandCategoryButtonNoAnimation(parentCategoryButton);
+            end
+            categoryButton:Click();
+            animFlyOut.noTranslation = true;
+            animFlyOut:Play();
+
+            InspectionFrame:ScrollToCategoryButton(categoryButton);
+
+            AchievementContainer:Show();
+            SummaryFrame:Hide();
+            SummaryButton:Show();
+        else
+            animFlyOut:Play();
+        end
+    end
+end
+
+function NarciAchievementGoToCategoryButtonMixin:SetAchievement(achievementID, isGuild)
+    local categoryID = GetAchievementCategory(achievementID);
+    local name, parentCategoryID = DataProvider:GetCategoryInfo(categoryID);
+    if categoryID then
+        self.categoryID = categoryID;
+        self.parentCategoryID = parentCategoryID;
+        self.isGuild = isGuild;
+        self.Label:SetText(name);
+        self:Show();
+        self:SetWidth(max(self.Label:GetWidth() + 60, 96));
+    end
+end
+
+
 NarciMetaAchievementButtonMixin = {};
 
 function NarciMetaAchievementButtonMixin:SetAchievement()
@@ -2222,11 +2336,9 @@ function NarciAchievementChainButtonMixin:OnLeave()
     self.icon:SetScale(1);
     self.border:SetScale(1);
 
-    local ChainFrame = self:GetParent()
-    local buttons = ChainFrame.buttons;
     Tooltip:FadeOut();
-
-    if not ChainFrame:IsMouseOver() then
+    local ChainFrame = self:GetParent();
+    if ChainFrame.DateToggle and not ChainFrame:IsMouseOver() then
         ChainFrame.DateToggle:FadeOut();
     end
 end
@@ -2235,7 +2347,7 @@ function NarciAchievementChainButtonMixin:SetAchievement()
     local id = self.id;
     if id then
         Tooltip:ClearAllPoints();
-        Tooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, 0);
+        Tooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 1, -2);
         Tooltip:SetAchievement(id);
     end
 end
@@ -3868,20 +3980,6 @@ local function OverrideFunctions()
     end
 end
 
-function NarciAchievement_RedirectPrimaryAchievementFrame()
-    if NarciAchievementOptions.UseAsDefault then
-        if not hasOverwritten then
-            OverrideFunctions();
-        end
-        NarciAchievementAlertSystem:Enable();
-    else
-        if hasOverwritten then
-            RestoreFunctions();
-        end
-        NarciAchievementAlertSystem:Disable();
-    end
-end
-
 local function OnAchivementEarned(achievementID)
     DataProvider:UpdateAchievementCache(achievementID);
     RefreshInspection(achievementID);
@@ -3899,6 +3997,138 @@ local function OnAchivementEarned(achievementID)
                 MainFrame.pendingCategoryID = categoryID;
             end
         end
+    end
+end
+
+
+-----------------------------------------------------------------------------
+local strsub = strsub;
+local strsplit = strsplit;
+
+local ENABLE_TOOLTIP = false;
+local tooltipButtons = {};
+
+local function InsertTooltipButton(tooltipFrame, buttonIndex, achievementID, completed, topLine)
+    --Called after adding new line
+    local line;
+    if topLine then
+        line = 1;
+    else
+        line = tooltipFrame:NumLines();
+    end
+    if not tooltipButtons[buttonIndex] then
+        tooltipButtons[buttonIndex] = CreateFrame("Button", nil, nil, "NarciAchievementTooltipButtonTemplate");
+    end
+    local button = tooltipButtons[buttonIndex];
+    button:ClearAllPoints();
+    button:SetParent(tooltipFrame);
+    button.achievementID = achievementID;
+    button:SetPoint("TOPLEFT", tooltipFrame:GetName().."TextLeft"..line, "TOPLEFT", 0, 2);
+    if topLine then
+        button:SetPoint("BOTTOMLEFT", tooltipFrame:GetName().."TextLeft"..line, "BOTTOMLEFT", 0, -2);
+        button:SetWidth(tooltipFrame:GetWidth());
+        button.closeFrame = true;
+    else
+        button:SetPoint("BOTTOMRIGHT", tooltipFrame:GetName().."TextLeft"..line, "BOTTOMRIGHT", 0, -2);
+        button.closeFrame = false;
+    end
+    if completed then
+        button.Highlight:SetVertexColor(0.251, 0.753, 0.251);
+    else
+        button.Highlight:SetVertexColor(1, 0.82, 0);
+    end
+    button:Show();
+    if not tooltipFrame.insertedFrames then
+        tooltipFrame.insertedFrames = {};
+    end
+    tinsert(tooltipFrame.insertedFrames, button);
+end
+
+local function HookAchievementTooltip()
+    hooksecurefunc(ItemRefTooltip, "SetHyperlink", function(self, link)
+        if not ENABLE_TOOLTIP then return end;
+
+        if strsub(link, 1, 11) == "achievement" then
+            local _, achievementID = strsplit(":", link);
+            achievementID = tonumber(achievementID);
+            local id, name, _, completed = DataProvider:GetAchievementInfo(achievementID);
+            InsertTooltipButton(self, 1, achievementID, completed, true)
+            local parentAchievementID1, parentAchievementID2 = GetParentAchievementID(achievementID, true);
+            if parentAchievementID1 then
+                self:AddLine(" ");
+                local id, name, _, completed = DataProvider:GetAchievementInfo(parentAchievementID1);
+                local colorString;
+                if completed then
+                    colorString = "|cff40c040";
+                else
+                    colorString = "|cFFFFD100";
+                end
+                --self:AddDoubleLine("|cFF808080> |r"..colorString..name.."|r", id, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, true);
+                self:AddLine("|cFF808080> |r"..colorString..name.."|r", 0.5, 0.5, 0.5, true);
+                InsertTooltipButton(self, 2, parentAchievementID1, completed);
+                if parentAchievementID2 then
+                    id, name, _, completed = DataProvider:GetAchievementInfo(parentAchievementID2);
+                    if completed then
+                        colorString = "|cff40c040";
+                    else
+                        colorString = "|cFFFFD100";
+                    end
+                    --self:AddDoubleLine("|cFF808080>> |r"..colorString..name.."|r", id, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, true);
+                    self:AddLine("|cFF808080>> |r"..colorString..name.."|r", 0.5, 0.5, 0.5, true);
+                    InsertTooltipButton(self, 3, parentAchievementID2, completed);
+                end
+                self:Show();
+            end
+        end
+    end);
+end
+
+
+NarciAchievementExtraTooltipMixin = {};
+
+function NarciAchievementExtraTooltipMixin:OnLoad()
+    self:RegisterForDrag("LeftButton");
+end
+
+function NarciAchievementExtraTooltipMixin:OnDragStart()
+    local parent = self:GetParent();
+    if parent and parent.OnDragStart then
+        parent:OnDragStart();
+    end
+end
+
+function NarciAchievementExtraTooltipMixin:OnDragStop()
+    local parent = self:GetParent();
+    if parent and parent.OnDragStop then
+        parent:OnDragStop();
+    end
+end
+
+function NarciAchievementExtraTooltipMixin:OnClick(button)
+    if self.achievementID then
+        Narci_AchievementFrame:LocateAchievement(self.achievementID);
+        if button == "RightButton" or self.closeFrame then
+            self:GetParent():Hide();
+        end
+    end
+end
+
+
+-----------------------------------------------------------------------------
+function NarciAchievement_RedirectPrimaryAchievementFrame()
+    if NarciAchievementOptions.UseAsDefault then
+        if not hasOverwritten then
+            OverrideFunctions();
+            HookAchievementTooltip()
+        end
+        ENABLE_TOOLTIP = true;
+        NarciAchievementAlertSystem:Enable();
+    else
+        if hasOverwritten then
+            RestoreFunctions();
+        end
+        ENABLE_TOOLTIP = false;
+        NarciAchievementAlertSystem:Disable();
     end
 end
 

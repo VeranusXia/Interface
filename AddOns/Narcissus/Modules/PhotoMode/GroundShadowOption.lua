@@ -138,8 +138,8 @@ function NarciGroundShadowOptionMixin:OnLoad()
     }
     local data2 = {
         ["header"] = L["Light Source"],
-        [1] = {L["Independent"], nil, function() self:EnableLightControl(false) end},
-        [2] = {L["Interconnected"], nil, function() self:EnableLightControl(true) end},
+        [1] = {L["Light Source Independent"], nil, function() self:EnableLightControl(false) end},
+        [2] = {L["Light Source Interconnected"], nil, function() self:EnableLightControl(true) end},
     }
 
     local totalWidth = 384;

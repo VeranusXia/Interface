@@ -1,12 +1,33 @@
-tag e14d6e462992cebbf0748c3cff40d0c387e35f01 8.5.1-release
+tag 3c4ec25e1958d9c03c256a8fe9e8398278df7658 8.6.0-relase
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Tue Nov 3 23:49:59 2020 +0100
+Date:	Sun Nov 8 16:48:36 2020 +0100
 
-Tagging as 8.5.1-release
+Tagging as 8.6.0-relase
 
-commit a9b942c8a1abb607cf3bc0d431652b4a7d51d0be
+commit 14449711159b3cc742b03b32d17a16af34567bde
 Author: Hizuro <hizuro@gmx.net>
-Date:   Tue Nov 3 23:49:45 2020 +0100
+Date:   Sun Nov 8 16:46:57 2020 +0100
 
-    fix missing table
+    disable nolib version. curseforge packager looks like buggy
+
+commit d725c10fbd0929f33f5b3170711e212368446128
+Author: Hizuro <hizuro@gmx.net>
+Date:   Sun Nov 8 16:41:57 2020 +0100
+
+    - replaced SetPoint by SetAllPoints to avoid error messages
+    - added list of incompatible addons
+    - added check of taint of essential functions
+    - added function for foreign addons to register frames"
+
+commit dfeebba359dc55eb796e61bd1b8914eb7088742e
+Author: Hizuro <hizuro@gmx.net>
+Date:   Sun Nov 8 16:06:05 2020 +0100
+
+    added little debug helper to option panel
+
+commit 5a04c6ee790faa241735075600bf7b380d993ab2
+Author: Hizuro <hizuro@gmx.net>
+Date:   Sun Nov 8 15:48:53 2020 +0100
+
+    minor changes in pkgmeta file
 

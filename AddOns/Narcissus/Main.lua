@@ -686,7 +686,7 @@ function CameraContainer:Enter()
 	SetCVar("test_cameraDynamicPitch", 1);
 
 	if self.blend then
-		if NarcissusDB.CameraOrbit and not IsPlayerMoving() and not IsMounted() then
+		if NarcissusDB.CameraOrbit and not IsPlayerMoving() then
 			if NarcissusDB.CameraOrbit then
 				self.smoothYaw:Show();
 			end

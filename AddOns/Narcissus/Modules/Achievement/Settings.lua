@@ -33,7 +33,7 @@ local WidgetStructure = {
         name = "Narcissus Achievement (BETA)",
         widgets = {
             [1] = {
-                name = L["Use Achievement Panel"],
+                name = NARCI_NEW_ENTRY_PREFIX..L["Use Achievement Panel"],
                 type = "checkbox",
                 key = "UseAsDefault",
                 data = {
@@ -402,8 +402,8 @@ local initialize = CreateFrame("Frame");
 initialize:RegisterEvent("PLAYER_ENTERING_WORLD");
 initialize:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
+        self:UnregisterEvent(event);
         AchievementDB = NarciAchievementOptions;
-        
         C_Timer.After(1.3, function()
             LoadSettings(Narci_AchievementSettings);
         end)
