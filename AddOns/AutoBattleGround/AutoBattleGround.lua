@@ -746,7 +746,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<40 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
 						table.insert(temp,result)
 					end 
 					
