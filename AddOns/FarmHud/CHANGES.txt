@@ -1,33 +1,24 @@
-tag 3c4ec25e1958d9c03c256a8fe9e8398278df7658 8.6.0-relase
+tag 78ec62bac05800a308905b2c2497836dbfb87595 8.6.1-release
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Sun Nov 8 16:48:36 2020 +0100
+Date:	Mon Nov 9 11:30:32 2020 +0100
 
-Tagging as 8.6.0-relase
+Tagging as 8.6.1-release
 
-commit 14449711159b3cc742b03b32d17a16af34567bde
+commit b729639027800c9e0483312fd71118cdd8a516f6
 Author: Hizuro <hizuro@gmx.net>
-Date:   Sun Nov 8 16:46:57 2020 +0100
+Date:   Mon Nov 9 11:15:50 2020 +0100
 
-    disable nolib version. curseforge packager looks like buggy
+    minor changes
 
-commit d725c10fbd0929f33f5b3170711e212368446128
+commit c62e1a7668e9e82215cdc38b5aa8b4584ab88ceb
 Author: Hizuro <hizuro@gmx.net>
-Date:   Sun Nov 8 16:41:57 2020 +0100
+Date:   Mon Nov 9 11:07:31 2020 +0100
 
-    - replaced SetPoint by SetAllPoints to avoid error messages
-    - added list of incompatible addons
-    - added check of taint of essential functions
-    - added function for foreign addons to register frames"
+    changed handling with known problematic addons
 
-commit dfeebba359dc55eb796e61bd1b8914eb7088742e
+commit f9e719b54f1219bb3a9950c499d4fca56e76f130
 Author: Hizuro <hizuro@gmx.net>
-Date:   Sun Nov 8 16:06:05 2020 +0100
+Date:   Mon Nov 9 11:05:50 2020 +0100
 
-    added little debug helper to option panel
-
-commit 5a04c6ee790faa241735075600bf7b380d993ab2
-Author: Hizuro <hizuro@gmx.net>
-Date:   Sun Nov 8 15:48:53 2020 +0100
-
-    minor changes in pkgmeta file
+    update localizations
 

@@ -16,7 +16,7 @@ local mps,Minimap,MinimapMT,mouseOnKeybind,Dummy = {},_G.Minimap,getmetatable(_G
 local minimapScripts,cardinalTicker,coordsTicker = {--[["OnMouseUp",]]"OnMouseDown","OnDragStart"};
 local playerDot_orig, playerDot_custom = "Interface\\Minimap\\MinimapArrow";
 local TrackingIndex,timeTicker = {};
-local incompatibleAddOns, incompatibleAddOnsDetected = {BasicMinimap=true},{};
+local knownProblematicAddOns, knownProblematicAddOnsDetected = {BasicMinimap=true},{};
 local SetPointToken,SetParentToken = {},{};
 local trackingTypes,trackingTypesStates,numTrackingTypes,trackingHookLocked = {},{},0,false;
 --local MinimapFunctionHijacked = {"SetParent","ClearAllPoints","SetAllPoints","GetPoint","GetNumPoints"};
@@ -75,7 +75,7 @@ local minimapCreateTextureTable = {};
 do
 	local addon_short = "FH";
 	local colors = {"0099ff","00ff00","ff6060","44ffff","ffff00","ff8800","ff44ff","ffffff"};
-	local debugMode = "8.6.0-relase" == "@".."project-version".."@";
+	local debugMode = "8.6.1-release" == "@".."project-version".."@";
 	local function colorize(...)
 		local t,c,a1 = {tostringall(...)},1,...;
 		if type(a1)=="boolean" then tremove(t,1); end
@@ -785,21 +785,21 @@ function FarmHudMixin:OnHide()
 	MinimapBackdrop:Show();
 end
 
-local function checkOnIncompatibleAddOns()
-	wipe(incompatibleAddOnsDetected);
-	for addOnName,bool in pairs(incompatibleAddOns) do
+local function checkOnKnownProblematicAddOns()
+	wipe(knownProblematicAddOnsDetected);
+	for addOnName,bool in pairs(knownProblematicAddOns) do
 		if bool and (IsAddOnLoaded(addOnName)) then
-			tinsert(incompatibleAddOnsDetected,addOnName);
+			tinsert(knownProblematicAddOnsDetected,addOnName);
 		end
 	end
 end
 
 --- RegisterForeignAddOnObject
 -- Register a frame or button or other type to help avoid problems with FarmHud.
--- FarmHud check childs and regions of the object and change SetPoint anchored to Minimap to FarmHudDummy
+-- FarmHud check childs and regions of the object and change SetPoint anchored from Minimap to FarmHudDummy
 -- while FarmHud is enabled and OnHide back again.
--- @object: string | object
--- @byAddOn: string
+-- @object: object - a frame table that is anchored on Minimap and holds texture, fontstrings or other elements that should be moved to FarmHudDummy while FarmHud is enabled.
+-- @byAddOn: string - name of the addon. this will be disable warning message on toggle FarmHud.
 -- @return: boolean - true on success
 
 function FarmHudMixin:RegisterForeignAddOnObject(object,byAddOn)
@@ -807,18 +807,17 @@ function FarmHudMixin:RegisterForeignAddOnObject(object,byAddOn)
 	assert(arg1Type=="table" and object.GetObjectType,"Argument #1 (called object) must be a table (frame,button,...), got "..arg1Type);
 	assert(arg2Type=="string","Argument #2 (called byAddOn) must be a string, got "..arg2Type);
 	foreignObjects[object] = {childs={},regions={},byAddOn=byAddOn};
-	if incompatibleAddOns[byAddOn] then
-		incompatibleAddOns[byAddOn] = nil; -- remove addon from incompatibleAddOns table
-		checkOnIncompatibleAddOns();
+	if knownProblematicAddOns[byAddOn] then
+		knownProblematicAddOns[byAddOn] = nil; -- remove addon from knownProblematicAddOns table
+		checkOnKnownProblematicAddOns();
 	end
 	return false;
 end
 
 -- Toggle FarmHud display
 function FarmHudMixin:Toggle(force)
-	if #incompatibleAddOnsDetected>0 then
-		ns.print("|cffffee00"..L["IncompatibleAddOnDetected"].."|r","|cffffee00"..table.concat(incompatibleAddOnsDetected,", ").."|r")
-		return;
+	if #knownProblematicAddOnsDetected>0 then
+		ns.print("|cffffee00"..L["KnownProblematicAddOnDetected"].."|r","|cffff8000("..table.concat(knownProblematicAddOnsDetected,", ")..")|r")
 	end
 	if force==nil then
 		force = not self:IsShown();
@@ -871,7 +870,7 @@ function FarmHudMixin:ToggleOptions()
 		ACD:Close(addon);
 	else
 		ACD:Open(addon);
-		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.6.0-relase");
+		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.6.1-release");
 	end
 end
 
@@ -933,7 +932,7 @@ function FarmHudMixin:OnEvent(event,...)
 			LibHijackMinimap:RegisterHijacker(addon,LibHijackMinimap_Token);
 		end
 
-		checkOnIncompatibleAddOns()
+		checkOnKnownProblematicAddOns()
 	elseif event=="PLAYER_LOGOUT" and mps.rotation and rotationMode and rotationMode~=mps.rotation then
 		-- reset rotation on logout and reload if FarmHud was open
 		SetCVar("rotateMinimap", mps.rotation, "ROTATE_MINIMAP");
