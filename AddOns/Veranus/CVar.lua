@@ -2,6 +2,10 @@
 SetCVar("overrideArchive", 0) --和谐国服  1:开启      0:关闭
 --SetCVar("ffxGlow", 0) --关闭全屏幕泛光: 
 SetCVar("profanityFilter", 0) --关闭关键字屏蔽功能
+SetCVar("missingTransmogSourceInItemTooltips", 1) --关闭关键字屏蔽功能
+	
+	
+	 
 --SetCVar("WorldTextScale", 1.6) -- 战斗字体大小缩放  (1是默认100%大小，如果设置成2就是200%大小，最大2.5)
 --SetCVar("floatingCombatTextCombatDamage", 1)  --伤害系统数字显示  1:开启      0:关闭
 --SetCVar("floatingCombatTextCombatHealing", 1) --治疗系统数字显示  1:开启      0:关闭
