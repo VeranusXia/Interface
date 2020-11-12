@@ -564,6 +564,7 @@ do
 				name = 'ElvUI NamePlates'
 			},
 			'TidyPlates',
+			'TidyPlates_ThreatPlates',
 			'Healers-Have-To-Die',
 			'Kui_Nameplates',
 			'Plater',
@@ -1022,16 +1023,6 @@ do -- BFA Convert, deprecated..
 			end
 		end
 
-		--Convert old 'Buffs and Debuffs' font size option to individual options
-		if E.db.auras.fontSize then
-			local fontSize = E.db.auras.fontSize
-			E.db.auras.buffs.countFontSize = fontSize
-			E.db.auras.buffs.durationFontSize = fontSize
-			E.db.auras.debuffs.countFontSize = fontSize
-			E.db.auras.debuffs.durationFontSize = fontSize
-			E.db.auras.fontSize = nil
-		end
-
 		--Remove stale font settings from Cooldown system for top auras
 		if E.db.auras.cooldown.fonts then
 			E.db.auras.cooldown.fonts = nil
@@ -1139,15 +1130,6 @@ do -- BFA Convert, deprecated..
 				E.db.tooltip.factionColors[i] = E:CopyTable(newTable, oldTable)
 				E.db.tooltip.factionColors[''..i] = nil
 			end
-		end
-
-		--v11 Nameplates Reset
-		if not E.db.v11NamePlateReset and E.private.nameplates.enable then
-			local styleFilters = E:CopyTable({}, E.db.nameplates.filters)
-			E.db.nameplates = E:CopyTable({}, P.nameplates)
-			E.db.nameplates.filters = E:CopyTable({}, styleFilters)
-			NamePlates:CVarReset()
-			E.db.v11NamePlateReset = true
 		end
 
 		-- Wipe some old variables off profiles
@@ -1796,6 +1778,7 @@ function E:Initialize()
 	if not E.db.unitframe.thinBorders then P.unitframe.colors.borderColor = { r = 0.1, g = 0.1, b = 0.1 } end
 
 	E:DBConversions()
+	E:UIScale()
 	E:BuildPrefixValues()
 	E:LoadAPI()
 	E:LoadCommands()
