@@ -1758,8 +1758,7 @@ function RareScanner:InitializeDataBase()
 	--============================================
 	-- Initialize database
 	--============================================
-	
-	self.db = LibStub("AceDB-3.0"):New("RareScannerDB", RSConstants.PROFILE_DEFAULTS)
+	self.db = LibStub("AceDB-3.0"):New("RareScannerDB", RSConstants.PROFILE_DEFAULTS,"Default")
 	self.db.RegisterCallback(self, "OnProfileChanged", "RefreshOptions")
 	self.db.RegisterCallback(self, "OnProfileCopied", "RefreshOptions")
 	self.db.RegisterCallback(self, "OnProfileReset", "RefreshOptions")
