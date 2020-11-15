@@ -69,29 +69,43 @@ local function X(self, event)
 
 	local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 	
+	local inInstance, instanceType = IsInInstance()
+	
 	if eventType=="SPELL_INTERRUPT" then
 		local spellId, spellName, spellSchool, extraSpellId, extraSpellName, extraSchool = select(12, CombatLogGetCurrentEventInfo())
 		if sourceName==UnitName("player") then
-			--SendChatMessage("打断-->"..GetSpellLink(extraSpellId),"say")
-			print("打断-->"..GetSpellLink(extraSpellId))
+			if inInstance==1 then
+				SendChatMessage("打断-->"..GetSpellLink(extraSpellId),"say")
+			else
+				print("打断-->"..GetSpellLink(extraSpellId))
+			end
 		end
 	elseif eventType=="SPELL_DISPEL" then
 		local spellId, spellName, spellSchool, extraSpellId, extraSpellName, extraSchool, auraType = select(12, CombatLogGetCurrentEventInfo())
 		if sourceName==UnitName("player") then
-			--SendChatMessage("驱散-->"..GetSpellLink(extraSpellId),"say")
-			print("驱散-->"..GetSpellLink(extraSpellId))
+			if inInstance==1 then
+			 SendChatMessage("驱散-->"..GetSpellLink(extraSpellId),"say")
+			else
+				print("驱散-->"..GetSpellLink(extraSpellId))
+			end
 		end
 	elseif eventType=="SPELL_STOLEN" then
 		local spellId, spellName, spellSchool, extraSpellId, extraSpellName, extraSchool, auraType = select(12, CombatLogGetCurrentEventInfo())
 		if sourceName==UnitName("player") then
-			--SendChatMessage("偷取-->"..GetSpellLink(extraSpellId),"say")
-			print("偷取-->"..GetSpellLink(extraSpellId))
+			if inInstance==1 then
+				SendChatMessage("偷取-->"..GetSpellLink(extraSpellId),"say")
+			else
+				print("偷取-->"..GetSpellLink(extraSpellId))
+			end
 		end
 	elseif eventType=="SPELL_MISSED" then
 		local spellId, spellName, spellSchool, missType, isOffHand, amountMissed = select(12, CombatLogGetCurrentEventInfo())
 		if missType=="REFLECT" and destName==UnitName("player") then 
-			--SendChatMessage("反射-->"..GetSpellLink(spellId),"say")
-			print("反射-->"..GetSpellLink(spellId))
+			if inInstance==1 then
+				SendChatMessage("反射-->"..GetSpellLink(spellId),"say")
+			else	
+				print("反射-->"..GetSpellLink(spellId))
+			end
 		end
 	end
 end
