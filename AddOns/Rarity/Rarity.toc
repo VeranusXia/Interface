@@ -2,7 +2,7 @@
 ## Interface: 90001
 ## X-Min-Interface: 90001
 ## Title: Rarity
-## Version: 1.0 (r700-release-5)
+## Version: 1.0 (r701-release-2)
 
 ## Notes: Tracks rare drops, including companions and mounts
 ## Notes-ruRU: Примечания

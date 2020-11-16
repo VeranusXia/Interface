@@ -1,5 +1,12 @@
 # Changelog
 
+## Changes in upcoming release
+* Options for showing/hiding points in particular zones
+* Optimize some checks by using GetPlayerAuraBySpellID
+
+## Changes in v17
+* Updated for Shadowlands
+
 ## Changes in v16
 * Migrate to the new uiMapId system finally; fixes various areas which were showing icons on the wrong level of a map
 * Clean up some Demon Hunter starting experience treasures

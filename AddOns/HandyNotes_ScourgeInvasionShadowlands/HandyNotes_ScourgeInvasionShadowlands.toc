@@ -1,6 +1,6 @@
 ## Interface: 90001
 ## Title: HandyNotes: Scourge Invasion of Shadowlands
-## Version: 1.1.3
+## Version: 1.1.7
 ## Notes: Scourge Invasion of Shadowlands Notes
 ## OptionalDeps: Ace3
 ## RequiredDeps: HandyNotes
@@ -15,9 +15,9 @@ localization\enUS.lua
 localization\zhCN.lua
 localization\ruRU.lua
 localization\frFR.lua
+localization\esES.lua
 #localization\zhTW.lua
 #localization\deDE.lua
-#localization\esES.lua
 #localization\koKR.lua
 
 core\class.lua

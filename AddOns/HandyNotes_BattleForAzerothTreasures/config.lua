@@ -14,6 +14,7 @@ ns.defaults = {
         icon_item = false,
         tooltip_item = true,
         tooltip_questid = false,
+        zonesHidden = {},
     },
     char = {
         hidden = {
@@ -35,6 +36,7 @@ ns.options = {
             type = "group",
             name = "Icon settings",
             inline = true,
+            order = 10,
             args = {
                 desc = {
                     name = "These settings control the look and feel of the icon.",
@@ -73,6 +75,7 @@ ns.options = {
             type = "group",
             name = "What to display",
             inline = true,
+            order = 20,
             args = {
                 icon_item = {
                     type = "toggle",
@@ -127,7 +130,7 @@ ns.options = {
                     name = "Reset hidden nodes",
                     desc = "Show all nodes that you manually hid by right-clicking on them and choosing \"hide\".",
                     func = function()
-                        for map,coords in pairs(ns.hidden) do
+                        for _, coords in pairs(ns.hidden) do
                             wipe(coords)
                         end
                         ns.HL:Refresh()
@@ -135,6 +138,30 @@ ns.options = {
                     order = 50,
                 },
             },
+        },
+        zonesHidden = {
+            type = "multiselect",
+            name = "Show in zones",
+            desc = "Toggle whether you want to show points in a given zone",
+            get = function(info, key) return not ns.db[info[#info]][key] end,
+            set = function(info, key, value)
+                ns.db[info[#info]][key] = not value
+                ns.HL:Refresh()
+            end,
+            values = function(info)
+                local values = {}
+                for uiMapID in pairs(ns.points) do
+                    local info = C_Map.GetMapInfo(uiMapID)
+                    if info and info.mapType == 3 then
+                        -- zones only
+                        values[uiMapID] = info.name
+                    end
+                end
+                -- replace ourself with the built values table
+                info.option.values = values
+                return values
+            end,
+            order = 30,
         },
     },
 }
@@ -153,18 +180,16 @@ local allQuestsComplete = function(quests)
     end
 end
 
-local playerHasBuff = function(spellid)
-    local buffname = GetSpellInfo(spellid)
-    for i = 1, 40 do
-        local name = UnitBuff("player", i)
-        if not name then
-            -- reached the end, probably
-            return
-        end
-        if buffname == name then
-            return UnitBuff("player",i)
-        end
+local zoneHidden
+zoneHidden = function(uiMapID)
+    if ns.db.zonesHidden[uiMapID] then
+        return true
     end
+    local info = C_Map.GetMapInfo(uiMapID)
+    if info and info.parentMapID then
+        return zoneHidden(info.parentMapID)
+    end
+    return false
 end
 
 local player_faction = UnitFactionGroup("player")
@@ -173,6 +198,9 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if isMinimap and not ns.db.show_on_minimap and not point.minimap then
         return false
     elseif not isMinimap and not ns.db.show_on_world then
+        return false
+    end
+    if zoneHidden(currentZone) then
         return false
     end
     if ns.hidden[currentZone] and ns.hidden[currentZone][coord] then
@@ -226,10 +254,10 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
             end
         end
     end
-    if point.requires_buff and not playerHasBuff(point.requires_buff) then
+    if point.requires_buff and not GetPlayerAuraBySpellID(point.requires_buff) then
         return false
     end
-    if point.requires_no_buff and playerHasBuff(point.requires_no_buff) then
+    if point.requires_no_buff and GetPlayerAuraBySpellID(point.requires_no_buff) then
         return false
     end
     if point.hide_before and not ns.db.upcoming and not allQuestsComplete(point.hide_before) then

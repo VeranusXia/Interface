@@ -58,6 +58,12 @@ local foreignObjects,anchoredFrames = {},{ -- <name[string]>
 	"rBFS_DebuffDragFrame",
 	-- BtWQuests
 	"BtWQuestsMinimapButton",
+	-- GW2_UI
+	"GwQuestTracker",
+	"GwAddonToggle",
+	"GwCalendarButton",
+	"GwGarrisonButton",
+	"GwMailButton",
 };
 local modifiers = {
 	A  = {LALT=1,RALT=1},
@@ -75,7 +81,7 @@ local minimapCreateTextureTable = {};
 do
 	local addon_short = "FH";
 	local colors = {"0099ff","00ff00","ff6060","44ffff","ffff00","ff8800","ff44ff","ffffff"};
-	local debugMode = "8.6.1-release" == "@".."project-version".."@";
+	local debugMode = "8.6.2-release" == "@".."project-version".."@";
 	local function colorize(...)
 		local t,c,a1 = {tostringall(...)},1,...;
 		if type(a1)=="boolean" then tremove(t,1); end
@@ -526,7 +532,7 @@ do
 		elseif IsKey(key,"showDummy") then
 			Dummy:SetShown(FarmHudDB.showDummy);
 		elseif IsKey(key,"showDummyBg") then
-			Dummy.bg:SetShown(FarmHudDB.showDummyBg);
+			Dummy.bg:SetShown(FarmHudDB.showDummyBg and (not HybridMinimap or (HybridMinimap and not HybridMinimap:IsShown())) );
 		elseif key:find("tracking^%d+") and not ns.IsClassic() then
 			local _, id = strsplit("^",key);
 			id = tonumber(id);
@@ -553,7 +559,7 @@ function FarmHudMixin:OnShow()
 	for i=1, Minimap:GetNumPoints() do
 		Dummy:SetPoint(Minimap:GetPoint(i));
 	end
-	Dummy.bg:SetShown(FarmHudDB.showDummyBg);
+	Dummy.bg:SetShown(FarmHudDB.showDummyBg and (not HybridMinimap or (HybridMinimap and not HybridMinimap:IsShown())) );
 	Dummy:SetShown(FarmHudDB.showDummy);
 	self.cluster:Show();
 
@@ -638,8 +644,13 @@ function FarmHudMixin:OnShow()
 	-- move and change minimap for FarmHud
 	Minimap:SetParent(FarmHud);
 	Minimap:ClearAllPoints();
-	--Minimap:SetPoint("CENTER",0,0); -- failed because[SetPoint would result in anchor family connection]
-	Minimap:SetAllPoints(); -- i don't know why but this works
+	-- sometimes SetPoint produce error "because[SetPoint would result in anchor family connection]"
+	local f, err = loadstring('Minimap:SetPoint("CENTER",0,0)');
+	if f then f(); else
+		Minimap:SetAllPoints(); -- but SetAllPoints results in an offset for somebody
+		Minimap:ClearAllPoints();
+		Minimap:SetPoint("CENTER",0,0); -- next try...
+	end
 	MinimapMT.SetFrameStrata(Minimap,"BACKGROUND");
 	MinimapMT.SetFrameLevel(Minimap,1);
 	MinimapMT.SetScale(Minimap,1);
@@ -870,7 +881,7 @@ function FarmHudMixin:ToggleOptions()
 		ACD:Close(addon);
 	else
 		ACD:Open(addon);
-		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.6.1-release");
+		ACD.OpenFrames[addon]:SetStatusText(GAME_VERSION_LABEL..CHAT_HEADER_SUFFIX.."8.6.2-release");
 	end
 end
 
@@ -930,6 +941,10 @@ function FarmHudMixin:OnEvent(event,...)
 		if(LibStub.libs['LibHijackMinimap-1.0'])then
 			LibHijackMinimap = LibStub('LibHijackMinimap-1.0');
 			LibHijackMinimap:RegisterHijacker(addon,LibHijackMinimap_Token);
+		end
+
+		if BasicMinimap and BasicMinimap.backdrop then
+			self:RegisterForeignAddOnObject(BasicMinimap.backdrop:GetParent(),"BasicMinimap");
 		end
 
 		checkOnKnownProblematicAddOns()

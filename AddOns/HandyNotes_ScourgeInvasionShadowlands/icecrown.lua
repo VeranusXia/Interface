@@ -76,6 +76,7 @@ options.rareMechagon = {
 
 nodes[31607050] = Rare({id=174067, quest=62345, note=L["id174067"], rewards={
     Transmog({item=183642, slot=L["cloth"]}),
+    Transmog({item=183654, slot=L["plate"]}),
 	Item({item=183676, quest=nil}),
 }}); --药剂师诺斯
 
@@ -98,6 +99,7 @@ nodes[57103030] = Rare({id=174064, quest=62342, note=L["id174064"], rewards={
 }}); --普崔塞德教授
 
 nodes[51107850] = Rare({id=174063, quest=62341, note=L["id174063"], rewards={
+    Transmog({item=183652, slot=L["bow"]}),
     Transmog({item=183641, slot=L["cloth"]}),
     Transmog({item=183653, slot=L["leather"]}),
     Transmog({item=183655, slot=L["mail"]}),
@@ -107,6 +109,7 @@ nodes[57805610] = Rare({id=174062, quest=62340, note=L["id174062"], rewards={
     Transmog({item=183656, slot=L["leather"]}),
     Transmog({item=183657, slot=L["mail"]}),
     Transmog({item=183670, slot=L["plate"]}),
+    Item({item=44151, quest=nil}),
 }}); --残忍的斯卡迪
 
 nodes[52305260] = Rare({id=174061, quest=62339, note=L["id174061"], rewards={
@@ -117,8 +120,8 @@ nodes[52305260] = Rare({id=174061, quest=62339, note=L["id174061"], rewards={
 
 nodes[54004470] = Rare({id=174060, quest=62338, note=L["id174060"], rewards={
     Transmog({item=183678, slot=L["fist"]}),
-    Transmog({item=183679, slot=L["leather"]}),
-	Transmog({item=183677, slot=L["mail"]}),
+    --Transmog({item=183679, slot=L["leather"]}),
+	--Transmog({item=183677, slot=L["mail"]}),
 	Transmog({item=183661, slot=L["mail"]}),
     Transmog({item=183680, slot=L["cloak"]}),
     Item({item=183625, quest=nil}),
@@ -132,13 +135,13 @@ nodes[64802210] = Rare({id=174059, quest=62337, note=L["id174059"], rewards={
 
 nodes[70603850] = Rare({id=174058, quest=62336, note=L["id174058"], rewards={
     Transmog({item=183675, slot=L["cloth"]}),
-    Transmog({item=183668, slot=L["leather"]}),
+    --Transmog({item=183668, slot=L["leather"]}),
     Transmog({item=183639, slot=L["mail"]}),
     Transmog({item=183635, slot=L["plate"]}),
     Item({item=183634, quest=nil}),
 }}); --布隆亚姆<千魂之父>
 
-nodes[47406720] = Rare({id=174057, quest=62335, note=L["id174057"], rewards={
+nodes[47136593] = Rare({id=174057, quest=62335, note=L["id174057"], rewards={
     Transmog({item=183674, slot=L["cloth"]}),
     Transmog({item=183633, slot=L["leather"]}),
     Transmog({item=183632, slot=L["shield"]}),
@@ -157,6 +160,7 @@ nodes[58208350] = Rare({id=174055, quest=62333, note=L["id174055"], rewards={
 }}); --玛维恩
 
 nodes[50208810] = Rare({id=174054, quest=62332, note=L["id174054"], rewards={
+    Transmog({item=183667, slot=L["1h_sword"]}),
     Transmog({item=183664, slot=L["cloth"]}),
     Transmog({item=183665, slot=L["plate"]}),
     Transmog({item=183666, slot=L["plate"]}),
@@ -177,34 +181,39 @@ nodes[77806610] = Rare({id=174052, quest=62330, note=L["id174052"], rewards={
 nodes[58303940] = Rare({id=174051, quest=62329, note=L["id174051"], rewards={
     Transmog({item=183626, slot=L["2h_sword"]}),
     Transmog({item=183669, slot=L["cloth"]}),
+    Transmog({item=183640, slot=L["mail"]}),
 }}); --托尔戈 quest=62329
 
 nodes[67505800] = Rare({id=174050, quest=62328, note=L["id174050"], rewards={
     Transmog({item=183681, slot=L["dagger"]}),
+    Transmog({item=183682, slot=L["cloth"]}),
+    Transmog({item=183683, slot=L["leather"]}),
 }}); --看门者克里克希尔 quest=62328
 
 nodes[29606220] = Rare({id=174049, quest=62327, note=L["id174049"], rewards={
-    Transmog({item=183678, slot=L["fist"]}),
+    --Transmog({item=183678, slot=L["fist"]}),
     Transmog({item=183679, slot=L["leather"]}),
 	Transmog({item=183677, slot=L["mail"]}),
-	Transmog({item=183661, slot=L["mail"]}),
-    Transmog({item=183680, slot=L["cloak"]}),
+	--Transmog({item=183661, slot=L["mail"]}),
+    --Transmog({item=183680, slot=L["cloak"]}),
     Item({item=183625, quest=nil}),
 }}); --塔达拉姆王子
 
 nodes[44204910] = Rare({id=174048, quest=62326, note=L["id174048"], rewards={
- 	Transmog({item=183624, slot=L["dagger"]}),
+    Transmog({item=183624, slot=L["dagger"]}),
+    Transmog({item=183641, slot=L["cloth"]}),
     Item({item=183673, quest=nil}),
 }}); --纳多克斯长老
 
 nodes[18001800] = Rare({id=17293, quest=62325, note=L["plaguewave"], rewards={
-    Transmog({item=183652, slot=L["bow"]}),
-    Transmog({item=183682, slot=L["cloth"]}),
-    Transmog({item=183683, slot=L["leather"]}),
-    Transmog({item=183640, slot=L["mail"]}),
-    Transmog({item=183654, slot=L["plate"]}),
+    --Transmog({item=183652, slot=L["bow"]}),
+    --Transmog({item=183682, slot=L["cloth"]}),
+    --Transmog({item=183683, slot=L["leather"]}),
+    --Transmog({item=183640, slot=L["mail"]}),
+    --Transmog({item=183654, slot=L["plate"]}),
+    Item({item=183200, quest=nil}),
     Item({item=183616, quest=nil}),
-}}); --天灾波
+}, isNeverDone=1}); --天灾波
 
 -------------------------------------------------------------------------------
 -------------------------------- MISCELLANEOUS --------------------------------

@@ -61,6 +61,7 @@ function Node:done ()
     for i, reward in ipairs(self.rewards or {}) do
         if not reward:obtained() then return false end
     end
+    if self.isNeverDone then return false end
     return true
 end
 

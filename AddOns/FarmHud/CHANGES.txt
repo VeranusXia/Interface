@@ -1,24 +1,30 @@
-tag 78ec62bac05800a308905b2c2497836dbfb87595 8.6.1-release
+tag 5ec5af7cd2bdc76fa75b3eaf73d3fccac5c95ee3 8.6.2-release
 Author:	Hizuro <hizuro@gmx.net>
-Date:	Mon Nov 9 11:30:32 2020 +0100
+Date:	Fri Nov 13 18:20:21 2020 +0100
 
-Tagging as 8.6.1-release
+Tagging as 8.6.2-release
 
-commit b729639027800c9e0483312fd71118cdd8a516f6
+commit 59b70ebd63210fa2a94d91b318fe9712b77c6154
 Author: Hizuro <hizuro@gmx.net>
-Date:   Mon Nov 9 11:15:50 2020 +0100
+Date:   Fri Nov 13 18:18:08 2020 +0100
+
+    next try
+
+commit 410bafec26a63e33eeb6f2197ba1002b98fdacf8
+Author: Hizuro <hizuro@gmx.net>
+Date:   Thu Nov 12 11:44:21 2020 +0100
 
     minor changes
 
-commit c62e1a7668e9e82215cdc38b5aa8b4584ab88ceb
+commit fce6fc04bcec920ff713fbdb948a182464b6c6a0
 Author: Hizuro <hizuro@gmx.net>
-Date:   Mon Nov 9 11:07:31 2020 +0100
+Date:   Thu Nov 12 11:37:54 2020 +0100
 
-    changed handling with known problematic addons
+    Found and added a way to handle backdropFrame from BasicMinimap
 
-commit f9e719b54f1219bb3a9950c499d4fca56e76f130
+commit e5aee66ba48e0a49693d0473785f94f8994ed220
 Author: Hizuro <hizuro@gmx.net>
-Date:   Mon Nov 9 11:05:50 2020 +0100
+Date:   Thu Nov 12 11:36:22 2020 +0100
 
-    update localizations
+    added some frames to the table anchoredFrames for GW2_UI
 
