@@ -94,7 +94,7 @@ nodes[49703270] = Rare({id=174065, quest=62343, note=L["id174065"], rewards={
 
 nodes[57103030] = Rare({id=174064, quest=62342, note=L["id174064"], rewards={
     Transmog({item=183649, slot=L["leather"]}),
-    Transmog({item=183651, slot=L["leather"]}),
+    Transmog({item=183651, slot=L["plate"]}),
 	Item({item=183650, quest=nil}),
 }}); --普崔塞德教授
 
