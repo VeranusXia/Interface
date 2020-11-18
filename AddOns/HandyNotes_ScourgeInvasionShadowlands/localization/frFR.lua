@@ -5,7 +5,7 @@ if not L then return end
 -------------------------------------------------------------------------------
 ----------------------------------- ICECROWN ----------------------------------
 -------------------------------------------------------------------------------
-L["plaguewave"] = "Ceci n'est |cFFFF0000PAS|r un boss réel, juste pour vous notifier le butin et l'ordre d'apparition des boss.|n|nL'intervalle de réapparition des boss est de 20 minutes, l'ordre d'apparition est: |n|n1. Noth le Porte-peste|n2. Le Recousu|n3. Reine de sang Lana'thel|n4. Professeur Putricide|n5. Dame Murmemort|n6. Skadi le Brutal|n7. Ingvar le Pilleur|n8. Prince Keleseth|n9. Le Chevalier noir|n10. Bronjahm|n11. Seigneur du Fléau Tyrannus|n12. Maître-forge Gargivre|n13. Marwyn|n14. Falric|n15. Le prophète Tharon'ja|n16. Novos l'Invocateur|n17. Trollétripe|n18. Krik'thir le Gardien de porte|n19. Prince Taldaram|n20. Ancien Nadox";
+L["plaguewave"] = "Ceci n'est |cFFFF0000PAS|r un boss réel, juste pour vous notifier le butin et l'ordre d'apparition des boss.|n|nL'intervalle de réapparition des boss est de 10 minutes, l'ordre d'apparition est: |n|n1. Noth le Porte-peste|n2. Le Recousu|n3. Reine de sang Lana'thel|n4. Professeur Putricide|n5. Dame Murmemort|n6. Skadi le Brutal|n7. Ingvar le Pilleur|n8. Prince Keleseth|n9. Le Chevalier noir|n10. Bronjahm|n11. Seigneur du Fléau Tyrannus|n12. Maître-forge Gargivre|n13. Marwyn|n14. Falric|n15. Le prophète Tharon'ja|n16. Novos l'Invocateur|n17. Trollétripe|n18. Krik'thir le Gardien de porte|n19. Prince Taldaram|n20. Ancien Nadox";
 
 L["id174067"] = "(1) A l'origine : Naxxramas."
 L["id174066"] = "(2) A l'origine : Naxxramas."

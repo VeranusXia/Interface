@@ -5,7 +5,7 @@ if not L then return end
 -------------------------------------------------------------------------------
 ----------------------------------- ICECROWN ----------------------------------
 -------------------------------------------------------------------------------
-L["plaguewave"] = "This is |cFFFF0000NOT|r a real boss, just for showing shared loots and spawn order of bosses.|n|nThe boss respawn interval is 20 minutes, spawn order is: |n|n 1. Noth the Plaguebringer|n 2. Patchwerk|n 3. Blood Queen Lana'thel|n 4. Professor Putricide|n 5. Lady Deathwhisper|n 6. Skadi the Ruthless|n 7. Ingvar the Plunderer|n 8. Prince Keleseth|n 9. The Black Knight|n10. Bronjahm|n11. Scourgelord Tyrannus|n12. Forgemaster Garfrost|n13. Marwyn|n14. Falric|n15. The Prophet Tharon'ja|n16. Novos the Summoner|n17. Trollgore|n18. Krik'thir the Gatewatcher|n19. Prince Taldaram|n20. Elder Nadox";
+L["plaguewave"] = "This is |cFFFF0000NOT|r a real boss, just for showing shared loots and spawn order of bosses.|n|nThe boss respawn interval is 10 minutes, spawn order is: |n|n 1. Noth the Plaguebringer|n 2. Patchwerk|n 3. Blood Queen Lana'thel|n 4. Professor Putricide|n 5. Lady Deathwhisper|n 6. Skadi the Ruthless|n 7. Ingvar the Plunderer|n 8. Prince Keleseth|n 9. The Black Knight|n10. Bronjahm|n11. Scourgelord Tyrannus|n12. Forgemaster Garfrost|n13. Marwyn|n14. Falric|n15. The Prophet Tharon'ja|n16. Novos the Summoner|n17. Trollgore|n18. Krik'thir the Gatewatcher|n19. Prince Taldaram|n20. Elder Nadox";
 
 L["id174067"] = "(1) Originally in Naxxramas."
 L["id174066"] = "(2) Originally in Naxxramas."

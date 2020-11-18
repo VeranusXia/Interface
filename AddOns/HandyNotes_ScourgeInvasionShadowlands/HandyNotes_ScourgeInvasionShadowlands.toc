@@ -1,6 +1,6 @@
 ## Interface: 90001
 ## Title: HandyNotes: Scourge Invasion of Shadowlands
-## Version: 1.1.8
+## Version: 1.1.9
 ## Notes: Scourge Invasion of Shadowlands Notes
 ## OptionalDeps: Ace3
 ## RequiredDeps: HandyNotes
