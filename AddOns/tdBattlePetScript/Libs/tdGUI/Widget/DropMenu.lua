@@ -30,9 +30,22 @@ function DropMenu:Constructor(_, style, withOtherMenu, menuList, level)
 
     if style == 'MENU' then
         self:SetPadding(15)
+        self:SetBackdrop{
+            bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
+            edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
+            edgeSize = 16, tileSize = 16, tile = true,
+            insets = {left = 4, right = 4, top = 4, bottom = 4},
+        }
+        self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b)
+        self:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b)
     else
         self:SetPadding(18, 18, 15, 15)
-
+        self:SetBackdrop{
+            bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]],
+            edgeFile = [[Interface\DialogFrame\UI-DialogBox-Border]],
+            insets = { left = 11, right = 12, top = 12, bottom = 9 },
+            tileSize = 32, edgeSize = 32, tile = true,
+        }
         self.scrollBar:ClearAllPoints()
         self.scrollBar:SetPoint('TOPRIGHT', -10, -26)
         self.scrollBar:SetPoint('BOTTOMRIGHT', -10, 26)
