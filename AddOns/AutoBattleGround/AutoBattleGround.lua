@@ -14,7 +14,7 @@ local classSpell ={
 	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
 	["MONK"] = "",--Monk
 	["DRUID"] = "",--Druid
-	["DEMON HUNTER"] = "",--Demon Hunter
+	["DEMONHUNTER"] = "",--Demon Hunter
 }
 local _, className, index = UnitClass("player"); --检测职业
 local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[className]
