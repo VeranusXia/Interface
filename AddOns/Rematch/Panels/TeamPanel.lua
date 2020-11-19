@@ -19,8 +19,6 @@ rematch:InitModule(function()
 	scrollFrame.callback = panel.FillTeamListButton
 	scrollFrame.preUpdateFunc = panel.PreUpdate
 
-	panel.Top.SearchBox.Instructions:SetText(L["Search Teams"])
-
 	panel.Top.Teams:SetText(L["Teams"])
 	rematch:UpdateAutoLoadState()
 end)
@@ -340,15 +338,15 @@ function panel:FillTeamListButton(key)
 		self.Name:SetPoint("RIGHT", rightOffset-2, 0)
 		self.Name:SetFontObject(settings.SlimListSmallText and GameFontNormalSmall or GameFontNormal)
 	else -- normal list mode potentially has subnames (name of target)
-		local nameYOffset = 0
+		self.Name:SetPoint("TOPRIGHT", rightOffset, -4)
 		if teamInfo.needsSubName then
+			self.Name:SetHeight(21)
 			self.SubName:SetText(teamInfo.targetName)
 			self.SubName:Show()
-			nameYOffset = 16
 		else
+			self.Name:SetHeight(36)
 			self.SubName:Hide()
 		end		
-		self.Name:SetPoint("BOTTOMRIGHT", rightOffset, nameYOffset)
 	end
 
 end
@@ -512,4 +510,3 @@ function rematch:GetNumTeams()
 	end
 	return numTeams
 end
-

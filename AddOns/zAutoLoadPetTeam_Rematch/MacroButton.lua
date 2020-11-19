@@ -25,7 +25,7 @@ local function CreateHelpButtons()
   buttonQuitGame:SetScript(
     "PreClick",
     function(btn, button)
-      if UnitLevel("player")==60 then
+      if UnitLevel("player")==120 then
         btn:SetAttribute("macrotext", "/quit")
       else
         btn:SetAttribute("macrotext", "")

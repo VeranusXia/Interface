@@ -139,7 +139,7 @@ function Module:OnInitialize()
         end
 
         local Icon = HelpIcon:CreateTexture(nil, 'BORDER') do
-            Icon:SetMask([[Interface\Minimap\UI-Minimap-Background]])
+            Icon:SetMask([[Textures\MinimapMask]])
             Icon:SetSize(28, 28)
             Icon:SetAllPoints(true)
         end
@@ -262,17 +262,12 @@ function Module:OnInitialize()
         end)
     end
 
-    local BugFrame = CreateFrame('Frame', nil, Content, 'BackdropTemplate') do
+    local BugFrame = CreateFrame('Frame', nil, Content) do
         BugFrame:Hide()
         BugFrame:SetPoint('BOTTOMLEFT', 8, 6)
         BugFrame:SetPoint('BOTTOMRIGHT', -8, 6)
         BugFrame:SetHeight(32)
-        BugFrame:SetBackdrop{
-            edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-            tile = true,
-            edgeSize = 16,
-        }
-        BugFrame:SetBackdropBorderColor(0.5, 0.5, 0.5)
+      
 
         local Bg = BugFrame:CreateTexture(nil, 'BACKGROUND') do
             Bg:SetTexture([[Interface\FrameGeneral\UI-Background-Marble]])
@@ -362,7 +357,7 @@ function Module:OnEnable()
 end
 
 function Module:OnFontChanged()
-    self.ScriptBox:SetFont(Addon:GetSetting('editorFontFace'), Addon:GetSetting('editorFontSize'))
+
 end
 
 function Module:PET_BATTLE_ACTION_SELECTED()

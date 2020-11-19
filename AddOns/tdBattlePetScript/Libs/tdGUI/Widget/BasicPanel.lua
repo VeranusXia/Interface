@@ -71,7 +71,7 @@ function BasicPanel:Constructor()
         end
 
         local Icon = Portrait:CreateTexture(nil, 'OVERLAY', nil, -1) do
-            Icon:SetMask([[Interface\Minimap\UI-Minimap-Background]])
+            Icon:SetMask([[Textures\MinimapMask]])
             Icon:SetAllPoints(Portrait)
         end
         Portrait.Icon   = Icon

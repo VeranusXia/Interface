@@ -28,7 +28,7 @@ function AutoCompleteItem:Constructor()
     end
 
     local Icon = self:CreateTexture(nil, 'BORDER') do
-        Icon:SetMask([[Interface\Minimap\UI-Minimap-Background]])
+        Icon:SetMask([[Textures\MinimapMask]])
         Icon:SetSize(24, 24)
         Icon:SetPoint('CENTER')
     end
