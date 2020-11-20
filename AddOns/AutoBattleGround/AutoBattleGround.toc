@@ -1,4 +1,4 @@
-﻿## Interface: 90100
+﻿## Interface: 90002
 ## Title: [Veranus]自助评级小助手
 ## Notes-zhCN: 艾泽拉斯科学研究院自助评级小助手
 ## Version: 4.0
