@@ -1,5 +1,6 @@
 local ADDON_NAME, _ = ...
 local L = LibStub("AceLocale-3.0"):NewLocale(ADDON_NAME, "zhCN", false, true)
+
 if not L then return end
 
 -------------------------------------------------------------------------------
@@ -152,3 +153,4 @@ L["options_toggle_ignore_quests"] = "忽略任务";
 L["options_toggle_ignore_quests_desc"] = "忽略节点的任务状态";
 L["options_toggle_force_nodes"] = "强制节点";
 L["options_toggle_force_nodes_desc"] = "强制显示所有节点";
+

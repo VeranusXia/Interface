@@ -1,16 +1,10 @@
-lightweight tag f323e98eb567e4dc843f693b6dd66488f8a24909 v9.0.1-02
+lightweight tag fb503f31e92d2835442847f6cd5427527ee9946e v9.0.2-03
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Thu Oct 22 13:48:19 2020 -0700
+Date:	Thu Nov 19 16:24:57 2020 -0800
 
-commit f323e98eb567e4dc843f693b6dd66488f8a24909
+commit fb503f31e92d2835442847f6cd5427527ee9946e
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Thu Oct 22 13:48:19 2020 -0700
+Date:   Thu Nov 19 16:24:57 2020 -0800
 
-    Bump version
-
-commit 9b69a34303820116045ea7c554f25847f47acaa6
-Author: Dave Hendler <sollaires@gmail.com>
-Date:   Thu Oct 22 13:47:56 2020 -0700
-
-    Add soulbind ID to soulbind= string for deterministic lookups across localizations
+    Fix a bug with determining player level
 

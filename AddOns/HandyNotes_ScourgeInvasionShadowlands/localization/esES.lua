@@ -1,5 +1,6 @@
 local ADDON_NAME, _ = ...
 local L = LibStub("AceLocale-3.0"):NewLocale(ADDON_NAME, "esES", false, true)
+
 if not L then return end
 
 -------------------------------------------------------------------------------
@@ -154,3 +155,4 @@ L["options_toggle_ignore_quests"] = "Ignorar misiones";
 L["options_toggle_ignore_quests_desc"] = "Ignorar estado de las misiones de los nodos.";
 L["options_toggle_force_nodes"] = "Forzar nodos";
 L["options_toggle_force_nodes_desc"] = "Forzar visualizaciónn de todos los nodos.";
+
