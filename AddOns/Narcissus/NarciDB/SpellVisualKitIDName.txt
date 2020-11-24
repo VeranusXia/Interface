@@ -81,7 +81,7 @@ Attachment ID:
 133029 Barrel Hold 1210
 132911 Arcane Precast Full body
 132838 Drain Soul Maw
-132804 Bucket
+132804 Basket
 132802 Hit Front Chest
 132715 Kyrian Crate 1208
 132711 Soul NPC

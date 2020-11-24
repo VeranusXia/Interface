@@ -6,7 +6,7 @@ NarciSpellVisualBrowser = {};
 
 local NEW = "|cfff2f2f2";
 
-NarciSpellVisualBrowser.Catalogue = {
+local Pack0 = {
     --[[
         [Category Index] = { ["name"] = Category Name,
             [Subcategory Index] = { ["name"] = Subcategory Name,
@@ -860,7 +860,257 @@ NarciSpellVisualBrowser.Catalogue = {
             
         },
     },
-}
+};
+
+local Pack1 = {
+    [1] = {["name"] = "Minor Spells",
+        [1] = { ["name"] = "Fire",
+            {108320, "Pyroblast", 135808},
+            {116178, "Blast", 135807},
+            {16556, "Heavy", 135265},
+            {101473, "Dripping", 1357810},
+            {64247, "Dense small", 135839},
+            {65563, "Dense medium", 135830},
+            {91113, "Dense large", 237588},
+            {63044, "Shining", 135810},
+            {20503, "Long tail", 135815},
+            {17830, "Mixed", 429384},
+            {97332, "Blue", 135777},
+            {28662, "Pink", 132854},
+            {69186, "Sha", 1043572},
+            {64111, "Blue engulfing", 135781},
+            {17758, "Dark", 425951},
+            {120955, "Contracting", 1391771},
+            
+        },
+
+        [2] = { ["name"] = "Frost",
+            {69059, "Simple Right hand", 135816},
+            {68771, "Simple Left hand", 135816},
+            {69384, "Shining", 1373132},
+            {77214, "Shining Left hand", 1373132},
+            {107260, "Jaina Cast", 236209},
+            {78469, "Medium", 135864},
+            {16343, "Cold blood", 135988},
+            {116611, "White frost", 135849},
+            {76911, "Radiant", 135851},
+            {10650, "Twinkling", 609814},
+            {74590, "Ice&fire", 429384},
+            {75985, "Light", 463280},
+            {16842, "Light Left hand", 463280},
+            {113812, "Ice shard", 429385},
+        },
+
+        [3] = { ["name"] = "Light",
+            {100722, "Holy fire", 535593},
+            {98030, "Sphere", 632352},
+            {75913, "Two orbs", 1519263},
+            {43470, "Radiant", 460954},
+            {107588, "Tiny", 236248},
+            {108109, "Stars", 135464},
+            {41004, "Solar Left", 535045},
+            {41005, "Solar Right", 535045},
+            {120868, "Gold Splash", 237151},
+            {107648,"Orbiting", 1538775},
+            {12481, "First aid", 135966, 63},
+        },
+
+
+        [4] = { ["name"] = "Shadow",
+            {121735, "Blast", 236222},
+            {122499, "Void&fire", 135823},
+            {122420, "Upcurrents", 136221},
+            {122321, "Dark blue Left", 136204},
+            {121860, "Downcurrent L", 425950},
+            {121861, "Downcurrent R", 425950},
+            {121834, "Radiant core", 237566},
+            {79554, "Large", 1022950},
+            {76379, "Bright", 132851},
+            {65199, "Fire&shadow", 1357804},
+            {64112, "Tiny", 132843},     --long tail
+            {10354, "Warlock", 136197},
+            {54582, "Green", 651085},
+            {15611, "Purple Right", 631519},
+            {10715, "Purple Left", 631519},
+            {10678, "Blue light", 631503},
+            {96842, "Dripping Void", 1386548},
+            {58009, "Void", 1728724},
+            {41336, "Void dark", 1786404},
+            {95630, "Medium", 237244},
+            {65352, "Bright tiny", 132886},
+            {95381, "Dark water", 1036179},
+
+        },
+
+        [5] = { ["name"] = "Arcane",
+            {121471, "Pink stars", 1717107},
+            {73948, "Sparse", 132861},
+            {117171, "Orbiting", 132860},
+            {12556, "Teleport", 2176537},
+            {77069, "Dense", 1717106},
+            {57874, "Lightning", 1033906},
+            {108730, "Complex", 135869},
+            {68828, "Blast", 135735},
+            {97136, "Azerite", 2065562},
+            {121489, "Triangle", 135750},
+        },
+
+        [6] = { ["name"] = "Fel",
+            {85123, "Sphere", 1379226},
+            {79791, "Fire", 135794},
+            {65170, "Lightning", 463281},
+            {63047, "Dense", 841218},
+            {63225, "Fire&fel", 2065636},
+            {25890, "Floating orbs", 1717109},
+        },
+
+        [7] = { ["name"] = "Chi",
+            {107815, "Dense", 627485},
+            {96448, "Lightning", 606542},
+            {65215, "Mist", 627487},
+            {24677, "Cloud", 1360980},
+            {109599, "Sha Orbs", 651083},
+
+        },
+
+        [8] = { ["name"] = "Nature",
+            {54442, "Emerald", 876914},
+            {108131, "Regular", 136085},
+            {108136, "Large", 236153},
+            {77282, "Shining", 1379242},
+            {100532, "Stars", 651082},
+            {64834, "Water", 1698701},
+            {108173, "Wind", 132837},
+            {96075, "Gale", 132845},
+            {123599, "Sands", 796635},
+            {121352, "Gem Dust", 463521},
+            {121360, "Berserker Rage", 136146},
+            {120345, "Toxic", 458736},
+
+        },
+
+        [9] = { ["name"] = "Lightning",
+            {110340, "Huge", 1370984},
+            {109410, "Red", 463282},
+            {103490, "Orange", 839982},
+            {96590, "Small", 1117099},
+            {96100, "Intense", 839977},
+            {95805, "Scintillant", 136048},
+            {70975, "Medium", 1385911},
+            {107151, "Dark large", 135750},
+            {79766, "Twilight Blue", 135778},
+            {115535, "Spark", 132862},
+        },
+
+        [10] = { ["name"] = "Death",
+            {95129, "Witchery", 2032589},
+            {73426, "Nightmare 1", 1357798},
+            {73112, "Nightmare 2", 1357816},
+            {122401, "Nightmare 3", 876915},
+            {102960, "Dripping Blood", 1357800},
+        },    
+    },
+
+    
+    [2] = {["name"] = "Grand Spells",
+        [1] = { ["name"] = "Frost",
+            {107205, "Snow flake", 135849},
+            {108283, "Glacial Ray", 135836},
+            {108284, "Jaina", 1345085},
+            {10252, "Conjuring", 464484},
+            {112813, "Ray of frost", 1698700},
+            {108124, "Elsa", 135849},
+            {24397, "Frost nova", 135848},
+            {10292, "Death Knight", 236205},
+            {17869, "Great orbs", 343638},
+            {116197, "Flash", 135837},
+            {80037, "Ice barrier", 458718,},
+
+        },
+
+        [2] = { ["name"] = "Fire",
+            {63087, "Shockwave", 236216},
+            {83901, "Blast", 237582},
+            {108170, "Ring", 132847},
+            {65218, "Phoenix", 526578}, 
+            {15631, "Rocket boots", 133029},
+            {67255, "Flame cannon", 1387353},
+            {103111, "Burning steps", 1339435, 143}, 
+            {69530, "Dragon\'s breath", 134153, }, 
+            {80292, "Blazing barrier", 132221, },
+            {123912, "Spiral Wrathion", 530999},
+            {122287, "Solar Wrath", 459027},
+        },
+
+        [3] = { ["name"] = "Lightning",
+            {105402, "Strike down", 136050},
+            {96062, "Conduit", 1370984},
+        },
+
+        [4] = { ["name"] = "Shadow",
+            {122791, "Void Barrier", 136192},
+            {122250, "Void Circle", 3163618},
+            {122207, "Surrounded", 135945},
+            {92782, "Dark mist", 2065615},
+            {106887, "Channeling", 1022950},
+            {20896, "Shadow mourne", 463286},
+        },
+
+        [5] = { ["name"] = "Light",
+            {104186, "Holy book", 133745},
+            {98177, "Energy shield", 1621331},
+            {106743, "Holy light", 236247},
+            {84441, "Holy barrier", 236264},
+            {33392, "Angelic wings", 463835},
+            {60185, "Wings&stars", 608954},
+            {57000, "Wings&crown", 1581161},
+            {68380, "Wings&particals", 571555},
+            {77556, "White Transparent", 1445239},
+            {11186, "Guardian spirit", 1060983},
+            {122099, "Light Eruption", 571554},
+
+        },
+
+        [6] = { ["name"] = "Nature",
+            {122498, "Water Eruption 1", 893777},
+            {24512, "Water Eruption 2", 538567},
+            {122391, "Rising rock", 646672},
+            {108411, "Star swirl", 236168,},
+            {104605, "Spirit eagle", 612363,},
+        },
+
+        [7] = { ["name"] = "Death",
+            {122570, "Blood Vortex M", 1394887},
+            {122569, "Blood Vortex S", 1392546},
+            {124180, "Blood Eruption 1", 236305},
+            {124281, "Blood Eruption 2", 1029738},
+            
+        },
+
+        [8] = { ["name"] = "Arcane",
+            {69120, "Charged up", 839979},
+            {95043, "Evocation", 136075,},   --72816
+            {68661, "Teleport", 237509, 125},
+            {108092, "Mana shield", 136153, },
+            {108728, "Prismatic Image", 1391780},
+            {80197, "Prismatic Barrier", 135991},
+            {116946, "Absorbing power", 1120359},
+            {122453, "Azerite Acquired", 2065618},
+            {122442, "Azerite Barrier", 2967107},
+            {122748, "Azerite Blast", 2032580},
+            {122436, "Azerite Shockwave", 2967103},
+            {122524, "Charging", 135786},
+        },
+
+        [9] = { ["name"] = "Hearthstone",
+            {106481, "Noblegarden", 237000, 1330},
+            {106582, "Midsummer", 135268, 1088},
+            {106588, "Brewfest", 133697,},
+        },
+    },
+};
+
+NarciSpellVisualBrowser.Catalogue = Pack0;
 
 local function BuildIconSearchingTable()
     local output = {};
@@ -893,7 +1143,7 @@ end
 
 local IconSearchTable = BuildIconSearchingTable();
 
-function Narci_GetSpellVisualKitInfo(id)
+local function GetSpellVisualKitInfo(id)
     local info = IconSearchTable[id];
     --print(id)
     if info then
@@ -902,5 +1152,15 @@ function Narci_GetSpellVisualKitInfo(id)
     else
         --print("No match")
         return "", 134400;                  --Question Icon
+    end
+end
+
+NarciSpellVisualBrowser.GetSpellVisualKitInfo = GetSpellVisualKitInfo;
+
+function NarciSpellVisualBrowser:GetPack(index)
+    if index == 1 then
+        return Pack1, "Shadowlands"
+    else
+        return Pack0, "Standard"
     end
 end
