@@ -1,7 +1,7 @@
-## Interface: 90001
+## Interface: 90002
 ## Title: Clique
 ## Author: Cladhaire
-## Version: v90001-1.0.1
+## Version: v90002-1.0.0
 ## Notes: Simply powerful click-casting interface
 ## SavedVariables: CliqueDB, CliqueDB3
 
