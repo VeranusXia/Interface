@@ -1,10 +1,10 @@
-lightweight tag 6295516cc25c49463f8336d5cb32dc87dfa33c60 v9.0.2-05
+lightweight tag 59ac6cdc6011f1eda4efbd280bcf7ff21bcfe550 v9.0.2-06
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Mon Nov 23 12:04:22 2020 -0800
+Date:	Wed Nov 25 11:31:44 2020 -0800
 
-commit 6295516cc25c49463f8336d5cb32dc87dfa33c60
+commit 59ac6cdc6011f1eda4efbd280bcf7ff21bcfe550
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Mon Nov 23 12:04:22 2020 -0800
+Date:   Wed Nov 25 11:31:44 2020 -0800
 
-    Do not build -nolib version, causing a lot of addon managers to download the wrong version of the addon
+    Export secondary stat data for crafted items
 
