@@ -1,6 +1,6 @@
-## Interface: 90000
-## Title: AutoLoadPetTeam For Rematch
-## Title-zhCN: AutoLoadPetTeam For Rematch
+﻿## Interface: 90000
+## Title: [微微修改]AutoLoadPetTeam For Rematch
+## Title-zhCN: [微微修改]Rematch自动换队
 ## Notes: 宠物自动换队-适配Rematch版
 ## Author: scdhao
 ## Version: 2.0.4

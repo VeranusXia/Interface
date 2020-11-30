@@ -1,5 +1,5 @@
-## Interface: 90000
-## Title: tdBattlePetScript
+﻿## Interface: 90000
+## Title: [微微修改]tdBattlePetScript
 ## Description: 自动宠物战斗
 ## Author: DengSir
 ## Version: 80100.01

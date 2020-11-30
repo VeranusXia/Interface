@@ -1,5 +1,5 @@
-## Interface: 90002
-## Title: Battle Pet BreedID
+﻿## Interface: 90002
+## Title: [微微修改]宠物属性查看
 ## Author: Simca@Malfurion and Hugh@Burning Blade
 ## Notes: Battle Pet BreedID displays the BreedID of pets in your journal, in battle, in chat links, and in AH tooltips.
 ## Version: r216

@@ -1,6 +1,6 @@
-## Interface: 90000
-## Title: tdBattlePetScript_Ext
-## Title-zhCN: tdBattlePetScript命令扩展
+﻿## Interface: 90000
+## Title: [微微修改]tdBattlePetScript_Ext
+## Title-zhCN: [微微修改]tdBattlePetScript扩展
 ## Author: scdhao
 ## Version: 1.0.1
 ## Dependencies: tdBattlePetScript

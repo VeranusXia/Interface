@@ -1,6 +1,6 @@
-## Interface: 90000
+﻿## Interface: 90000
 ## Version: 1.0.3
-## Title: PetBattleLevelUpMonitor
+## Title: [微微修改]宠物练级状态监控
 ## Author: scdhao
 ## Notes: 宠物练级状态监控
 ## Dependencies: Rematch
