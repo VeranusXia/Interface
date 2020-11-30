@@ -213,7 +213,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="BACKGROUND">
-				<Texture file="Interface\AddOns\Narcissus\Art\Widgets\SpellVisualBrowser\Panel" parentKey="Divider" Alpha="0">
+				<Texture file="Interface\AddOns\Narcissus\Art\Widgets\SpellVisualBrowser\Panel" parentKey="Divider" hidden="true">
 					<TexCoords left="0" right="0.228515625" top="0.970703125" bottom="1"/>
 					<Size x="126" y="6.67"/>
 					<Anchors>
@@ -996,16 +996,18 @@
 								</Texture>
 							</Layer>
 						</Layers>
-						<!--HighlightTexture file="Interface\AddOns\Narcissus\Art\Widgets\SpellVisualBrowser\PreviewHighlight" parentKey="Highlight" alphaMode="ADD">
+						<HighlightTexture file="Interface\AddOns\Narcissus\Art\Widgets\SpellVisualBrowser\PreviewHighlight" parentKey="Highlight" alphaMode="ADD">
 							<Size x="137" y="137"/>
 							<Anchors>
 								<Anchor point="CENTER" relativePoint="CENTER"/>
 							</Anchors>
-						</HighlightTexture-->
+						</HighlightTexture>
 						<Scripts>
 							<OnLoad method="OnLoad"/>
 							<OnHide method="OnHide"/>
 							<OnClick method="OnClick"/>
+							<OnEnter method="OnEnter"/>
+							<OnLeave method="OnLeave"/>
 						</Scripts>
 					</Button>
 

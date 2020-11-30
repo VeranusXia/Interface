@@ -35,7 +35,10 @@
     2 Horde
     3 Test
 
+    125 Shadowlands Campaign 0/2    Through the Shattered Sky/ Arrival in the Shadowlands
+
     126 The Looming Dark    Choose Covenant
+    114 Bastion 0/7 Eternity's Call Tidings of War
     115 Art of War  Maldraxxus
 --]]
 
@@ -74,7 +77,7 @@ function DataProvider:GetCampaignIDFromQuestLog()
     local questLogIndex = 1;
     local info = C_QuestLog.GetInfo(questLogIndex);
     if info and info.campaignID then
-        --print("CampaignID: "..info.campaignID);
+        print("CampaignID: "..info.campaignID);
         return info.campaignID
     end
 end
@@ -144,20 +147,22 @@ function DataProvider:FormatEntries(textEntries)
             self.headers[uiOrder] = headerText;
             index = 1;
         else
-            tempTable = {strsplit("\n", rawText)};
-            for j = 1, #tempTable do
-                tempTable[j] = strtrim(tempTable[j]);
-                if tempTable[j] ~= "" then
-                    if comparisonMode then
-                        if not self.contents[headerText][index] then
-                            self.contents[headerText][index] = {text = tempTable[j], isNew = true};
-                            --print(headerText)
-                            NarciLoreAlert:SetUp(headerText, uiOrder);
+            if headerText and self.contents[headerText] then
+                tempTable = {strsplit("\n", rawText)};
+                for j = 1, #tempTable do
+                    tempTable[j] = strtrim(tempTable[j]);
+                    if tempTable[j] ~= "" then
+                        if comparisonMode then
+                            if not self.contents[headerText][index] then
+                                self.contents[headerText][index] = {text = tempTable[j], isNew = true};
+                                --print(headerText)
+                                NarciLoreAlert:SetUp(headerText, uiOrder);
+                            end
+                        else
+                            self.contents[headerText][index] = {text = tempTable[j], isNew = false};
                         end
-                    else
-                        self.contents[headerText][index] = {text = tempTable[j], isNew = false};
+                        index = index + 1;
                     end
-                    index = index + 1;
                 end
             end
         end
@@ -343,6 +348,7 @@ function NarciLoreBookMixin:OnLoad()
     self.page = 1;
     self:SetPadding(32);
     self:ResetPageLevel(-1);
+    tinsert(UISpecialFrames, self:GetName());
 end
 
 function NarciLoreBookMixin:SetPadding(value)
@@ -580,7 +586,7 @@ end
 
 function NarciLoreBookMixin:OnMouseDown()
 
-    FormatUtil:GetTruncatedText(self.LoreObject)
+    --FormatUtil:GetTruncatedText(self.LoreObject)
     --print(strsub(self.LoreObject:GetText(), characterIndex))
 end
 
@@ -629,4 +635,5 @@ function NarciLoreBookMixin:OnShow()
     CAM = self.ModelScene:GetActiveCamera();
     CAM.buttonModes.leftY = 2;
 end
+
 --]]

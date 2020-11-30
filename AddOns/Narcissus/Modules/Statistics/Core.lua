@@ -392,6 +392,8 @@ end
 
 function ReadQuest:PrintResult()
     print(" ");
+    local Y = "|CFFFFD100";
+
     for locale, questData in pairs(NarciStatisticsDB.questReadingTime) do
         local numQuests = 0;
         local numWords = 0;
@@ -403,10 +405,11 @@ function ReadQuest:PrintResult()
         end
         if timeReading > 0 then
             local wpm = math.floor(numWords / timeReading * 60 + 0.5);
-            print("|cFFFFD100Text Language:|r "..locale);
-            print("|cFFFFD100Words:|r "..numWords);
-            print("|cFFFFD100Duration:|r "..timeReading.."s");
-            print("|cFFFFD100Reading Speed:|r "..wpm.." wpm")
+            print(Y.."Language:|r "..locale);
+            print(Y.."Quest:|r "..numQuests);
+            print(Y.."Words:|r "..numWords);
+            print(Y.."Duration:|r "..FormatTime(timeReading));
+            print(Y.."Speed:|r "..wpm.." wpm")
             print(" ");
         end
     end

@@ -229,7 +229,7 @@
             </Frame>
             <Button inherits="NarciCloseButtonTemplate" Alpha="1" frameLevel="5">
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="0" y="-3"/>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="6" y="6"/>
                 </Anchors>
             </Button>
         </Frames>

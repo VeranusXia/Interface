@@ -1,25 +1,7 @@
-changeset:   215:da6664aa6fd3
-tag:         v1.17.0
+changeset:   217:4d70f6adb67b
+tag:         v1.17.1
 user:        MMOSimca
-date:        Thu Nov 26 14:49:12 2020 -0500
-summary:     Updated base stats data and breed data for Patch 9.0.2 and Shadowlands week 1.
-
-
-changeset:   214:1e3f522d2fe6
-user:        MMOSimca
-date:        Thu Nov 26 14:45:47 2020 -0500
-summary:     Fixed two debug mode errors.
-
-
-changeset:   213:34f506aa9149
-user:        MMOSimca
-date:        Thu Nov 26 14:45:04 2020 -0500
-summary:     Updated TOC for Patch 9.0.2.
-
-
-changeset:   212:ac50b737dd4c
-user:        MMOSimca
-date:        Thu Nov 26 14:44:35 2020 -0500
-summary:     Attempted to fix minor compatibility issue with PetTracker.
+date:        Fri Nov 27 17:12:19 2020 -0500
+summary:     Backed out changeset: ac50b737dd4c
 
 

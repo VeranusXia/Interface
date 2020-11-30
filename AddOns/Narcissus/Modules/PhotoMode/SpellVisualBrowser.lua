@@ -21,6 +21,7 @@ local NumEffectiveButtons = 0;
 local NarciSpellVisualBrowser = NarciSpellVisualBrowser;
 local SpellVisualList = NarciSpellVisualBrowser.Catalogue;
 local GetSpellVisualKitInfo = NarciSpellVisualBrowser.GetSpellVisualKitInfo;
+local IsSpellVisualLogged = NarciSpellVisualBrowser.IsSpellVisualLogged;
 local NarciTooltip = NarciTooltip;
 local SelectedVisualIndex;
 local _;
@@ -235,6 +236,9 @@ local function GoToTab(index)
     if index ~= 1 then
         FadeFrame(HomeButton, 0.2, "IN");
         HomeButton.CurrentTabIndex = index;
+        PreviewFrame:Disable();
+    else
+        PreviewFrame:Enable();
     end
     
     --Guide
@@ -714,27 +718,6 @@ end
 -------------------------------------------------
 ----------------Set preview image----------------
 -------------------------------------------------
-local function BuildPreviewCheckTable()
-    local output = {};
-    local subtable, deeptable, elements = {}, {}, {};
-    local Catalogue = NarciSpellVisualBrowser.Catalogue;
-    for i = 1, #Catalogue do
-        subtable = Catalogue[i];
-        for j = 1, #subtable do
-            deeptable = subtable[j];
-            if deeptable then
-                for k = 1, #deeptable do
-                    elements = deeptable[k];
-                    output[ elements[1] ] = true;
-                end
-            end
-        end
-    end
-    return output;
-end
-
-local HasPreview = BuildPreviewCheckTable();
-
 local PreviewTimer = NarciAPI_CreateAnimationFrame(0.25);
 PreviewTimer:SetScript("OnHide", function(self)
     self:Hide();
@@ -745,7 +728,7 @@ PreviewTimer:SetScript("OnUpdate", function(self, elapsed)
     if self.total >= self.duration then
         if self.visualID == self.LastID then                --Some times when you collpase/expand a tab, OnEnter gets triggerred. In this case don't update prewview image
                 --print(self.visualID)
-            if HasPreview[self.visualID] then
+            if IsSpellVisualLogged(self.visualID) then
                 PreviewFrame.TopImage.FadeOut:Play();
                 --print("Has preview")
             else
@@ -854,6 +837,7 @@ local function CreateEntryButtonFrames(Category)
         button.Drawer:Hide();
         button.Drawer:SetAlpha(0);
         button.Drawer:SetHeight(15);
+        button.Divider:Show()
         button.collapsed = true;
         button.text = list["name"];
         button.ButtonText:SetJustifyH("CENTER");
@@ -1877,10 +1861,10 @@ function NarciSpellVisualBrowserPreviewFrameMixin:OnLoad()
     PreviewFrame = self;
     self.packName = "Standard";
     self.isStandardPack = true;
+    self.tooltip = L["Change Pack"];
 end
 
 function NarciSpellVisualBrowserPreviewFrameMixin:OnClick()
-    --[[
     self.isStandardPack = not self.isStandardPack;
     local packID;
     if self.isStandardPack then
@@ -1901,6 +1885,14 @@ end
 
 function NarciSpellVisualBrowserPreviewFrameMixin:OnHide()
     self:StopAnimating();
+end
+
+function NarciSpellVisualBrowserPreviewFrameMixin:OnEnter()
+    NarciTooltip:ShowTooltip(self, 6);
+end
+
+function NarciSpellVisualBrowserPreviewFrameMixin:OnLeave()
+    NarciTooltip:FadeOut();
 end
 
 --[[

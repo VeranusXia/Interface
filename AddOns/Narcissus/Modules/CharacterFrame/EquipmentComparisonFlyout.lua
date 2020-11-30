@@ -248,15 +248,15 @@ local function UntruncateText(frame, fontstring)
     end
 end
 
-local HeartLevel = 0;
-local CurrentSpecID = 1;
-local PrimaryStatName = "Primary";
+local HEART_LEVEL = 0;
+local CURRENT_SPEC = 1;
+local MAX_TIER = 5;
+local PRIMARY_STAT_NAME = "Primary";
 local GetAllTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfo;
 local GetPowerInfo = C_AzeriteEmpoweredItem.GetPowerInfo;
 local IsPowerSelected = C_AzeriteEmpoweredItem.IsPowerSelected;
 local GetPowerText = C_AzeriteEmpoweredItem.GetPowerText;   --azeriteEmpoweredItemLocation, powerID, level
 local IsPowerAvailableForSpec = C_AzeriteEmpoweredItem.IsPowerAvailableForSpec;
-local MaximumTier = 5;
 local TierInfos, azeritePowerDescription;
 
 local function GetActiveTraits(itemLocation, itemButton)
@@ -268,7 +268,7 @@ local function GetActiveTraits(itemLocation, itemButton)
     TierInfos = GetAllTierInfo(itemLocation);
     if not TierInfos then return; end
 
-    for i = 1, MaximumTier do
+    for i = 1, MAX_TIER do
         if (not TierInfos[i]) or (not TierInfos[i].azeritePowerIDs) then
             if shouldCache then
                 if itemButton then
@@ -326,11 +326,11 @@ local function BuildAzeiteTraitsFrame(TraitsFrame, itemLocation, itemButton)
     if not TraitsCache then return; end
 
     local rightSpec = false;
-    for i = 1, MaximumTier do
+    for i = 1, MAX_TIER do
         local button = TraitsFrame.Traits[i];
         button.Icon:Hide();
         if (TraitsCache[i]) and (TraitsCache[i][5]) then
-            if TraitsCache[i][5] > HeartLevel then
+            if TraitsCache[i][5] > HEART_LEVEL then
                 button.Level:SetText(TraitsCache[i][5]);
                 button.Level:Show();
                 button.Border0:SetTexCoord(0.5, 0.75, 0, 1);            --Desaturated
@@ -339,7 +339,7 @@ local function BuildAzeiteTraitsFrame(TraitsFrame, itemLocation, itemButton)
                 button.Level:Hide();
                 button.Icon:SetTexture(TraitsCache[i][2]);
                 button.Icon:Show();
-                rightSpec = IsPowerAvailableForSpec(TraitsCache[i][1], CurrentSpecID);
+                rightSpec = IsPowerAvailableForSpec(TraitsCache[i][1], CURRENT_SPEC);
                 if rightSpec then
                     button.Border0:SetTexCoord(0, 0.25, 0, 1);          --Saturated
                     button.Border1:SetDesaturated(false);
@@ -386,12 +386,12 @@ local function BuildAzeiteTraitsFrame(TraitsFrame, itemLocation, itemButton)
     if not EquipmentFlyoutFrame.BaseItem then return; end 
     TraitsCache = GetActiveTraits(EquipmentFlyoutFrame.BaseItem);
     if not TraitsCache or EquipmentFlyoutFrame.BaseItem == itemLocation then 
-        for i = 1, MaximumTier do
+        for i = 1, MAX_TIER do
             TraitsFrame.Traits[i].BaseTrait:Hide();
         end
         return;
     end
-    for i = 1, MaximumTier do
+    for i = 1, MAX_TIER do
         local button = TraitsFrame.Traits[i];
         local tinybutton = button.BaseTrait;
         if (TraitsCache[i]) and (TraitsCache[i][5]) then
@@ -409,11 +409,11 @@ local function BuildAzeiteTraitsFrame(TraitsFrame, itemLocation, itemButton)
 
     wipe(TraitsCache);
     --[[
-    for i = 1, MaximumTier do
+    for i = 1, MAX_TIER do
         TraitsFrame.Traits[i].Icon:Hide();
         if (not TierInfos[i]) or (not TierInfos[i].azeritePowerIDs) then
             TraitsFrame.Traits[i]:Hide();
-            for j = i + 1, MaximumTier do
+            for j = i + 1, MAX_TIER do
                 TraitsFrame.Traits[j]:Hide();
             end
             return;
@@ -423,7 +423,7 @@ local function BuildAzeiteTraitsFrame(TraitsFrame, itemLocation, itemButton)
         unlockLevel = TierInfos[i].unlockLevel;
         button = TraitsFrame.Traits[i];
 
-        if unlockLevel > HeartLevel then
+        if unlockLevel > HEART_LEVEL then
             button.Level:SetText(unlockLevel);
             button.Level:Show();
             button.Border0:SetTexCoord(0.5, 0.75, 0, 1);
@@ -498,7 +498,7 @@ function Narci_Comparison_SetComparison(itemLocation, itemButton)
     frame.Label:SetText(itemSubType);
 
     DisplayComparison("ilvl", STAT_AVERAGE_ITEM_LEVEL, stats.ilvl, baseStats.ilvl, nil, {1, 0.82, 0});
-    DisplayComparison("prim", PrimaryStatName, stats.prim, baseStats.prim, nil, {0.92, 0.92, 0.92});
+    DisplayComparison("prim", PRIMARY_STAT_NAME, stats.prim, baseStats.prim, nil, {0.92, 0.92, 0.92});
     DisplayComparison("stamina", STAMINA_STRING, stats.stamina, baseStats.stamina, CR_ConvertRatio.stamina, {0.92, 0.92, 0.92});
     DisplayComparison("crit", STAT_CRITICAL_STRIKE, stats.crit, baseStats.crit, CR_ConvertRatio.crit);
     DisplayComparison("haste", STAT_HASTE, stats.haste, baseStats.haste, CR_ConvertRatio.haste);
@@ -629,23 +629,20 @@ local function UpdateSpectIDAndPrimaryStat()
 
     local currentSpec = GetSpecialization() or 1;
     local _, primaryStatID;
-    CurrentSpecID, _, _, _, _, primaryStatID = GetSpecializationInfo(currentSpec);
-    PrimaryStatName = PrimaryStatsList[primaryStatID];
+    CURRENT_SPEC, _, _, _, _, primaryStatID = GetSpecializationInfo(currentSpec);
+    PRIMARY_STAT_NAME = PrimaryStatsList[primaryStatID];
 end
 
 local NT = CreateFrame("Frame");
-NT:RegisterEvent("VARIABLES_LOADED");
 NT:RegisterEvent("PLAYER_ENTERING_WORLD");
 NT:RegisterEvent("PLAYER_LEVEL_UP");
 NT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 NT:RegisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED");
 NT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 NT:SetScript("OnEvent",function(self,event,...)
-    if event == "VARIABLES_LOADED" then
-        self:UnregisterEvent("VARIABLES_LOADED");
-        C_Timer.After(1, function()
-            EquipmentFlyoutFrame = Narci_EquipmentFlyoutFrame;
-        end)
+    if event == "PLAYER_ENTERING_WORLD" then
+        self:UnregisterEvent(event);
+        EquipmentFlyoutFrame = Narci_EquipmentFlyoutFrame;
     end
 
     if event ~= "AZERITE_ITEM_POWER_LEVEL_CHANGED" then
@@ -665,9 +662,14 @@ NT:SetScript("OnEvent",function(self,event,...)
     if event == "AZERITE_ITEM_POWER_LEVEL_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
         local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
         if azeriteItemLocation then
-            HeartLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation);
+            --Credit: flowerpew     Bug Fix: Can't retrieve level if Heart of Azeroth is in the bank
+            if AzeriteUtil.IsAzeriteItemLocationBankBag(azeriteItemLocation) then
+                HEART_LEVEL = 0;
+            else
+                HEART_LEVEL = C_AzeriteItem.GetPowerLevel(azeriteItemLocation) or 0;
+            end
         else
-            HeartLevel = 0;
+            HEART_LEVEL = 0;
         end
         UpdateSpectIDAndPrimaryStat();
     end

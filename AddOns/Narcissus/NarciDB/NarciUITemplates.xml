@@ -264,7 +264,8 @@
 					tileEdge = true,
 					tileSize = 24,
 					edgeSize = 24,
-				}
+				};
+				
 				self:SetBackdrop(backdropInfo);
 			</OnLoad>
 		</Scripts>
