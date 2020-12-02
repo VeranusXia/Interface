@@ -1,10 +1,10 @@
-lightweight tag 59ac6cdc6011f1eda4efbd280bcf7ff21bcfe550 v9.0.2-06
+lightweight tag dc15c749ab71474bd3cc780008c06a9c8d40f6df v9.0.2-09
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Wed Nov 25 11:31:44 2020 -0800
+Date:	Tue Dec 1 18:29:51 2020 -0800
 
-commit 59ac6cdc6011f1eda4efbd280bcf7ff21bcfe550
+commit dc15c749ab71474bd3cc780008c06a9c8d40f6df
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Wed Nov 25 11:31:44 2020 -0800
+Date:   Tue Dec 1 18:29:51 2020 -0800
 
-    Export secondary stat data for crafted items
+    Fix TOC, still had reference to a removed dependency
 

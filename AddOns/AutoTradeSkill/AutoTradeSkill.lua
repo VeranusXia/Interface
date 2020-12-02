@@ -7,7 +7,7 @@ function logText(text)
 	print(date("[%H:%M:%S] ")..text)
 end
 local AutoTradeSkill = CreateFrame("Frame", "AutoTradeSkill", UIParent, "UIPanelDialogTemplate")
-local isSellOver = true
+local isSellOver = false
 local lock = true
  
 
@@ -89,8 +89,12 @@ end
 function AutoTradeSkill:GoEvent(event, arg1)  
 	if event == "PLAYER_LOGIN" then
 		if  not GetMacroInfo("快乐赚钱") then
-			CreateMacro("快乐赚钱", "1322720", "/click HappyATS", nil, nil)
+			CreateMacro("快乐赚钱", "133768", "/click HappyATS", nil, nil) --/dump GetItemIcon(173194)
 			logText("初始化快乐赚钱宏")
+		end
+		if  not GetMacroInfo("半影线") then
+			CreateMacro("半影线", "133768", "/run BuyMerchantItem(1,200)", nil, nil)
+			logText("初始化购买半影线宏")
 		end
 	end 
 	AutoTradeSkill:SaveConfig("")
