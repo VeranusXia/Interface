@@ -50,8 +50,8 @@ function rematch:GetUnitNameandID(unit)
 		local name = UnitName(unit)
 		local npcID = tonumber((UnitGUID(unit) or ""):match(".-%-%d+%-%d+%-%d+%-%d+%-(%d+)"))
 		if npcID and npcID~=0 then
-			if rematch.notableRedirects[npcID] and not RematchSaved[npcID] then -- if this is a challenge post pet then return npcID of its post
-				npcID = rematch.notableRedirects[npcID]
+			if rematch.targetRedirects[npcID] and not RematchSaved[npcID] then -- if this is a challenge post pet then return npcID of its post
+				npcID = rematch.targetRedirects[npcID]
 				return (rematch:GetNameFromNpcID(npcID)),npcID
 			else
 				return name,npcID -- this is an npc, return its name and npcID
@@ -188,12 +188,6 @@ end
 -- yfromtop is the y offset when frame is anchoring to top (hidden title area of pet card)
 -- yfrombottom is the y offset when frame is anchoring to the bottom (hidden controls of winrecord)
 local references = { ["RematchFrame"]=true, ["UIParent"]=true }
-
-local anchorFrame = CreateFrame("Frame",nil,UIParent)
-anchorFrame:SetSize(50,50)
---anchorFrame:SetBackdrop({bgFile="Interface\\DialogFrame\\UI-DialogBox-Background"})
-
-anchorFrame:SetFrameStrata("FULLSCREEN")
 
 function rematch:SmartAnchor(frame,relativeTo,center,yfromtop,yfrombottom)
 	if not relativeTo then
@@ -766,4 +760,13 @@ function rematch:UnitBuff(buffName)
    if activeBuffs[buffName] then
       return UnitBuff("player",activeBuffs[buffName])
    end
+end
+
+-- configures the journal if it's up or the standalone frame otherwise
+function rematch:Configure()
+	if RematchJournal:IsVisible() then
+		RematchJournal:ConfigureJournal()
+	else
+		RematchFrame:ConfigureFrame()
+	end
 end

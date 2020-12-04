@@ -39,10 +39,10 @@ rematch:InitModule(function()
 		model:SetPosition(0,0,-0.075)
 		model:SetScript("OnEvent",Model_OnEvent)
 		-- border frame here is a sibling to the above target model
-		panel.Target.ModelBorder = CreateFrame("Frame",nil,panel.Target,"RematchUseParentLevel")
+		panel.Target.ModelBorder = CreateFrame("Frame",nil,panel.Target,"RematchUseParentLevel,BackdropTemplate")
 		local border = panel.Target.ModelBorder
-		
-		
+		border:SetBackdrop({edgeFile="Interface\\Tooltips\\UI-Tooltip-Border", tile=true, edgeSize=12})
+		border:SetBackdropBorderColor(0.5,0.5,0.5)
 		border:SetPoint("TOPLEFT",model,"TOPLEFT",-5,5)
 		border:SetPoint("BOTTOMRIGHT",model,"BOTTOMRIGHT",5,-5)
 		local back = border:CreateTexture(nil,"BACKGROUND",nil,2)

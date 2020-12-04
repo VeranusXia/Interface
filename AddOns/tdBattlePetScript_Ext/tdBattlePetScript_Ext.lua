@@ -28,6 +28,15 @@ local function registerTdScript()
                     floor(C_PetBattles.GetMaxHealth(LE_BATTLE_PET_ALLY, player) * 0.4)
             end
         )
+		
+		tdBattlePetScript:RegisterCondition(
+            "unit.level",
+            {type = "compare", arg = false,pet=false},
+            function(owner, pet)
+                return UnitLevel("player")+UnitXP("player")/UnitXPMax("player")
+            end
+        )
+		
         inited = true
     end
 end
