@@ -970,7 +970,7 @@ function ALPTRematch:InitMacroOptions()
                 },
                 summonWM = {
                     type = "toggle",
-                    name = "如果在阿苏纳，使用“尾锚的宠物日志”",
+                    name = "使用'法夜竖琴'固定站位",
                     width = "full",
                     order = newOrder(),
                     get = function()

@@ -107,11 +107,11 @@ local function createMacroText(btn)
     end
 
     --尾锚
-    if config.summonWM and C_Map.GetBestMapForUnit("player") == 630 then
-      local startTime, duration = GetItemCooldown(122681)
+    if config.summonWM then --and C_Map.GetBestMapForUnit("player") == 630 
+      local startTime, duration = GetItemCooldown(184489)
       if duration < 1 then
-        DebugPrint("召唤尾锚")
-        macro = macro .. "\n/use item:122681"
+        DebugPrint("使用法夜竖琴")
+        macro = macro .. "\n/use item:184489"
       end
     end
 
