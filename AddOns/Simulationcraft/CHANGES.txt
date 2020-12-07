@@ -1,10 +1,10 @@
-lightweight tag dc15c749ab71474bd3cc780008c06a9c8d40f6df v9.0.2-09
+lightweight tag d63e2cc39a219e78d53a963d09f5949cd6695103 v9.0.2-10
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Tue Dec 1 18:29:51 2020 -0800
+Date:	Thu Dec 3 17:56:21 2020 -0800
 
-commit dc15c749ab71474bd3cc780008c06a9c8d40f6df
+commit d63e2cc39a219e78d53a963d09f5949cd6695103
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Tue Dec 1 18:29:51 2020 -0800
+Date:   Thu Dec 3 17:56:21 2020 -0800
 
-    Fix TOC, still had reference to a removed dependency
+    Fixes potential crash if an item has no item level from GetDetailedItemLevelInfo()
 
