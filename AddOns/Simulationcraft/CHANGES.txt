@@ -1,10 +1,10 @@
-lightweight tag d63e2cc39a219e78d53a963d09f5949cd6695103 v9.0.2-10
+lightweight tag eeea8843a7575663615a5f005becc807808ccdec v9.0.2-11
 Author:	Dave Hendler <sollaires@gmail.com>
-Date:	Thu Dec 3 17:56:21 2020 -0800
+Date:	Wed Dec 9 11:19:44 2020 -0800
 
-commit d63e2cc39a219e78d53a963d09f5949cd6695103
+commit eeea8843a7575663615a5f005becc807808ccdec
 Author: Dave Hendler <sollaires@gmail.com>
-Date:   Thu Dec 3 17:56:21 2020 -0800
+Date:   Wed Dec 9 11:19:44 2020 -0800
 
-    Fixes potential crash if an item has no item level from GetDetailedItemLevelInfo()
+    Fix possible bug when item name is not available
 
