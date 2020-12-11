@@ -437,7 +437,8 @@ function AutoBattleGround:Action()
 		end
 		if  step==1 and isSearching==false then
 			logText("搜索队伍中...")
-			C_LFGList.Search(9, 0, 19)
+			--C_LFGList.Search(9, 0, 19)
+			C_LFGList.Search(9, 0, 8)
 			isSearching=true
 	
 		 
@@ -746,12 +747,12 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>=0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
 						table.insert(temp,result)
 					end 
 					
-					
 				end 
+				logText("本次搜索到评级队伍"..#resultIDTable.."个,其中脚本队"..#temp.."个")
 			    if #temp>0 then
 					local num = math.random(#temp) 
 						local item = temp[num]
