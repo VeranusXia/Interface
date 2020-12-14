@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2418, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20201210230930")
+mod:SetRevision("20201213202914")
 mod:SetCreatureID(166644)
 mod:SetEncounterID(2405)
 mod:SetUsedIcons(1, 2)
@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 328437 335013 325399 327887 329770 328789 340758 329834 328880 342310 340788 342854 329107 340807",
 	"SPELL_CAST_SUCCESS 325361 326271 325399",
 	"SPELL_AURA_APPLIED 328448 328468 325236 327902 327414",
-	"SPELL_AURA_REMOVED 328448 328468",
+	"SPELL_AURA_REMOVED 328448 328468 325236",
 --	"SPELL_PERIODIC_DAMAGE",
 --	"SPELL_PERIODIC_MISSED",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
@@ -55,6 +55,7 @@ local specWarnEdgeofAnnihilation					= mod:NewSpecialWarningRun(328789, nil, 307
 mod:AddTimerLine(BOSS)
 local timerDimensionalTearCD						= mod:NewCDTimer(25, 328437, nil, nil, nil, 3, nil, nil, true)
 local timerGlyphofDestructionCD						= mod:NewCDTimer(36.4, 325361, nil, "Tank", nil, 5, nil, DBM_CORE_L.TANK_ICON)--27.9-58.6 for now
+local timerGlyphofDestruction						= mod:NewTargetTimer(4, 325361, nil, nil, 2, 2, nil, DBM_CORE_L.TANK_ICON)
 local timerStasisTrapCD								= mod:NewCDTimer(30.3, 326271, nil, nil, nil, 3)--30, except when it's reset by phase changes
 local timerRiftBlastCD								= mod:NewCDTimer(36, 335013, nil, nil, nil, 3)--36.3 except when it's reset by phase changes
 local timerHyperlightSparkCD						= mod:NewCDTimer(15.8, 325399, nil, nil, nil, 2, nil, DBM_CORE_L.HEALER_ICON)--15.8 except when it's heavily spell queued
@@ -62,8 +63,9 @@ local timerHyperlightSparkCD						= mod:NewCDTimer(15.8, 325399, nil, nil, nil, 
 mod:AddTimerLine(DBM:EJ_GetSectionInfo(22119))
 local timerFleetingSpiritsCD						= mod:NewCDTimer(40.8, 340758, nil, nil, nil, 3)--40.8-46
 local timerSeedsofExtinctionCD						= mod:NewCDTimer(43.7, 329770, 130924, nil, nil, 5)--43-49. Shortname "Root"
-local timerExtinction								= mod:NewCastTimer(12, 329107, nil, nil, nil, 2, nil, DBM_CORE_L.DEADLY_ICON)
+local timerExtinction								= mod:NewCastTimer(16, 329107, nil, nil, nil, 2, nil, DBM_CORE_L.DEADLY_ICON)
 local timerEdgeofAnnihilationCD						= mod:NewCDTimer(44.3, 328789, 307421, nil, nil, 2, nil, DBM_CORE_L.DEADLY_ICON)--Shortname "Annihilation"
+local timerEdgeofAnnihilation						= mod:NewCastTimer(10, 328789, nil, nil, nil, 2, nil, DBM_CORE_L.DEADLY_ICON)
 local timerUnleashPowerCD							= mod:NewCDCountTimer(40.8, 342854, nil, nil, nil, 5, nil, DBM_CORE_L.MYTHIC_ICON..DBM_CORE_L.DEADLY_ICON)
 
 --local berserkTimer								= mod:NewBerserkTimer(600)
@@ -215,6 +217,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnEdgeofAnnihilation:Show(self.vb.annihilationCount)
 		specWarnEdgeofAnnihilation:Play("justrun")
 		specWarnEdgeofAnnihilation:ScheduleVoice(2, "keepmove")
+		timerEdgeofAnnihilation:Start()
 	elseif spellId == 342854 then--Unleash Power, cast in mythic phase 3 to activate all relics at once (replaces 340807 which is not cast on mythic)
 		if self.vb.p3FirstCast == 0 then
 			self.vb.p3FirstCast = 2
@@ -281,6 +284,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnGlyphofDestructionTaunt:Show(args.destName)
 			specWarnGlyphofDestructionTaunt:Play("tauntboss")
 		end
+		timerGlyphofDestruction:Start(args.destName)
 	elseif spellId == 327902 then
 		warnFixate:CombinedShow(0.5, args.destName)
 		if args:IsPlayer() then
@@ -302,6 +306,11 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnTear then
 			self:SetIcon(args.destName, 0)
 		end
+	elseif spellId == 325236 then
+		if args:IsPlayer() then
+			yellGlyphofDestructionFades:Cancel(spellId)
+		end
+		timerGlyphofDestruction:Stop(args.destName)
 	end
 end
 

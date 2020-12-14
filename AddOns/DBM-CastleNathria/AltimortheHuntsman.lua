@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2429, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20201210213254")
+mod:SetRevision("20201213202914")
 mod:SetCreatureID(165066)
 mod:SetEncounterID(2418)
 mod:SetUsedIcons(1, 2, 3)
@@ -187,7 +187,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnShadesofBargast:Play("killmob")
 		timerShadesofBargastCD:Start()
 		if self.Options.SetIconOnShades then
-			self:ScanForMobs(171557, 1, 4, 2, 0.2, 15)--Start at 4 ascending up
+			self:ScanForMobs(171557, 1, 4, 2, 0.2, 15, "SetIconOnShades")--Start at 4 ascending up
 		end
 	elseif spellId == 334852 then
 		timerPetrifyingHowlCD:Start()
