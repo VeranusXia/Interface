@@ -26,6 +26,7 @@ local rateFrame
 local loseNum=0
 local readyCheck=false
 local isSearching=false
+local blackList={}
 
 local piaobtn =  CreateFrame("BUTTON", "piaobtn", UIParent, "BackdropTemplate")
 piaobtn:SetSize(50, 50)
@@ -416,7 +417,8 @@ function AutoBattleGround:Action()
 				logText("这个队伍A太多了 果断换一个")
 				return
 			end
-			if gaNum == 1  then
+			if gaNum <= 2  then
+				blackList[groupLeaderName]=1
 				C_PartyInfo.LeaveParty()
 				logText("这个队伍活人队 果断换一个")
 				return
@@ -747,7 +749,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>=0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName  then
+					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>=0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName and blackList[leaderName]==nil  then
 						table.insert(temp,result)
 					end 
 					
