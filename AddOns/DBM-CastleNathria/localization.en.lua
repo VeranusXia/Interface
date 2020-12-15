@@ -50,7 +50,7 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization({
-	timerContainers2			= "Show timer that will show container fill progress and time remaining until full"
+	timerContainers				= "Show timer that will show container fill progress and time remaining until full"
 })
 
 ---------------------------

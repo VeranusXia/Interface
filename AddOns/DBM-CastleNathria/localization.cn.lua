@@ -54,7 +54,7 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization({
-	timerContainers2			= "显示容器装满的进度与时间"
+	timerContainers				= "显示容器装满的进度与时间"
 })
 
 ---------------------------

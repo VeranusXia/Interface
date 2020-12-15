@@ -1,12 +1,12 @@
 local mod	= DBM:NewMod(2428, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20201213224032")
+mod:SetRevision("20201210213254")
 mod:SetCreatureID(164261)
 mod:SetEncounterID(2383)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
-mod:SetHotfixNoticeRev(20201211000000)--2020, 12, 11
-mod:SetMinSyncRevision(20201211000000)
+mod:SetHotfixNoticeRev(20201209000000)--2020, 12, 9
+mod:SetMinSyncRevision(20201209000000)
 --mod.respawnTime = 29
 
 mod:RegisterCombat("combat")
@@ -41,7 +41,6 @@ local yellGluttonousMiasma						= mod:NewPosYell(329298, DBM_CORE_L.AUTO_YELL_CU
 local specWarnEssenceSap						= mod:NewSpecialWarningStack(334755, false, 8, nil, 2, 1, 6)--Mythic, spammy, opt in
 local specWarnConsume							= mod:NewSpecialWarningRun(334522, nil, nil, nil, 4, 2)
 local specWarnExpunge							= mod:NewSpecialWarningMoveAway(329725, nil, nil, nil, 1, 2)
-local specWarnVolatileEjectionPerWarn			= mod:NewSpecialWarningSoon(334266, false, nil, nil, 2, 2)--Optional prewarn special warning, for the cast (before you know the targets)
 local specWarnVolatileEjection					= mod:NewSpecialWarningYou(334266, nil, nil, nil, 1, 2)
 local yellVolatileEjection						= mod:NewYell(334266, 202046)--ShortText "Beam". Change to NewPosYell if it's ever added to combat log, can't be trusted as icon yell when relying on syncing
 local specWarnGrowingHunger						= mod:NewSpecialWarningCount(332295, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.stack:format(6, 332295), nil, 1, 2)
@@ -79,7 +78,6 @@ mod.vb.expungeCount = 0
 mod.vb.consumeCount = 0
 mod.vb.desolateCount = 0
 mod.vb.overwhelmCast = 0
-mod.vb.meleeFound = false
 
 local updateInfoFrame
 do
@@ -169,7 +167,6 @@ function mod:OnCombatStart(delay)
 	self.vb.overwhelmCast = 0
 	self.vb.miasmaCount = 0
 	self.vb.miasmaIcon = 2
-	self.vb.meleeFound = false
 	timerGluttonousMiasmaCD:Start(3-delay, 1)--Always same
 	if self:IsEasy() then--TODO, Confirm LFR
 		timerOverwhelmCD:Start(5.2-delay, 1)
@@ -257,8 +254,6 @@ function mod:SPELL_CAST_START(args)
 		--10.0, 36.0, 36.0, 24.0, 36.0, 36.0, 24.0, 36.0, 36.0, 24.0", -- [4]--NEW
 		--Normal, LFR?
 		--Same pattern slowed down slightly
-		specWarnVolatileEjectionPerWarn:Show()
-		specWarnVolatileEjectionPerWarn:Play("specialsoon")
 		if self.vb.volatileCast % 3 == 0 then
 			timerVolatileEjectionCD:Start(self:IsEasy() and 25.3 or 24, self.vb.volatileCast+1)--Minus isn't a bug, the counter is off by 2 for perfect timers
 		else
@@ -306,7 +301,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			table.wipe(GluttonousTargets)
 			self.vb.miasmaCount = self.vb.miasmaCount + 1
 			self.vb.miasmaIcon = 2
-			self.vb.meleeFound = false
 			timerGluttonousMiasmaCD:Start(23.8, self.vb.miasmaCount+1)--Same in all difficulties
 		end
 		if not tContains(GluttonousTargets, args.destName) then
@@ -314,14 +308,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		local icon
 		local uId = DBM:GetRaidUnitId(args.destName)
-		if self:IsMelee(uId, true) and not self.vb.meleeFound then
+		if self:IsMelee(uId, true) then
 			icon = 1
-			self.vb.meleeFound = true--Some sets can have more than 1 melee, this makes sure star isn't assigned to multiple
-			DBM:Debug("First Melee Miasma found: "..args.destName, 2)
+			DBM:Debug("Melee Miasma found: "..args.destName, 2)
 		else
-			icon = self.vb.miasmaIcon < 5 and self.vb.miasmaIcon or 1--If icon is 5 then were no melee in this wave at all, force assign star to the final ranged
+			icon = self.vb.miasmaIcon
 			self.vb.miasmaIcon = self.vb.miasmaIcon + 1
-			DBM:Debug("Ranged/Second Melee Miasma found: "..args.destName, 2)
+			DBM:Debug("Ranged Miasma found: "..args.destName, 2)
 		end
 		if args:IsPlayer() then
 			specWarnGluttonousMiasma:Show(self:IconNumToTexture(icon))
