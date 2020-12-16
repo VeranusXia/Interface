@@ -12,7 +12,7 @@ local classSpell ={
 	["SHAMAN"] = "", --Shaman
 	["MAGE"] = "/cast 寒冰护体\n", --Mage
 	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
-	["MONK"] = "",--Monk
+	["MONK"] = "/cast 碧愈疾风\n",--Monk
 	["DRUID"] = "",--Druid
 	["DEMONHUNTER"] = "",--Demon Hunter
 }
@@ -723,7 +723,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 				gnumBase = tempGnum
 			end
 		end
-		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" then
+		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" and isSearching then
 			StaticPopupSpecial_Hide(LFGListApplicationDialog);
 			isSearching=false
 		
