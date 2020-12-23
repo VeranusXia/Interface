@@ -1,0 +1,9 @@
+## Interface: 80300
+## Title: PetScan
+## Notes: Battlepet Scanner
+## Author: Iklama
+## DefaultState: Enabled
+## SavedVariables: PetScan
+PetScan.lua
+PetScanData.lua
+
