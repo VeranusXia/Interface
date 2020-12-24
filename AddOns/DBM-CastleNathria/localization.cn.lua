@@ -1,4 +1,4 @@
---Mini Dragon <流浪者酒馆-Brilla@金色平原> 20201221
+--Mini Dragon <流浪者酒馆-Brilla@金色平原> 20201214
 --夏一可，暴雪娱乐
 
 if GetLocale() ~= "zhCN" then return end
@@ -71,12 +71,6 @@ L:SetOptionLocalization({
 --  Stoneborne Generals --
 ---------------------------
 --L= DBM:GetModLocalization(2425)
-
-L= DBM:GetModLocalization(2425)
-
-L:SetOptionLocalization({
-	ExperimentalTimerCorrection	= "当技能发生排队时，自动调整计时器"
-})
 
 ---------------------------
 --  Sire Denathrius --
