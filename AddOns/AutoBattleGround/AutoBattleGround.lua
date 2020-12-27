@@ -6,11 +6,11 @@ local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
 	["PALADIN"] = "/targetfriendplayer\n/cast 殉道者之光\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
-	["ROGUE"] = "", --Rogue
+	["ROGUE"] = "/cast 猩红之瓶\n", --Rogue
 	["PRIEST"] = "/cast 绝望祷言\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
-	["SHAMAN"] = "", --Shaman
-	["MAGE"] = "/cast 寒冰护体\n", --Mage
+	["SHAMAN"] = "/castsequence reset=20 激流,闪电之盾,血肉铸造\n", --Shaman
+	["MAGE"] = "/castsequence 寒冰护体,寒冰宝珠\n", --Mage
 	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
 	["MONK"] = "/cast 碧愈疾风\n",--Monk
 	["DRUID"] = "",--Druid
@@ -145,21 +145,21 @@ line2:SetPoint("TOP",   0, -80)
 	-- SaveConfig() 
 -- end)
 
-local blck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
-blck.text = blck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-blck.text:SetPoint("LEFT", blck, "RIGHT", 0, 1)
-blck:SetPoint("LEFT", 5, 0)
-blck.text:SetText("部落模式")
-blck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
+-- local blck = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
+-- blck.text = blck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- blck.text:SetPoint("LEFT", blck, "RIGHT", 0, 1)
+-- blck:SetPoint("LEFT", 5, 0)
+-- blck.text:SetText("部落模式")
+-- blck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
 
 
 
 local itemwp = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemwp.text = itemwp:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemwp.text:SetPoint("LEFT", itemwp, "RIGHT", 0, 1)
-itemwp:SetPoint("LEFT", 110, 0)
+itemwp:SetPoint("LEFT", 5, 0)
 itemwp.text:SetText("快乐法杖")
 itemwp:SetScript("OnClick", function() 
 	SaveConfig() 
@@ -169,7 +169,7 @@ end)
 local itemtk = CreateFrame("CheckButton", nil, line2, "UICheckButtonTemplate")
 itemtk.text = itemtk:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 itemtk.text:SetPoint("LEFT", itemtk, "RIGHT", 0, 1)
-itemtk:SetPoint("LEFT", 215, 0)
+itemtk:SetPoint("LEFT", 110, 0)
 itemtk.text:SetText("快乐饰品")    
 itemtk:SetScript("OnClick", function() 
 	SaveConfig() 
@@ -181,23 +181,23 @@ local line3 = CreateFrame("Frame", nil, AutoBattleGround)
 line3:SetSize(330,40) 
 line3:SetPoint("TOP",   0, -120) 
 
-local boxck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
-boxck.text = boxck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-boxck.text:SetPoint("LEFT", boxck, "RIGHT", 0, 1)
-boxck:SetPoint("LEFT", 5, 0)
-boxck.text:SetText("快乐宝箱")
-boxck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
+-- local boxck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+-- boxck.text = boxck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- boxck.text:SetPoint("LEFT", boxck, "RIGHT", 0, 1)
+-- boxck:SetPoint("LEFT", 5, 0)
+-- boxck.text:SetText("快乐宝箱")
+-- boxck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
 
-local fishck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
-fishck.text = fishck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-fishck.text:SetPoint("LEFT", fishck, "RIGHT", 0, 1)
-fishck:SetPoint("LEFT", 110, 0)
-fishck.text:SetText("快乐开鱼")
-fishck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
+-- local fishck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+-- fishck.text = fishck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- fishck.text:SetPoint("LEFT", fishck, "RIGHT", 0, 1)
+-- fishck:SetPoint("LEFT", 110, 0)
+-- fishck.text:SetText("快乐开鱼")
+-- fishck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
 
 -- local classSPck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
 -- classSPck.text = classSPck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -208,14 +208,14 @@ end)
 	-- SaveConfig() 
 -- end)
 
-local neckck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
-neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
-neckck:SetPoint("LEFT", 215, 0)
-neckck.text:SetText("项链精华")
-neckck:SetScript("OnClick", function() 
-	SaveConfig() 
-end)
+-- local neckck = CreateFrame("CheckButton", nil, line3, "UICheckButtonTemplate")
+-- neckck.text = neckck:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- neckck.text:SetPoint("LEFT", neckck, "RIGHT", 0, 1)
+-- neckck:SetPoint("LEFT", 215, 0)
+-- neckck.text:SetText("项链精华")
+-- neckck:SetScript("OnClick", function() 
+	-- SaveConfig() 
+-- end)
 
 ---第四行
 
@@ -243,23 +243,23 @@ end
 
 --保存配置 重置宏
 function SaveConfig(normal)
-	local usewptxt = itemwp:GetChecked() and "\n/use 16\n" or ""
-	local usetktxt = itemtk:GetChecked() and "/use 13\n/use 14\n" or ""
-	local usebox = boxck:GetChecked() and "/use 黄金保险箱\n/use 钢铁保险箱\n" or ""
-	local usefish = fishck:GetChecked() and "/use 淡紫刺鳐\n/use 软泥鲭鱼\n/use 洋流鲷鱼\n/use 狂乱的利齿青鱼\n/use 赤尾泥鳅\n/use 海砂变色鱼\n/use 提拉加德鲈鱼\n/use 蝰鱼\n/use 无尽之海鲶鱼\n" or ""
-	local useneck = neckck:GetChecked() and "/cast 艾泽拉斯之心精华\n" or ""
+	local usewptxt = itemwp:GetChecked() and "/use 16\n" or ""
+	local usetktxt =itemtk:GetChecked() and "/use 13\n/use 14\n" or ""
+	--local usebox = boxck:GetChecked() and "/use 黄金保险箱\n/use 钢铁保险箱\n" or ""
+	--local usefish = fishck:GetChecked() and "/use 淡紫刺鳐\n/use 软泥鲭鱼\n/use 洋流鲷鱼\n/use 狂乱的利齿青鱼\n/use 赤尾泥鳅\n/use 海砂变色鱼\n/use 提拉加德鲈鱼\n/use 蝰鱼\n/use 无尽之海鲶鱼\n" or ""
+	--local useneck = neckck:GetChecked() and "/cast 艾泽拉斯之心精华\n" or ""
 	local useclassSpell =  classSpell[className]  
 	local runAction = "/run AutoBattleGround:Action()\n"
 	local enterMarco = readyCheck and "/click PVPReadyDialogEnterBattleButton\n" or ""
-	macrotxt= usewptxt..usetktxt..usebox..usefish..useneck..useclassSpell..runAction..enterMarco
+	macrotxt= useclassSpell..usewptxt..usetktxt..runAction..enterMarco
 	PVPBtn:SetAttribute("macrotext",macrotxt)
 	if normal==nil then
 		logText("ABG配置成功")
 	end
 	--ABG_CONFIG.modeck = modeck:GetChecked()
-	ABG_CONFIG.boxck = boxck:GetChecked()
-	ABG_CONFIG.fishck = fishck:GetChecked()
-	ABG_CONFIG.blck = blck:GetChecked()
+	--ABG_CONFIG.boxck = boxck:GetChecked()
+	--ABG_CONFIG.fishck = fishck:GetChecked()
+	--ABG_CONFIG.blck = blck:GetChecked()
 	
 	--print(macrotxt)
 end
@@ -352,13 +352,13 @@ function AutoBattleGround:Action()
 	
 	
  	local curHour = tonumber(date("%H")) 
-	local daynightmode = blck:GetChecked() and true or (curHour>22 or curHour<8)
-	local difftime_config= daynightmode and 400 or 180
-	local groupmembers_config = daynightmode and 6 or 5 
+	--local daynightmode = blck:GetChecked() and true or (curHour>22 or curHour<8)
+	local difftime_config= 400 
+	--local groupmembers_config = daynightmode and 6 or 5 
 	
-	local groupmembersMin_config = daynightmode and 8 or 5 
-	local groupmembersMax_config = daynightmode and 9 or 8 
-	local groupassistantnum_config = daynightmode and 9 or 7
+	local groupmembersMin_config = 4
+	local groupmembersMax_config = 9
+	local groupassistantnum_config = 9
 
  
 	 
@@ -419,6 +419,7 @@ function AutoBattleGround:Action()
 			end
 			if gaNum <= 2  then
 				blackList[groupLeaderName]=1
+				ABG_CONFIG.BLACKLIST = blackList
 				C_PartyInfo.LeaveParty()
 				logText("这个队伍活人队 果断换一个")
 				return
@@ -624,9 +625,9 @@ function AutoBattleGround:Init()
 	if not ABG_CONFIG then
 		ABG_CONFIG={}
 		--ABG_CONFIG.modeck=true
-		ABG_CONFIG.boxck =true
-		ABG_CONFIG.fishck = false
-		ABG_CONFIG.blck = false
+		--ABG_CONFIG.boxck =true
+		--ABG_CONFIG.fishck = false
+		--ABG_CONFIG.blck = false
 	end
 	
 	if (not ABG_DB[pr]) then
@@ -642,19 +643,23 @@ function AutoBattleGround:Init()
 	if ABGCharacterDB then
 		ABG_DB[pr] = ABGCharacterDB
 	end
-	 
+	 if not ABG_CONFIG.BLACKLIST then
+		ABG_CONFIG.BLACKLIST={}
+	else
+		blackList = ABG_CONFIG.BLACKLIST
+	end
 	if  not GetMacroInfo("快乐评级") then
 		CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
 		logText("初始化评级宏")
 	end
 	--modeck:SetChecked(ABG_CONFIG.modeck)
-	boxck:SetChecked(ABG_CONFIG.boxck)
-	fishck:SetChecked(ABG_CONFIG.fishck)
-	blck:SetChecked(ABG_CONFIG.blck)
+	--boxck:SetChecked(ABG_CONFIG.boxck)
+	--fishck:SetChecked(ABG_CONFIG.fishck)
+	--blck:SetChecked(ABG_CONFIG.blck)
 	
-	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
-	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
-	neckck:SetChecked(classSpell[className]=="")
+	--itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
+	--itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+	--neckck:SetChecked(classSpell[className]=="")
 	--classSPck:SetChecked(classSpell[className]~="")
 	SaveConfig()
 	AutoBattleGround_CreateMinimapButton()
@@ -695,10 +700,10 @@ abgPVPmatch:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
 		local curHour = tonumber(date("%H")) 
-		local daynightmode = blck:GetChecked() and true or (curHour>23 or curHour<7)
-		local difftime_config= daynightmode and 300 or 120
-		local groupmembersMin_config = daynightmode and 9 or 6 
-		local groupmembersMax_config = daynightmode and 9 or 8 
+		--local daynightmode = blck:GetChecked() and true or (curHour>23 or curHour<7)
+		--local difftime_config= 400 
+		local groupmembersMin_config = 4 
+		local groupmembersMax_config = 9
 		--local groupassistantnum_config = daynightmode and 9 or 7
 		
 		if event == "PVP_MATCH_COMPLETE" then
@@ -749,7 +754,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					--local autoAccept = result.autoAccept
 					local age = result.age
 					--local questID = result.questID
-					if numBNetFriends==0 and numGuildMates==0 and age<600 and requiredItemLevel>=0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName and blackList[leaderName]==nil  then
+					if numBNetFriends==0 and numGuildMates==0 and age<300 and requiredItemLevel>=0 and requiredItemLevel<50 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName and blackList[leaderName]==nil  then
 						table.insert(temp,result)
 					end 
 					

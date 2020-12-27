@@ -1,0 +1,21 @@
+﻿## Interface: 90002
+## Title: BattlegroundTargets  |cff0055FF战场集火插件|r
+## Version: @project-version@
+## Notes: BattlegroundTargets is modified by Morty for Shadow Land version.
+## DefaultState: Enabled
+## SavedVariables: BattlegroundTargets_Options
+
+BattlegroundTargets-localized-carrier.lua
+BattlegroundTargets-localized-racenames.lua
+BattlegroundTargets-localized-talents.lua
+BattlegroundTargets-localized-transliteration.lua
+
+BattlegroundTargets-localization-enUS.lua
+BattlegroundTargets-localization-zhCN.lua
+BattlegroundTargets-localization-zhTW.lua
+
+utf8.lua
+
+BattlegroundTargets_templates.lua
+BattlegroundTargets.lua
+BattlegroundTargets_welcome.lua
