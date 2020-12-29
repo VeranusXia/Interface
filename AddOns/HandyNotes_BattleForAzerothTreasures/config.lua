@@ -8,16 +8,20 @@ ns.defaults = {
         show_junk = false,
         show_npcs = true,
         show_treasure = true,
+        show_routes = true,
         upcoming = true,
         found = false,
-        repeatable = true,
+        collectablefound = true,
+        achievedfound = false,
         icon_scale = 1.0,
         icon_alpha = 1.0,
         icon_item = false,
+        tooltip_pointanchor = false,
         tooltip_item = true,
         tooltip_questid = false,
         zonesHidden = {},
         achievementsHidden = {},
+        worldmapoverlay = true,
     },
     char = {
         hidden = {
@@ -32,7 +36,7 @@ ns.options = {
     get = function(info) return ns.db[info[#info]] end,
     set = function(info, v)
         ns.db[info[#info]] = v
-        ns.HL:SendMessage("HandyNotes_NotifyUpdate", myname:gsub("HandyNotes_", ""))
+        ns.HL:Refresh()
     end,
     args = {
         icon = {
@@ -69,7 +73,7 @@ ns.options = {
                 show_on_minimap = {
                     type = "toggle",
                     name = "Minimap",
-                    desc = "Show icons on the minimap",
+                    desc = "Show all icons on the minimap",
                     order = 50,
                 },
                 default_icon = {
@@ -81,7 +85,17 @@ ns.options = {
                         Garr_TreasureIcon = CreateAtlasMarkup("Garr_TreasureIcon", 20, 20) .. " Shiny chest",
                     },
                     order = 60,
-                }
+                },
+                worldmapoverlay = {
+                    type = "toggle",
+                    name = "Add button to world map",
+                    desc = "Put a button on the world map for quick access to these options",
+                    set = function(info, v)
+                        ns.db[info[#info]] = v
+                        WorldMapFrame:RefreshOverlayFrames()
+                    end,
+                    order = 70,
+                },
             },
         },
         display = {
@@ -102,11 +116,29 @@ ns.options = {
                     desc = "Show the full tooltips for items",
                     order = 10,
                 },
+                tooltip_pointanchor = {
+                    type = "toggle",
+                    name = "Anchor tooltips to points",
+                    desc = "Whether to anchor the tooltips to the individual points or to the map",
+                    order = 15,
+                },
                 found = {
                     type = "toggle",
                     name = "Show found",
                     desc = "Show waypoints for items you've already found?",
                     order = 20,
+                },
+                achievedfound = {
+                    type = "toggle",
+                    name = "Count achievement-complete as found",
+                    desc = "For nodes which are repeatable on a daily quest *and* tied to an achievement, only consider the achievement",
+                    order = 21,
+                },
+                collectablefound = {
+                    type = "toggle",
+                    name = "Count collectables as found",
+                    desc = "For account-level items like mounts, pets, and toys, count them being known as this being found",
+                    order = 22,
                 },
                 upcoming = {
                     type = "toggle",
@@ -126,18 +158,19 @@ ns.options = {
                     desc = "Show treasure that can be looted",
                     order = 30,
                 },
+                show_routes = {
+                    type = "toggle",
+                    name = "Show routes",
+                    desc = "Show relevant routes between points ",
+                    disabled = function() return not ns.RouteWorldMapDataProvider end,
+                    order = 31,
+                },
                 show_junk = {
                     type = "toggle",
                     name = "Show non-achievement",
                     desc = "Show items which don't count for any achievement",
                     order = 40,
                 },
-                -- repeatable = {
-                --     type = "toggle",
-                --     name = "Show repeatable",
-                --     desc = "Show items which are repeatable? This generally means ones which have a daily tracking quest attached",
-                --     order = 40,
-                -- },
                 tooltip_questid = {
                     type = "toggle",
                     name = "Show quest ids",
@@ -247,6 +280,48 @@ local allCriteriaComplete = function(achievement, criteria)
         return true
     end
 end
+local function PlayerHasMount(mountid)
+    return (select(11, C_MountJournal.GetMountInfoByID(mountid)))
+end
+local function PlayerHasPet(petid)
+    return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
+end
+local allLootKnown = function(loot)
+    -- if the point has knowable loot and it's all known, return true
+    -- if the point has knowable loot and it's not all known, return false
+    -- otherwise return nil
+    if not loot then return false end
+    local knowable
+    for _, item in ipairs(loot) do
+        if type(item) == "table" then
+            knowable = knowable or item.toy or item.mount or item.pet
+            if item.toy and not PlayerHasToy(item[1]) then
+                return false
+            end
+            if item.mount and not PlayerHasMount(item.mount) then
+                return false
+            end
+            if item.pet and not PlayerHasPet(item.pet) then
+                return false
+            end
+        end
+    end
+    -- TODO: could arguably do transmog here, too. Since we're mostly
+    -- considering soulbound things, the restrictions on seeing appearances
+    -- known cross-armor-type wouldn't really matter...
+    return knowable
+end
+local function anyItemInBags(inbags)
+    if type(inbags) == "table" then
+        for _, item in ipairs(inbags) do
+            if GetItemCount(item, true) > 0 then
+                return true
+            end
+        end
+    else
+        return GetItemCount(inbags, true) > 0
+    end
+end
 
 local zoneHidden
 zoneHidden = function(uiMapID)
@@ -295,8 +370,11 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if point.faction and point.faction ~= player_faction then
         return false
     end
-    if (not ns.db.found) then
-        if point.quest then
+    if not ns.db.found and (not point.always) then
+        if ns.db.collectablefound and allLootKnown(point.loot) then
+            return false
+        end
+        if point.quest and (not point.achievement or not ns.db.achievedfound) then
             if allQuestsComplete(point.quest) then
                 return false
             end
@@ -312,13 +390,17 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
         if point.follower and C_Garrison.IsFollowerCollected(point.follower) then
             return false
         end
+        -- todo: clean this one up once all the data is updated:
         if point.toy and point.item and PlayerHasToy(point.item) then
             return false
         end
+        if point.inbag and anyItemInBags(point.inbag) then
+            return false
+        end
+        if point.onquest and C_QuestLog.IsOnQuest(point.onquest) then
+            return false
+        end
     end
-    -- if (not ns.db.repeatable) and point.repeatable then
-    --     return false
-    -- end
     if not point.follower then
         if point.npc then
             if not ns.db.show_npcs then
@@ -337,7 +419,13 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if point.requires_no_buff and GetPlayerAuraBySpellID(point.requires_no_buff) then
         return false
     end
-    if not ns.db.upcoming then
+    if point.requires_item and GetItemCount(point.requires_item, true) == 0 then
+        return false
+    end
+    if point.covenant and point.covenant ~= C_Covenants.GetActiveCovenantID() then
+        return false
+    end
+    if not ns.db.upcoming or point.upcoming == false then
         if point.level and point.level > UnitLevel("player") then
             return false
         end
@@ -379,7 +467,7 @@ function ns.SetupMapOverlay()
         local uiMapID = self:GetParent():GetMapID()
         local info = C_Map.GetMapInfo(uiMapID)
         local parentMapID = info and info.parentMapID or 0
-        if ns.points[uiMapID] or ns.points[parentMapID] then
+        if ns.db.worldmapoverlay and (ns.points[uiMapID] or ns.points[parentMapID]) then
             self:Show()
         else
             self:Hide()
@@ -393,7 +481,6 @@ function ns.SetupMapOverlay()
         local info = UIDropDownMenu_CreateInfo()
         level = level or 1
         if level == 1 then
-
             info.isTitle = true
             info.notCheckable = true
             info.text = "HandyNotes - " .. myname:gsub("HandyNotes_", "")
@@ -420,7 +507,7 @@ function ns.SetupMapOverlay()
                 else
                     db[value] = checked
                 end
-                ns.HL:SendMessage("HandyNotes_NotifyUpdate", myname:gsub("HandyNotes_", ""))
+                ns.HL:Refresh()
             end
 
             local sorted = {}
@@ -441,6 +528,11 @@ function ns.SetupMapOverlay()
                 elseif option.type == "execute" then
                     info.notCheckable = true
                     info.checked = nil
+                end
+                if option.disabled then
+                    info.disabled = option.disabled()
+                else
+                    info.disabled = nil
                 end
                 UIDropDownMenu_AddButton(info, level)
             end
@@ -490,7 +582,7 @@ function ns.SetupMapOverlay()
                 local checked = button.checked
                 local value = button.value
                 ns.db[section][value] = not checked
-                ns.HL:SendMessage("HandyNotes_NotifyUpdate", myname:gsub("HandyNotes_", ""))
+                ns.HL:Refresh()
             end
             if parent == "achievementsHidden" then
                 local values = {}
