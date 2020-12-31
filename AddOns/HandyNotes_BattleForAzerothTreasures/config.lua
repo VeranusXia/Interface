@@ -245,83 +245,91 @@ ns.options = {
     },
 }
 
-local player_name = UnitName("player")
-local allQuestsComplete = function(quests)
-    if type(quests) == 'table' then
-        -- if it's a table, only count as complete if all quests are complete
-        for _, quest in ipairs(quests) do
-            if not C_QuestLog.IsQuestFlaggedCompleted(quest) then
-                return false
-            end
+local function doTestAll(test, input, ...)
+    for _, value in ipairs(input) do
+        if not test(value, ...) then
+            return false
         end
-        return true
-    elseif C_QuestLog.IsQuestFlaggedCompleted(quests) then
-        return true
-    end
-end
-ns.allQuestsComplete = allQuestsComplete
-local criteriaComplete = function(achievement, criteria)
-    local _, _, completed, _, _, completedBy = GetAchievementCriteriaInfoByID(achievement, criteria)
-    if not (completed and (not completedBy or completedBy == player_name)) then
-        return false
     end
     return true
 end
-local allCriteriaComplete = function(achievement, criteria)
-    if type(criteria) == "table" then
-        -- if it's a table, only count as complete if all criteria are complete
-        for _, criteriaa in ipairs(criteria) do
-            if not criteriaComplete(achievement, criteriaa) then
-                return false
-            end
+local function doTestAny(test, input, ...)
+    for _, value in ipairs(input) do
+        if test(value, ...) then
+            return true
         end
-        return true
-    elseif criteriaComplete(achievement, criteria) then
-        return true
+    end
+    return false
+end
+local function doTest(test, input, ...)
+    if type(input) == "table" then
+        if input.any then
+            return doTestAny(test, input, ...)
+        end
+        return doTestAll(test, input, ...)
+    else
+        return test(input, ...)
     end
 end
+local function testMaker(test, override)
+    return function(...)
+        return (override or doTest)(test, ...)
+    end
+end
+
+local itemInBags = testMaker(function(item) return GetItemCount(item, true) > 0 end)
+local allQuestsComplete = testMaker(function(quest) return C_QuestLog.IsQuestFlaggedCompleted(quest) end)
+ns.allQuestsComplete = allQuestsComplete
+
+local allCriteriaComplete = testMaker(function(criteria, achievement)
+    local _, _, completed, _, _, completedBy = (criteria < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(achievement, criteria)
+    if not (completed and (not completedBy or completedBy == ns.playerName)) then
+        return false
+    end
+    return true
+end)
+
 local function PlayerHasMount(mountid)
     return (select(11, C_MountJournal.GetMountInfoByID(mountid)))
 end
 local function PlayerHasPet(petid)
     return (C_PetJournal.GetNumCollectedInfo(petid) > 0)
 end
-local allLootKnown = function(loot)
-    -- if the point has knowable loot and it's all known, return true
-    -- if the point has knowable loot and it's not all known, return false
-    -- otherwise return nil
-    if not loot then return false end
-    local knowable
-    for _, item in ipairs(loot) do
-        if type(item) == "table" then
-            knowable = knowable or item.toy or item.mount or item.pet
-            if item.toy and not PlayerHasToy(item[1]) then
-                return false
-            end
-            if item.mount and not PlayerHasMount(item.mount) then
-                return false
-            end
-            if item.pet and not PlayerHasPet(item.pet) then
-                return false
-            end
-        end
+ns.itemRestricted = function(item)
+    if type(item) ~= "table" then return false end
+    if item.covenant and item.covenant ~= C_Covenants.GetActiveCovenantID() then
+        return true
     end
-    -- TODO: could arguably do transmog here, too. Since we're mostly
-    -- considering soulbound things, the restrictions on seeing appearances
-    -- known cross-armor-type wouldn't really matter...
-    return knowable
+    if item.class and ns.playerClass ~= item.class then
+        return true
+    end
+    return false
 end
-local function anyItemInBags(inbags)
-    if type(inbags) == "table" then
-        for _, item in ipairs(inbags) do
-            if GetItemCount(item, true) > 0 then
-                return true
-            end
-        end
-    else
-        return GetItemCount(inbags, true) > 0
+ns.itemIsKnowable = function(item)
+    return type(item) == "table" and (item.toy or item.mount or item.pet or item.quest) and not ns.itemRestricted(item)
+end
+ns.itemIsKnown = function(item)
+    -- returns true/false/nil for yes/no/not-knowable
+    if type(item) == "table" then
+        -- TODO: could arguably do transmog here, too. Since we're mostly
+        -- considering soulbound things, the restrictions on seeing appearances
+        -- known cross-armor-type wouldn't really matter...
+        if item.toy then return PlayerHasToy(item[1]) end
+        if item.mount then return PlayerHasMount(item.mount) end
+        if item.pet then return PlayerHasPet(item.pet) end
+        if item.quest then return C_QuestLog.IsQuestFlaggedCompleted(item.quest) or C_QuestLog.IsOnQuest(item.quest) end
     end
 end
+local hasKnowableLoot = testMaker(ns.itemIsKnowable, doTestAny)
+local allLootKnown = testMaker(function(item)
+    -- This returns true if all loot is known-or-unknowable
+    -- If the "no knowable loot" case matters this should be gated behind hasKnowableLoot
+    local known = ns.itemIsKnown(item)
+    if known == nil then
+        return true
+    end
+    return known
+end)
 
 local zoneHidden
 zoneHidden = function(uiMapID)
@@ -339,7 +347,37 @@ local achievementHidden = function(achievement)
     return ns.db.achievementsHidden[achievement]
 end
 
-local player_faction = UnitFactionGroup("player")
+local checkPois
+do
+    local poi_expirations = {}
+    local poi_zone_expirations = {}
+    local pois_byzone = {}
+    local function refreshPois(zone)
+        local now = time()
+        if not poi_zone_expirations[zone] or now > poi_zone_expirations[zone] then
+            pois_byzone[zone] = wipe(pois_byzone[zone] or {})
+            for _, poi in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(zone)) do
+                pois_byzone[zone][poi] = true
+                poi_expirations[poi] = now + (C_AreaPoiInfo.GetAreaPOISecondsLeft(poi) or 60)
+            end
+            poi_zone_expirations[zone] = now + 1
+        end
+    end
+    function checkPois(pois)
+        for _, data in ipairs(pois) do
+            local zone, poi = unpack(data)
+            local now = time()
+            if now > (poi_expirations[poi] or 0) then
+                refreshPois(zone)
+                poi_expirations[poi] = poi_expirations[poi] or (now + 60)
+            end
+            if pois_byzone[zone][poi] then
+                return true
+            end
+        end
+    end
+end
+
 ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if isMinimap and not ns.db.show_on_minimap and not point.minimap then
         return false
@@ -361,17 +399,17 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if point.art and point.art ~= C_Map.GetMapArtID(currentZone) then
         return false
     end
-    if ns.map_questids[currentZone] and not (point.junk or point.npc or point.follower) and C_QuestLog.IsQuestFlaggedCompleted(ns.map_questids[currentZone]) then
+    if point.poi and not checkPois(point.poi) then
         return false
     end
     if point.junk and not ns.db.show_junk then
         return false
     end
-    if point.faction and point.faction ~= player_faction then
+    if point.faction and point.faction ~= ns.playerFaction then
         return false
     end
     if not ns.db.found and (not point.always) then
-        if ns.db.collectablefound and allLootKnown(point.loot) then
+        if ns.db.collectablefound and point.loot and hasKnowableLoot(point.loot) and allLootKnown(point.loot) then
             return false
         end
         if point.quest and (not point.achievement or not ns.db.achievedfound) then
@@ -383,7 +421,7 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
             if completedByMe then
                 return false
             end
-            if point.criteria and allCriteriaComplete(point.achievement, point.criteria) then
+            if point.criteria and allCriteriaComplete(point.criteria, point.achievement) then
                 return false
             end
         end
@@ -394,10 +432,16 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
         if point.toy and point.item and PlayerHasToy(point.item) then
             return false
         end
-        if point.inbag and anyItemInBags(point.inbag) then
+        if point.inbag and itemInBags(point.inbag) then
             return false
         end
         if point.onquest and C_QuestLog.IsOnQuest(point.onquest) then
+            return false
+        end
+        if point.hide_quest and C_QuestLog.IsQuestFlaggedCompleted(point.hide_quest) then
+            -- This is distinct from point.quest as it's supposed to be for
+            -- other trackers that make the point not _complete_ but still
+            -- hidden (Draenor treasure maps, so far):
             return false
         end
     end
@@ -419,7 +463,10 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
     if point.requires_no_buff and GetPlayerAuraBySpellID(point.requires_no_buff) then
         return false
     end
-    if point.requires_item and GetItemCount(point.requires_item, true) == 0 then
+    if point.requires_item and not itemInBags(point.requires_item) then
+        return false
+    end
+    if point.requires_worldquest and not C_TaskQuest.IsActive(point.requires_worldquest) then
         return false
     end
     if point.covenant and point.covenant ~= C_Covenants.GetActiveCovenantID() then
@@ -430,6 +477,9 @@ ns.should_show_point = function(coord, point, currentZone, isMinimap)
             return false
         end
         if point.active and point.active.quest and not C_QuestLog.IsQuestFlaggedCompleted(point.active.quest) then
+            return false
+        end
+        if point.active and point.active.notquest and C_QuestLog.IsQuestFlaggedCompleted(point.active.notquest) then
             return false
         end
         if point.hide_before and not allQuestsComplete(point.hide_before) then

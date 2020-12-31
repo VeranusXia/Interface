@@ -12,9 +12,6 @@ ns.HL = HL
 ns.map_spellids = {
     -- zone = spellid
 }
-ns.map_questids = {
-    -- zone = questid
-}
 
 ns.currencies = {
     ANIMA = {
@@ -96,6 +93,8 @@ local playerClassLocal, playerClass = UnitClass("player")
 ns.playerClass = playerClass
 ns.playerClassLocal = playerClassLocal
 ns.playerClassColor = RAID_CLASS_COLORS[playerClass]
+ns.playerName = UnitName("player")
+ns.playerFaction = UnitFactionGroup("player")
 
 ---------------------------------------------------------
 -- All the utility code
@@ -142,10 +141,11 @@ local function render_string(s)
             end
         elseif variant == "quest" then
             local name = C_QuestLog.GetTitleForQuestID(id)
-            if name and name ~= "" then
-                local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
-                return CreateAtlasMarkup("questnormal") .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
+            if not (name and name ~= "") then
+                name = tostring(id)
             end
+            local completed = C_QuestLog.IsQuestFlaggedCompleted(id)
+            return CreateAtlasMarkup("questnormal") .. (completed and completeColor or incompleteColor):WrapTextInColorCode(name)
         elseif variant == "questid" then
             return CreateAtlasMarkup("questnormal") .. (C_QuestLog.IsQuestFlaggedCompleted(id) and completeColor or incompleteColor):WrapTextInColorCode(id)
         elseif variant == "npc" then
@@ -181,7 +181,6 @@ end
 local function cache_loot(loot)
     if not loot then return end
     for _, item in ipairs(loot) do
-
         C_Item.RequestLoadItemDataByID(ns.lootitem(item))
     end
 end
@@ -234,7 +233,7 @@ local function work_out_label(point)
     end
     if point.achievement then
         if point.criteria and type(point.criteria) ~= "table" then
-            local criteria = GetAchievementCriteriaInfoByID(point.achievement, point.criteria)
+            local criteria = (point.criteria < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(point.achievement, point.criteria)
             if criteria then
                 return criteria
             end
@@ -329,13 +328,13 @@ local function work_out_texture(point)
     end
     if point.currency then
         if not currency_texture then
-            currency_texture = atlas_texture("Auctioneer", 1.5)
+            currency_texture = atlas_texture("Auctioneer", 1.3)
         end
         return currency_texture
     end
     if point.junk then
         if not junk_texture then
-            junk_texture = atlas_texture("VignetteLoot", 1.5)
+            junk_texture = atlas_texture("VignetteLoot", 1)
         end
         return junk_texture
     end
@@ -371,6 +370,8 @@ local get_point_info = function(point, isMinimap)
         local label = work_out_label(point)
         local icon = work_out_texture(point)
         if point.active and point.active.quest and not C_QuestLog.IsQuestFlaggedCompleted(point.active.quest) then
+            icon = get_inactive_texture_variant(icon)
+        elseif point.active and point.active.notquest and C_QuestLog.IsQuestFlaggedCompleted(point.active.notquest) then
             icon = get_inactive_texture_variant(icon)
         elseif point.level and UnitLevel("player") < point.level then
             icon = get_upcoming_texture_variant(icon)
@@ -428,14 +429,14 @@ local function handle_tooltip(tooltip, point)
             if point.criteria then
                 if type(point.criteria) == "table" then
                     for _, criteria in ipairs(point.criteria) do
-                        local criteria, _, complete = GetAchievementCriteriaInfoByID(point.achievement, criteria)
+                        local criteria, _, complete = (criteria < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(point.achievement, criteria)
                         tooltip:AddDoubleLine(" ", criteria,
                             nil, nil, nil,
                             complete and 0 or 1, complete and 1 or 0, 0
                         )
                     end
                 else
-                    local criteria, _, complete = GetAchievementCriteriaInfoByID(point.achievement, point.criteria)
+                    local criteria, _, complete = (point.criteria < 40 and GetAchievementCriteriaInfo or GetAchievementCriteriaInfoByID)(point.achievement, point.criteria)
                     tooltip:AddDoubleLine(" ", criteria,
                         nil, nil, nil,
                         complete and 0 or 1, complete and 1 or 0, 0
@@ -475,6 +476,10 @@ local function handle_tooltip(tooltip, point)
                         end
                         if item.class then
                             link = TEXT_MODE_A_STRING_VALUE_TYPE:format(link, RAID_CLASS_COLORS[item.class]:WrapTextInColorCode(LOCALIZED_CLASS_NAMES_FEMALE[item.class]))
+                        end
+                        local known = ns.itemIsKnown(item)
+                        if known ~= nil and (known == true or not ns.itemRestricted(item)) then
+                            link = link .. CreateAtlasMarkup(known and "common-icon-checkmark" or "common-icon-redx")
                         end
                     end
                     tooltip:AddDoubleLine(ENCOUNTER_JOURNAL_ITEM, quick_texture_markup(icon) .. link)

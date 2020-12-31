@@ -383,10 +383,6 @@ L["Elite"] = "Elite"
 --[[Translation missing --]]
 L["Emote"] = "Emote"
 --[[Translation missing --]]
-L["Emphasized"] = "Emphasized"
---[[Translation missing --]]
-L["Emphasized option checked in BigWigs's spell options"] = "Emphasized option checked in BigWigs's spell options"
---[[Translation missing --]]
 L["Empty"] = "Empty"
 --[[Translation missing --]]
 L["Enchant Applied"] = "Enchant Applied"

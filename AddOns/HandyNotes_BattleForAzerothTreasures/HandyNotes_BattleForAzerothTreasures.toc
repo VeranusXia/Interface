@@ -2,7 +2,7 @@
 ## Title: HandyNotes: Battle for Azeroth Treasures
 ## Notes: Where are the hidden treasures in Battle For Azeroth?
 ## Author: Kemayo
-## Version: v15
+## Version: v16
 ## DefaultState: enabled
 ## X-Category: Map
 ## X-eMail: kemayo @ gmail DOT com
@@ -25,5 +25,11 @@ zones\Zuldazar.lua
 zones\Nazmir.lua
 zones\Voldun.lua
 
+zones\Darkshore.lua
+zones\ArathiHighlands.lua
+
 zones\Mechagon.lua
 zones\Nazjatar.lua
+
+zones\ValeOfEternalBlossoms.lua
+zones\Uldum.lua

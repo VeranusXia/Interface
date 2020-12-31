@@ -398,10 +398,6 @@ L["Edge of Madness"] = "Edge of Madness"
 L["Elide"] = "Elide"
 L["Elite"] = "Elite"
 L["Emote"] = "Emote"
---[[Translation missing --]]
-L["Emphasized"] = "Emphasized"
---[[Translation missing --]]
-L["Emphasized option checked in BigWigs's spell options"] = "Emphasized option checked in BigWigs's spell options"
 L["Empty"] = "Leer"
 --[[Translation missing --]]
 L["Enchant Applied"] = "Enchant Applied"

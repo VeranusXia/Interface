@@ -29,6 +29,7 @@ T.KnownSpells = {
 	[21]={type="aura", target="all-allies", healATK=15, duration=5, noFirstTick=true},
 	[45]={type="nuke", target=1, damageATK=75, healATK=25, healTarget="self"},
 	[6]={type="nuke", target="enemy-back", damageATK=50},
+	[56]={type="nuke", target="enemy-back", damageATK=55},
 	[49]={type="aura", target="enemy-back", modDamageTaken=33, duration=4},
 	[54]={
 		{type="nuke", target=0, damageATK=45},
