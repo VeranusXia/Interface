@@ -363,8 +363,6 @@ L["Disease"] = "Krankheit"
 L["Dispel"] = "Bannen (DISPEL)"
 L["Dispel Failed"] = "Bannen fehlgeschlagen (DISPEL_FAILED)"
 L["Display"] = "Anzeige"
---[[Translation missing --]]
-L["Displays the icon for the Legendary Power that matches this bonus id."] = "Displays the icon for the Legendary Power that matches this bonus id."
 L["Distance"] = "Distanz"
 L["Dodge"] = "Ausweichen (DODGE)"
 L["Dodge (%)"] = "Ausweichen (%)"
@@ -466,6 +464,10 @@ L["Fallback Icon"] = "Fallback Icon"
 L["False"] = "Nicht Zutrifft"
 --[[Translation missing --]]
 L["Fankriss the Unyielding"] = "Fankriss the Unyielding"
+--[[Translation missing --]]
+L["Fetch Legendary Power"] = "Fetch Legendary Power"
+--[[Translation missing --]]
+L["Fetches the name and icon of the Legendary Power that matches this bonus id."] = "Fetches the name and icon of the Legendary Power that matches this bonus id."
 --[[Translation missing --]]
 L["Filter messages with format <message>"] = "Filter messages with format <message>"
 L["Fire Resistance"] = "Feuerwiderstand"
@@ -630,6 +632,10 @@ L["Instructor Razuvious"] = "Instructor Razuvious"
 L["Insufficient Resources"] = "Insufficient Resources"
 L["Intellect"] = "Intelligenz"
 L["Interrupt"] = "Unterbrechen (INTERRUPT)"
+--[[Translation missing --]]
+L["Interrupt School"] = "Interrupt School"
+--[[Translation missing --]]
+L["Interrupted School Text"] = "Interrupted School Text"
 L["Interruptible"] = "Unterbrechbar"
 L["Inverse"] = "Invertieren"
 --[[Translation missing --]]
@@ -1153,6 +1159,8 @@ L["Spacing"] = "Abstand"
 L["Spark"] = "Spark"
 --[[Translation missing --]]
 L["Spec Role"] = "Spec Role"
+--[[Translation missing --]]
+L["Specific Type"] = "Specific Type"
 L["Specific Unit"] = "Konkrete Einheit"
 L["Spell"] = "Zauber"
 L["Spell (Building)"] = "Zauber, Gebäude (SPELL_BUILDING)"
@@ -1362,8 +1370,6 @@ L["Usage:"] = "Benutzung:"
 --[[Translation missing --]]
 L["Use /wa minimap to show the minimap icon again."] = "Use /wa minimap to show the minimap icon again."
 L["Use Custom Color"] = "Benutzerdefinierte Farbe benutzen"
---[[Translation missing --]]
-L["Use Legendary Power Icon"] = "Use Legendary Power Icon"
 --[[Translation missing --]]
 L["Vaelastrasz the Corrupt"] = "Vaelastrasz the Corrupt"
 L["Value"] = "Wert"

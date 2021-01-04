@@ -376,8 +376,6 @@ L["Dispel Failed"] = "Disipar - Fallido"
 --[[Translation missing --]]
 L["Display"] = "Display"
 --[[Translation missing --]]
-L["Displays the icon for the Legendary Power that matches this bonus id."] = "Displays the icon for the Legendary Power that matches this bonus id."
---[[Translation missing --]]
 L["Distance"] = "Distance"
 L["Dodge"] = "Esquivar"
 --[[Translation missing --]]
@@ -488,6 +486,10 @@ L["Fallback Icon"] = "Fallback Icon"
 L["False"] = "Falso"
 --[[Translation missing --]]
 L["Fankriss the Unyielding"] = "Fankriss the Unyielding"
+--[[Translation missing --]]
+L["Fetch Legendary Power"] = "Fetch Legendary Power"
+--[[Translation missing --]]
+L["Fetches the name and icon of the Legendary Power that matches this bonus id."] = "Fetches the name and icon of the Legendary Power that matches this bonus id."
 --[[Translation missing --]]
 L["Filter messages with format <message>"] = "Filter messages with format <message>"
 --[[Translation missing --]]
@@ -675,6 +677,10 @@ L["Insufficient Resources"] = "Insufficient Resources"
 --[[Translation missing --]]
 L["Intellect"] = "Intellect"
 L["Interrupt"] = "Interrumpir"
+--[[Translation missing --]]
+L["Interrupt School"] = "Interrupt School"
+--[[Translation missing --]]
+L["Interrupted School Text"] = "Interrupted School Text"
 L["Interruptible"] = "Se puede interrumpir"
 L["Inverse"] = "Invertido"
 --[[Translation missing --]]
@@ -1229,6 +1235,8 @@ L["Spacing"] = "Espaciar"
 L["Spark"] = "Spark"
 --[[Translation missing --]]
 L["Spec Role"] = "Spec Role"
+--[[Translation missing --]]
+L["Specific Type"] = "Specific Type"
 L["Specific Unit"] = "Unidad específica"
 L["Spell"] = "Hechizo"
 L["Spell (Building)"] = "Hechizo (en curso)"
@@ -1460,8 +1468,6 @@ L["Usage:"] = "Usage:"
 L["Use /wa minimap to show the minimap icon again."] = "Use /wa minimap to show the minimap icon again."
 --[[Translation missing --]]
 L["Use Custom Color"] = "Use Custom Color"
---[[Translation missing --]]
-L["Use Legendary Power Icon"] = "Use Legendary Power Icon"
 --[[Translation missing --]]
 L["Vaelastrasz the Corrupt"] = "Vaelastrasz the Corrupt"
 --[[Translation missing --]]
