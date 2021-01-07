@@ -4,14 +4,14 @@ local step = 0;
 local oldtime = nil
 local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
-	["PALADIN"] = "/targetfriendplayer\n/cast 殉道者之光\n",--Paladin
+	["PALADIN"] = "/targetfriendplayer\n/cast [target=player]神圣震击\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
 	["ROGUE"] = "/cast 猩红之瓶\n", --Rogue
 	["PRIEST"] = "/cast 绝望祷言\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n", --DeathKnight
 	["SHAMAN"] = "/castsequence reset=20 激流,闪电之盾,血肉铸造\n", --Shaman
 	["MAGE"] = "/castsequence 寒冰护体,寒冰宝珠\n", --Mage
-	["WARLOCK"] = "/castsequence reset=15 黑暗契约,魔甲术,制造治疗石\n/use 治疗石\n",--Warlock
+	["WARLOCK"] = "/castsequence 黑暗契约,制造治疗石\n/use 治疗石\n",--Warlock
 	["MONK"] = "/cast 碧愈疾风\n",--Monk
 	["DRUID"] = "",--Druid
 	["DEMONHUNTER"] = "",--Demon Hunter
