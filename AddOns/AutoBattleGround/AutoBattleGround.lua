@@ -4,7 +4,7 @@ local step = 0;
 local oldtime = nil
 local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
-	["PALADIN"] = "/targetfriendplayer\n/cast [target=player]神圣震击\n",--Paladin
+	["PALADIN"] = "/targetfriendplayer\n/castsequence 殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
 	["ROGUE"] = "/cast 猩红之瓶\n", --Rogue
 	["PRIEST"] = "/cast 绝望祷言\n",--Priest
@@ -417,7 +417,7 @@ function AutoBattleGround:Action()
 				logText("这个队伍A太多了 果断换一个")
 				return
 			end
-			if gaNum <= 2  then
+			if gaNum <= 4  then
 				blackList[groupLeaderName]=1
 				ABG_CONFIG.BLACKLIST = blackList
 				C_PartyInfo.LeaveParty()
@@ -439,10 +439,10 @@ function AutoBattleGround:Action()
 			return
 		end
 		if  step==1 and isSearching==false then
+			isSearching=true
 			logText("搜索队伍中...")
 			--C_LFGList.Search(9, 0, 19)
 			C_LFGList.Search(9, 0, 8)
-			isSearching=true
 	
 		 
 		end
@@ -730,7 +730,6 @@ function abgPVPmatch:OnEvent(event, arg1)
 		end
 		if event=="LFG_LIST_SEARCH_RESULTS_RECEIVED" and isSearching then
 			StaticPopupSpecial_Hide(LFGListApplicationDialog);
-			isSearching=false
 		
 			numResults, resultIDTable = C_LFGList.GetSearchResults();
 			local temp = {}
@@ -769,6 +768,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					 
 					--LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
 				end 
+					isSearching=false
 				  
 			end
 		end

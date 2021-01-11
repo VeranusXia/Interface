@@ -10001,14 +10001,17 @@ function Hekili:TogglePause( ... )
         end
 
         self.Pause = true
-        self:SaveDebugSnapshot()
-        self:Print( "快照保存." )
-        self.ActiveDebug = false
-
-        if not warnOnce then
-            Hekili:Print( "快照可以通过/hekili查看(直到你重新加载你的用户界面)." )
-            warnOnce = true
+        
+        if self:SaveDebugSnapshot() then
+            if not warnOnce then
+                self:Print( "快照可以通过/hekili查看(直到你重新加载你的用户界面)." )
+                warnOnce = true
+            else
+                self:Print( "快照保存." )
+            end
         end
+        
+        self.ActiveDebug = false
     else
         self.Pause = false
     end
