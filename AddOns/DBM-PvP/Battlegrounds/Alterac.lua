@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("z30", "DBM-PvP")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20201228165807")
+mod:SetRevision("20210102162846")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 mod:RegisterEvents("ZONE_CHANGED_NEW_AREA")
 
@@ -26,11 +26,18 @@ do
 			elseif zoneID == 2197 then
 				assaultID = 1537
 			end
-			DBM:GetModByName("PvPGeneral"):SubscribeAssault(assaultID, 0)
-			-- TODO: Add boss health
+			local generalMod = DBM:GetModByName("PvPGeneral")
+			generalMod:SubscribeAssault(assaultID, 0)
+			generalMod:TrackHealth(11946, "HordeBoss")
+			generalMod:TrackHealth(11948, "AllianceBoss")
+			generalMod:TrackHealth(11947, "Galvangar")
+			generalMod:TrackHealth(11949, "Balinda")
+			generalMod:TrackHealth(13419, "Ivus")
+			generalMod:TrackHealth(13256, "Lokholar")
 		elseif bgzone then
 			bgzone = false
 			self:UnregisterShortTermEvents()
+			DBM:GetModByName("PvPGeneral"):StopTrackHealth()
 		end
 	end
 
