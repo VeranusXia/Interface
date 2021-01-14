@@ -29,3 +29,6 @@ ChatLinkIcon.lua
 FriendsMenuXP.lua
 ##自动分享任务
 AutoShare.lua
+
+##爬塔BUFF向右
+ScenarioBlocks.lua
