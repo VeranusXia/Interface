@@ -5,7 +5,7 @@ local DBM = DBM
 local GetPlayerFactionGroup = GetPlayerFactionGroup or UnitFactionGroup -- Classic Compat fix
 local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
-mod:SetRevision("20210113031751")
+mod:SetRevision("20210114233713")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 mod:RegisterEvents(
 	"ZONE_CHANGED_NEW_AREA",
@@ -220,11 +220,7 @@ do
 	local function updateInfoFrame()
 		local lines, sortedLines = {}, {}
 		for cid, health in pairs(syncTrackedUnits) do
-			if not trackedUnits[cid] then
-				if mod:AntiSpam(60, cid) then
-					DBM:Debug("Tracking an unknown unit by ID: " .. cid)
-				end
-			else
+			if trackedUnits[cid] then
 				lines[trackedUnits[cid]] = health .. "%"
 				sortedLines[#sortedLines + 1] = trackedUnits[cid]
 			end
@@ -369,7 +365,7 @@ end
 
 do
 	local type, string, mfloor, mmin = type, string, math.floor, math.min
-	local GetTime, FACTION_HORDE, FACTION_ALLIANCE = GetTime, FACTION_HORDE, FACTION_ALLIANCE
+	local FACTION_HORDE, FACTION_ALLIANCE = FACTION_HORDE, FACTION_ALLIANCE
 	local winTimer = mod:NewTimer(30, "TimerWin", GetPlayerFactionGroup("player") == "Alliance" and "132486" or "132485") -- Interface\\Icons\\INV_BannerPVP_02.blp || Interface\\Icons\\INV_BannerPVP_01.blp
 	local resourcesPerSec = {
 		[3] = {1e-300, 1, 3, 4}, -- Gilneas
@@ -562,22 +558,11 @@ do
 	}
 	local capTimer = mod:NewTimer(isClassic and 64 or 60, "TimerCap", "136002") -- Interface\\icons\\spell_misc_hellifrepvphonorholdfavor.blp
 	capTimer.keep = true
-	local prevTime = 0
 
 	function mod:AREA_POIS_UPDATED(widget)
 		local allyBases, hordeBases = 0, 0
 		local widgetID = widget and widget.widgetID
 		if subscribedMapID ~= 0 then
-			local time = GetTime()
-			if prevTime == 0 then
-				prevTime = time
-				return
-			end
-			local elapsed = time - prevTime
-			prevTime = time
-			if elapsed < 0.5 then
-				return
-			end
 			local isAtlas = false
 			for _, areaPOIID in ipairs(C_AreaPoiInfo.GetAreaPOIForMap(subscribedMapID)) do
 				local areaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo(subscribedMapID, areaPOIID)
@@ -627,7 +612,7 @@ do
 					end
 				end
 			end
-			if widgetID == 1671 or widgetID == 2073 then -- Standard battleground score predictor: 1671. Deepwind rework: 2073
+			if widgetID == 1671 or widgetID == 2074 then -- Standard battleground score predictor: 1671. Deepwind rework: 2074
 				local info = C_UIWidgetManager.GetDoubleStatusBarWidgetVisualizationInfo(widgetID)
 				self:UpdateWinTimer(info.leftBarMax, info.leftBarValue, info.rightBarValue, allyBases, hordeBases)
 			end
