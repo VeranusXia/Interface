@@ -5,7 +5,7 @@ local DBM = DBM
 local GetPlayerFactionGroup = GetPlayerFactionGroup or UnitFactionGroup -- Classic Compat fix
 local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
-mod:SetRevision("20210114233713")
+mod:SetRevision("20210116162333")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 mod:RegisterEvents(
 	"ZONE_CHANGED_NEW_AREA",
@@ -181,21 +181,23 @@ do
 	local pairs = pairs
 
 	function mod:UnsubscribeAssault()
+		if hasWarns then
+			local map = C_Map.GetMapInfo(subscribedMapID)
+			DBM:AddMsg("DBM-PvP missing data, please report to our discord.")
+			DBM:AddMsg("Battleground: " .. map and map.name or "Unknown")
+			for k, v in pairs(warnAtEnd) do
+				DBM:AddMsg(v .. "x " .. k)
+			end
+			DBM:AddMsg("Thank you for making DBM-PvP a better addon.")
+		end
+		warnAtEnd = {}
+		hasWarns = false
 		HideEstimatedPoints()
 		HideBasesToWin()
 		self:UnregisterShortTermEvents()
 		self:Stop()
 		subscribedMapID = 0
 		prevAScore, prevHScore = 0, 0
-		if hasWarns then
-			DBM:AddMsg("DBM-PvP missing data, please report to our discord.")
-			for k, _ in pairs(warnAtEnd) do
-				DBM:AddMsg(k)
-			end
-			DBM:AddMsg("Thank you for making DBM-PvP a better addon.")
-			warnAtEnd = {}
-			hasWarns = false
-		end
 	end
 end
 
@@ -364,7 +366,7 @@ do
 end
 
 do
-	local type, string, mfloor, mmin = type, string, math.floor, math.min
+	local type, mfloor, mmin, sformat = type, math.floor, math.min, string.format
 	local FACTION_HORDE, FACTION_ALLIANCE = FACTION_HORDE, FACTION_ALLIANCE
 	local winTimer = mod:NewTimer(30, "TimerWin", GetPlayerFactionGroup("player") == "Alliance" and "132486" or "132485") -- Interface\\Icons\\INV_BannerPVP_02.blp || Interface\\Icons\\INV_BannerPVP_01.blp
 	local resourcesPerSec = {
@@ -383,21 +385,29 @@ do
 		-- Start debug
 		if prevAScore ~= allianceScore then
 			if resPerSec[allianceBases + 1] == 1000 then
-				warnAtEnd[string.format("%d,%d", allianceScore - prevAScore, allianceBases)] = true
-				hasWarns = true
+				local key = sformat("%d,%d", allianceScore - prevAScore, allianceBases)
+				local warnCount = warnAtEnd[key] or 0
+				warnAtEnd[key] = warnCount + 1
+				if warnCount > 2 then
+					hasWarns = true
+				end
 			end
 			if allianceScore < maxScore then
-				DBM:Debug(string.format("Alliance: +%d (%d)", allianceScore - prevAScore, allianceBases), 3)
+				DBM:Debug(sformat("Alliance: +%d (%d)", allianceScore - prevAScore, allianceBases), 3)
 			end
 			prevAScore = allianceScore
 		end
 		if prevHScore ~= hordeScore then
 			if resPerSec[hordeBases + 1] == 1000 then
-				warnAtEnd[string.format("%d,%d", hordeScore - prevHScore, hordeBases)] = true
-				hasWarns = true
+				local key = sformat("%d,%d", hordeScore - prevHScore, hordeBases)
+				local warnCount = warnAtEnd[key] or 0
+				warnAtEnd[key] = warnCount + 1
+				if warnCount > 2 then
+					hasWarns = true
+				end
 			end
 			if hordeScore < maxScore then
-				DBM:Debug(string.format("Horde: +%d (%d)", hordeScore - prevHScore, hordeBases), 3)
+				DBM:Debug(sformat("Horde: +%d (%d)", hordeScore - prevHScore, hordeBases), 3)
 			end
 			prevHScore = hordeScore
 		end
