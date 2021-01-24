@@ -473,6 +473,7 @@ state.UnitClassification = UnitClassification
 state.UnitDebuff = UnitDebuff
 state.UnitExists = UnitExists
 state.UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
+state.UnitGUID = UnitGUID
 state.UnitHealth = UnitHealth
 state.UnitHealthMax = UnitHealthMax
 state.UnitName = UnitName
@@ -1712,7 +1713,7 @@ local mt_state = {
             return t.now + t.offset + t.delay
 
         elseif k == "time_to_die" or k == "fight_remains" or k == "interpolated_fight_remains" then
-            if not t.boss then return 3600 end
+            -- if not t.boss then return 3600 end
             return max( 1, Hekili:GetGreatestTTD() - ( t.offset + t.delay ) )
 
         elseif k:sub(1, 12) == "time_to_pct_" then
@@ -2631,7 +2632,7 @@ local mt_default_cooldown = {
             end
         end
 
-        local raw = false
+        local raw = state.display ~= "Primary" and state.display ~= "AOE"
 
         if k:sub(1, 5) == "true_" then
             k = k:sub(6)
@@ -5339,14 +5340,29 @@ do
 
         for i, entry in ipairs( queue ) do
             if cast_events[ entry.type ] and ( action == nil or entry.action == action ) and entry.start <= self.query_time then
-                self.applyBuff( "casting", entry.time - self.query_time )
+                local casting = self.buff.casting
+
+                casting.applied = entry.start
+                
+                if entry.time > entry.start then
+                    casting.expires = entry.time
+                else
+                    casting.expires = entry.start + entry.time
+                end
+
+                casting.duration = casting.expires - casting.applied
+
+                casting.v3 = entry.type == "CHANNEL_FINISH"
 
                 if entry.action then
                     local spell = class.abilities[ entry.action ]
                     if spell and spell.id then
-                        self.buff.casting.v1 = spell.id
-                        self.buff.casting.v3 = entry.type == "CHANNEL_FINISH"
+                        casting.v1 = spell.id
+                    else
+                        casting.v1 = 0
                     end
+                else
+                    casting.v1 = 0
                 end
 
                 return
@@ -6412,7 +6428,8 @@ function state:TimeToReady( action, pool )
     local ability = class.abilities[ action ]
 
     if ability.id < -99 or ability.id > 0 then
-        if not ability.castableWhileCasting and ( ability.gcd ~= "off" or ( ability.item and not ability.essence ) or not ability.interrupt ) then
+        -- if not ability.castableWhileCasting and ( ability.gcd ~= "off" or ( ability.item and not ability.essence ) or not ability.interrupt ) then
+        if ( ability.gcd ~= "off" or ability.castableWhileCasting ) or ( ability.item and not ability.essence ) then
             wait = max( wait, self.cooldown.global_cooldown.remains )
         end
 

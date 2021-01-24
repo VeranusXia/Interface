@@ -1,8 +1,11 @@
 # Hekili
 
-## [v9.0.2-1.0.35-beta2](https://github.com/Hekili/hekili/tree/v9.0.2-1.0.35-beta2) (2021-01-08)
-[Full Changelog](https://github.com/Hekili/hekili/compare/v9.0.2-1.0.35-beta1...v9.0.2-1.0.35-beta2) [Previous Releases](https://github.com/Hekili/hekili/releases)
+## [v9.0.2-1.0.36-beta9](https://github.com/Hekili/hekili/tree/v9.0.2-1.0.36-beta9) (2021-01-21)
+[Full Changelog](https://github.com/Hekili/hekili/compare/v9.0.2-1.0.36-beta8...v9.0.2-1.0.36-beta9) [Previous Releases](https://github.com/Hekili/hekili/releases)
 
-- Balance:  Revise Starfall buff detection/generation; clean up Starfall handler.  
-- Elemental:  Don't recommend Earth Elemental unless DPS elementals are already on CD.  
-- Prevent snapshot errors when playing an unsupported (healer) spec.  
+- Marksmanship:  Lots of off-GCD abilities also interrupt Steady Focus.  
+- Fix for off-GCD abilities being occasionally GCD-synched by accident.  
+- Feral:  Add Max Energy modifier for Ferocious Bite.  Fix a few energy cost reductions (thanks ShmooDude).  
+- Fix "any bloodlust is bloodlust" code.  
+- Fire:  Priority correct to resolve #857.  
+- WW:  Don't require Good Karma for ToK to be recommended.  

@@ -24,7 +24,7 @@ local FeignEvent = ns.FeignEvent
 
 local insert, remove, wipe = table.insert, table.remove, table.wipe
 
-local unitIDs = { "target", "targettarget", "focus", "focustarget", "boss1", "boss2", "boss3", "boss4", "boss5" }
+local unitIDs = { "target", "targettarget", "focus", "focustarget", "boss1", "boss2", "boss3", "boss4", "boss5", "arena1", "arena2", "arena3", "arena4", "arena5" }
 
 local npGUIDs = {}
 local npUnits = {}
@@ -817,8 +817,8 @@ do
         enemy.lastSeen = time
     end
 
-    local DEFAULT_TTD = 15
-    local FOREVER = 3600
+    local DEFAULT_TTD = 25
+    local FOREVER = 300
     local TRIVIAL = 5
 
 
@@ -1034,7 +1034,7 @@ do
         end
     end
 
-    local trackedUnits = {"target", "boss1", "boss2", "boss3", "boss4", "boss5", "focus"}
+    local trackedUnits = {"target", "boss1", "boss2", "boss3", "boss4", "boss5", "focus", "arena1", "arena2", "arena3", "arena4", "arena5" }
     local seen = {}
 
     local UpdateTTDs
@@ -1071,8 +1071,8 @@ do
             seen[guid] = true
         end
 
-        C_Timer.After( 0.5, UpdateTTDs )
+        C_Timer.After( 0.25, UpdateTTDs )
     end
 
-    C_Timer.After( 0.5, UpdateTTDs )
+    C_Timer.After( 0.25, UpdateTTDs )
 end

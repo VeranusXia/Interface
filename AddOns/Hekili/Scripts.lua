@@ -417,6 +417,9 @@ do
 
         { "^dot%.festering_wound%.stack[>=]=?(.-)$",    -- UH DK helper during Unholy Frenzy.
                                                     "time_to_wounds(%1)" },
+            
+        { "^master_assassin_remains[<=]+(.-)$",
+                                                    "0.01+master_assassin_remains-(%1)" },
 
         { "^exsanguinated$",                        "remains" }, -- Assassination
         { "^!?(debuff%.[a-z0-9_]+)%.exsanguinated$",
@@ -1049,6 +1052,7 @@ local newModifiers = {
     interrupt_global = 'bool',
     interrupt_if = 'bool',
     interrupt_immediate = 'bool',
+    max_energy = 'bool',
     moving = 'bool',
     only_cwc = 'bool',
     strict = 'bool',
