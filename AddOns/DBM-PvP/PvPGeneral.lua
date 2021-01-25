@@ -5,7 +5,7 @@ local DBM = DBM
 local GetPlayerFactionGroup = GetPlayerFactionGroup or UnitFactionGroup -- Classic Compat fix
 local isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
-mod:SetRevision("20210116162333")
+mod:SetRevision("20210124083458")
 mod:SetZone(DBM_DISABLE_ZONE_DETECTION)
 mod:RegisterEvents(
 	"ZONE_CHANGED_NEW_AREA",
@@ -184,7 +184,7 @@ do
 		if hasWarns then
 			local map = C_Map.GetMapInfo(subscribedMapID)
 			DBM:AddMsg("DBM-PvP missing data, please report to our discord.")
-			DBM:AddMsg("Battleground: " .. map and map.name or "Unknown")
+			DBM:AddMsg("Battleground: " .. (map and map.name or "Unknown"))
 			for k, v in pairs(warnAtEnd) do
 				DBM:AddMsg(v .. "x " .. k)
 			end
@@ -371,7 +371,7 @@ do
 	local winTimer = mod:NewTimer(30, "TimerWin", GetPlayerFactionGroup("player") == "Alliance" and "132486" or "132485") -- Interface\\Icons\\INV_BannerPVP_02.blp || Interface\\Icons\\INV_BannerPVP_01.blp
 	local resourcesPerSec = {
 		[3] = {1e-300, 1, 3, 4}, -- Gilneas
-		[4] = {1e-300, 2, 3, 4, 1000--[[Unknown]]}, -- TempleOfKotmogu/EyeOfTheStorm
+		[4] = {1e-300, 2, 3, 4, 12--[[Data seems to suggest this, will need to confirm if win timers line up]]}, -- TempleOfKotmogu/EyeOfTheStorm
 		[5] = {1e-300, 2, 3, 4, 7, 1000--[[Unknown]]} -- Arathi/Deepwind
 	}
 
@@ -567,7 +567,6 @@ do
 		[216]                       = State.HORDE_CONTROLLED
 	}
 	local capTimer = mod:NewTimer(isClassic and 64 or 60, "TimerCap", "136002") -- Interface\\icons\\spell_misc_hellifrepvphonorholdfavor.blp
-	capTimer.keep = true
 
 	function mod:AREA_POIS_UPDATED(widget)
 		local allyBases, hordeBases = 0, 0
@@ -591,7 +590,7 @@ do
 						capTimer:Stop(infoName)
 						objectivesStore[infoName] = (atlasName and atlasName or infoTexture)
 						if not ignoredAtlas[subscribedMapID] and (isAllyCapping or isHordeCapping) then
-							capTimer:Start(isClassic and (C_AreaPoiInfo.GetAreaPOITimeLeft(areaPOIID) or 0) * 60 or C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPOIID) or overrideTimers[subscribedMapID] or 60, infoName)
+							capTimer:Start(C_AreaPoiInfo.GetAreaPOITimeLeft and C_AreaPoiInfo.GetAreaPOITimeLeft(areaPOIID) and C_AreaPoiInfo.GetAreaPOITimeLeft(areaPOIID) * 60 or overrideTimers[subscribedMapID] or 60, infoName)
 							if isAllyCapping then
 								capTimer:SetColor({r=0, g=0, b=1}, infoName)
 								capTimer:UpdateIcon("132486", infoName) -- Interface\\Icons\\INV_BannerPVP_02.blp
