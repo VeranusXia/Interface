@@ -334,7 +334,7 @@ local function ResourceButton_OnClick(self)
 	end
 end
 local RewardButton_SetReward do
-	local baseXPReward = {title="基础经验", tooltip="即使失败了也能获得奖励", icon="Interface/Icons/XP_Icon", qualityAtlas="loottoast-itemborder-purple"}
+	local baseXPReward = {title="基础经验", tooltip="即使失败了也能获得经验", icon="Interface/Icons/XP_Icon", qualityAtlas="loottoast-itemborder-purple"}
 	function RewardButton_SetReward(self, rew, isOvermax, pw)
 		if rew == "xp" then
 			baseXPReward.followerXP = isOvermax
@@ -465,7 +465,7 @@ local function FollowerButton_OnEnter(self)
 		if si and si.type == "nop" then
 			dc, guideLine = 0.60, "It does nothing."
 		end
-		if si.desc then
+		if si and si.desc then
 			dc, guideLine = 0.60, si.desc .. (guideLine and "|n" .. guideLine or "")
 		end
 		GameTooltip:AddLine(s.description, dc, dc, dc, 1)
@@ -624,7 +624,7 @@ local function DoomRun_OnEnter(self)
 	GameTooltip:SetText("地狱模式")
 	GameTooltip:AddLine(("失败以后每人获得 |cff00ff00%s XP|r 经验."):format(p.Rewards[1].Quantity:GetText()), 1,1,1,1)
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("双击启动: 弟弟们,出去送人头了", 0.1,0.9,0.1, 1)
+	GameTooltip:AddLine("双击启动: 以下弟弟们出去送人头了:", 0.1,0.9,0.1, 1)
 	for i=1,#g do
 		local fi = ft[g[i]]
 		GameTooltip:AddLine("|cffa0a0a0[" .. fi.level .. "]|r " .. fi.name, 1,1,1)
