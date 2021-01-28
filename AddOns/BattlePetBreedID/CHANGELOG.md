@@ -1,7 +1,6 @@
 # Battle Pet BreedID
 
-## v1.17.4 (2020-12-29)
+## v1.17.5 (2021-01-27)
  
 
-- Converted repository to Git and made some minor TOC updates.  
-- Added tag v1.17.3 for changeset 21cb9335dc80  
+- Updated breed data for more Shadowlands pets. Almost everything is there now except a couple hidden (or removed?) pets and a few that require deep progress a Covenant's special feature building.  
