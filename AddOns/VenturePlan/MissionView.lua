@@ -193,15 +193,15 @@ local function Puck_OnEnter(self)
 						guideLine = "Targets: " .. b
 					end
 				end
-				if si and (si.healATK or si.damageATK or si.healPerc or si.damagePerc) then
+				if si.healATK or si.damageATK or si.healPerc or si.damagePerc then
 					local p = FormatSpellPulse(si)
 					if p then
 						guideLine = "Pulse: " .. p .. (guideLine and "    " .. guideLine or "")
 					end
 				end
-			end
-			if si.desc then
-				dc, guideLine = 0.60, si.desc .. (guideLine and "|n" .. guideLine or "")
+				if si.desc then
+					dc, guideLine = 0.60, si.desc .. (guideLine and "|n" .. guideLine or "")
+				end
 			end
 			GameTooltip:AddLine(s.description, dc, dc, dc, 1)
 			if guideLine then
@@ -289,7 +289,7 @@ local function Predictor_OnEnter(self)
 	GameTooltip:SetText(ITEM_QUALITY_COLORS[5].hex .. "被诅咒的冒险家指南")
 	GameTooltip:AddLine(ITEM_UNIQUE, 1,1,1, 1)
 	GameTooltip:AddLine("点击:计算结果,看看你的配队最终命运", 0, 1, 0, 1)
-	GameTooltip:AddLine('"不要相信谎言!平衡德不是紧急口粮"', 1, 0.835, 0.09, 1)
+	GameTooltip:AddLine('"Do not believe its lies! Balance druids are not emergency rations."', 1, 0.835, 0.09, 1)
 	GameTooltip:Show()
 end
 local function Predictor_OnClick(self)
@@ -314,13 +314,13 @@ local function Predictor_OnClick(self)
 		else
 			GameTooltip:AddLine("The guide shows you many possible futures. Too many. It is impossible to draw conclusions about your party's chances from this.", 1,1,1,1)
 			if (sim.pWin == 0) then
-				GameTooltip:AddLine("不出意外你要跪了.", 1,1,1,1)
+				GameTooltip:AddLine("For what it is worth, everything you remember ended badly.", 1,1,1,1)
 			elseif sim.pLose == 0 then
-				GameTooltip:AddLine("不出意外会好起来的.", 1,1,1,1)
+				GameTooltip:AddLine("For what it is worth, everything you remember ended well.", 1,1,1,1)
 			end
 		end
 		if not incompleteModel then
-			GameTooltip:AddLine('"稳住我们能赢."', 1, 0.835, 0.09, 1)
+			GameTooltip:AddLine('"With your luck, there is only one way this ends."', 1, 0.835, 0.09, 1)
 		end
 	else
 		if sim.mass == 1 then
@@ -437,7 +437,7 @@ local function MissionRewards_OnShow(self)
 		FollowerList:SyncXPGain(xp)
 	end
 end
-local function MissionView_OnShow(self)
+local function MissionView_OnShow()
 	if not FollowerList then
 		FollowerList = T.CreateObject("FollowerList", CovenantMissionFrame)
 		FollowerList:ClearAllPoints()
@@ -449,7 +449,7 @@ local function MissionView_OnShow(self)
 	CovenantMissionFrameFollowers.MaterialFrame:SetParent(FollowerList)
 	CovenantMissionFrameFollowers.HealAllButton:SetParent(FollowerList)
 end
-local function MissionView_OnHide(self)
+local function MissionView_OnHide()
 	if FollowerList then
 		FollowerList:Hide()
 	end
