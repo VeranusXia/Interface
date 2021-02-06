@@ -31,4 +31,4 @@ FriendsMenuXP.lua
 AutoShare.lua
 
 ##爬塔BUFF向右
-ScenarioBlocks.lua
+##ScenarioBlocks.lua

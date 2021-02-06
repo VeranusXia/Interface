@@ -5,4 +5,3 @@ if list and switch then
     list:ClearAllPoints()
     list:SetPoint("TOPLEFT", mawBuffsBlock.Container, "TOPRIGHT", 10, 0)
 end
- 
