@@ -1,5 +1,5 @@
 local _, T = ...
-local EV = T.Evie
+local EV, L = T.Evie, T.L
 
 local W = {} do
 	local missionCreditCriteria = {}
@@ -82,11 +82,11 @@ end
 
 local function LogCounter_OnClick(self)
 	local cb = self:GetParent().CopyBox
-	cb.Title:SetText("Wanted: Adventure Reports")
-	cb.Intro:SetText("The Cursed Adventurer's Guide hungers. Only the tales of your companions' adventures, conveyed in excruciating detail, will satisfy it.")
-	cb.FirstInputBoxLabel:SetText("To submit your adventure reports,|n1. Visit:")
-	cb.SecondInputBoxLabel:SetText("2. Copy the following text:")
-	cb.ResetButton:SetText("Reset Adventure Reports")
+	cb.Title:SetText(L"Wanted: Adventure Reports")
+	cb.Intro:SetText(L"The Cursed Adventurer's Guide hungers. Only the tales of your companions' adventures, conveyed in excruciating detail, will satisfy it.")
+	cb.FirstInputBoxLabel:SetText(L"To submit your adventure reports," .. "|n" .. L"1. Visit:")
+	cb.SecondInputBoxLabel:SetText(L"2. Copy the following text:")
+	cb.ResetButton:SetText(L"Reset Adventure Reports")
 	cb.FirstInputBox:SetText("https://www.townlong-yak.com/addons/venture-plan/submit-reports")
 	cb.FirstInputBox:SetCursorPosition(0)
 	cb.SecondInputBox:SetText(T.ExportMissionReports())
@@ -107,8 +107,7 @@ local function ConfigureMission(me, mi, isAvailable, haveSpareCompanions)
 	
 	me.missionID, me.isAvailable, me.offerEndTime = mid, isAvailable, mi.offerEndTime
 	me.baseCost, me.baseCostCurrency = mi.basecost, mi.costCurrencyTypesID
-	me.hasOvermaxRewards = not not (mi.overmaxRewards and mi.overmaxRewards[1])
-	me.hasUsefulOvermaxRewards = mi.overmaxRewardScore ~= 0
+	me.baseXPReward = mi.xp or 0
 	me.Name:SetText(mi.name)
 	if (mi.description or "") ~= "" then
 		me.Description:SetText(mi.description)
@@ -125,14 +124,14 @@ local function ConfigureMission(me, mi, isAvailable, haveSpareCompanions)
 	elseif mi.timeLeftSeconds then
 		me.completableAfter = timeNow+mi.timeLeftSeconds
 		me.ProgressBar.Text:SetText("")
-		me.ProgressBar:SetProgressCountdown(me.completableAfter, mi.durationSeconds, "点击完成", true, true)
+		me.ProgressBar:SetProgressCountdown(me.completableAfter, mi.durationSeconds, L"Click to complete", true, true)
 	elseif mi.completed then
 		me.completableAfter = timeNow-1
 		me.ProgressBar:SetProgress(1)
-		me.ProgressBar.Text:SetText("点击完成")
+		me.ProgressBar.Text:SetText(L"Click to complete")
 	end
 	me.ProgressBar:SetMouseMotionEnabled(me.completableAfter and me.completableAfter <= timeNow)
-	me.ExpireTime.tooltipHeader = "Adventure Expires In:"
+	me.ExpireTime.tooltipHeader = L"Adventure Expires In:"
 	me.ExpireTime.tooltipCountdownTo = expireAt
 	me:SetCountdown(expirePrefix, expireAt, nil, nil, true, expireRoundUp)
 	me.Rewards:SetRewards(mdi.xp, mi.rewards)
@@ -167,7 +166,7 @@ local function ConfigureMission(me, mi, isAvailable, haveSpareCompanions)
 			totalATK = totalATK + e.attack
 		end
 	end
-	local tag = "[" .. (mi.missionScalar or 0) .. (mi.isElite and " 精英]" or mi.isRare and " 稀有]" or "]")
+	local tag = "[" .. (mi.missionScalar or 0) .. (mi.isElite and "+]" or mi.isRare and "r]" or "]")
 	if hasNovelSpells then
 		tag = tag .. " |TInterface/EncounterJournal/UI-EJ-WarningTextIcon:16:16|t"
 	end
@@ -177,7 +176,7 @@ local function ConfigureMission(me, mi, isAvailable, haveSpareCompanions)
 	me.duration:SetText(mi.duration)
 	me.statLine:SetWidth(me.duration:GetRight() - me.statLine:GetLeft())
 	me.TagText:SetText(tag)
-	me.TagText:SetFont(STANDARD_TEXT_FONT, 16, "THINOUTLINE")
+	
 	me:Show()
 end
 local function cmpMissionInfo(a,b)
@@ -289,8 +288,9 @@ local function HookAndCallOnShow(frame, f)
 end
 function EV:I_ADVENTURES_UI_LOADED()
 	MissionPage, MissionList = T.CreateObject("MissionPage", CovenantMissionFrame.MissionTab)
+	T.MissionList = MissionList
 	local lc = MissionPage.LogCounter
-	lc.tooltipHeader, lc.tooltipText = "|cff1eff00Adventure Report", NORMAL_FONT_COLOR_CODE .. "A detailed record of an adventure completed by your companions.|n|n|cff1eff00Use: Feed the Cursed Adventurer's Guide."
+	lc.tooltipHeader, lc.tooltipText = "|cff1eff00" .. L"Adventure Report", NORMAL_FONT_COLOR_CODE .. L"A detailed record of an adventure completed by your companions." .. "|n|n|cff1eff00" .. L"Use: Feed the Cursed Adventurer's Guide."
 	lc:SetScript("OnClick", LogCounter_OnClick)
 	HookAndCallOnShow(CovenantMissionFrame.MissionTab.MissionList, function(self)
 		self:Hide()
