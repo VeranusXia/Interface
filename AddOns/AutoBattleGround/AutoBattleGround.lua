@@ -1,7 +1,8 @@
 ﻿ 
 local start = false  
-local step = 0;
+local step = 0
 local oldtime = nil
+local totalgaNum = 5
 local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
 	["PALADIN"] = "/targetfriendplayer\n/castsequence 殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
@@ -406,9 +407,9 @@ function AutoBattleGround:Action()
 				C_PartyInfo.LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
-			if loseNum>=3 then
+			if loseNum>=5 then
 				C_PartyInfo.LeaveParty()
-				logText("连跪三把了 离队换个车头")
+				logText("连跪N把了 离队换个车头")
 				return
 			end
 			local gaNum=GetGroupAssistantNum()
@@ -417,7 +418,7 @@ function AutoBattleGround:Action()
 				logText("这个队伍A太多了 果断换一个")
 				return
 			end
-			if gaNum <= 4  then
+			if gaNum <= totalgaNum  then
 				blackList[groupLeaderName]=1
 				ABG_CONFIG.BLACKLIST = blackList
 				C_PartyInfo.LeaveParty()
