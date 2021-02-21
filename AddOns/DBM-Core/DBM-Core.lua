@@ -70,9 +70,9 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210216230026"),
-	DisplayVersion = "9.0.21 alpha", -- the string that is shown as version
-	ReleaseRevision = releaseDate(2021, 2, 16) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	Revision = parseCurseDate("20210219050500"),
+	DisplayVersion = "9.0.22 alpha", -- the string that is shown as version
+	ReleaseRevision = releaseDate(2021, 2, 18) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 DBM.HighestRelease = DBM.ReleaseRevision --Updated if newer version is detected, used by update nags to reflect critical fixes user is missing on boss pulls
 
@@ -11295,6 +11295,24 @@ do
 		end
 	end
 
+	function timerPrototype:Pause(...)
+		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
+		local bar = DBM.Bars:GetBar(id)
+		if bar then
+			fireEvent("DBM_TimerPause", id)
+			return bar:Pause()
+		end
+	end
+
+	function timerPrototype:Resume(...)
+		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
+		local bar = DBM.Bars:GetBar(id)
+		if bar then
+			fireEvent("DBM_TimerResume", id)
+			return bar:Resume()
+		end
+	end
+
 	function timerPrototype:UpdateIcon(icon, ...)
 		local id = self.id..pformat((("\t%s"):rep(select("#", ...))), ...)
 		local bar = DBM.Bars:GetBar(id)
@@ -12227,7 +12245,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210216230026" then
+	if not revision or revision == "20210219050500" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end
