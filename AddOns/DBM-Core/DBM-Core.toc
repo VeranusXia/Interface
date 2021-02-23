@@ -20,7 +20,7 @@
 ## X-Website: http://www.deadlybossmods.com
 ## X-Curse-Project-ID: 3358
 ## X-WoWI-ID: 8814
-## Version: 9.0.21-1-gf979b37
+## Version: 9.0.21-5-gfc249c4
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
