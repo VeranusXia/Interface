@@ -1,8 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.0.21-5-gfc249c4](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/fc249c476fcd29719cb2ccb4beda3ab90d91b157) (2021-02-22)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...fc249c476fcd29719cb2ccb4beda3ab90d91b157) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.21-7-gf738096](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/f738096671b6a454108e7e449eb9d8795a27cd00) (2021-02-24)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...f738096671b6a454108e7e449eb9d8795a27cd00) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Forgot these  
+- tiny bit of post tier cleanup  
 - Fix  
 - updated timer recovery to send paused bar status. This will fix a bug where a user reloading bars they think are "stuck" won't ACTUALLY break them for real when recovery gets them back.  
     Changed sync handler for it to avoid out of date syncs also messing it up that don't have paused status.  

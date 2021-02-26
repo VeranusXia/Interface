@@ -361,7 +361,7 @@ function Board:getMyTeam()
     end
 
     if self.hasRandomSpells and self.isCalcRandom == false then
-        return "部队拥有随机技能。该任务无法自动模拟。\n请点击按钮检视预测结果。"
+        return "部队拥有随机技能。该任务无法自动模拟。\n请点击按钮查看预测结果。"
     end
 
     local isWin = self:isWin()
@@ -382,7 +382,7 @@ end
 
 function Board:constructResultString()
     if self.isEmpty then
-        return '请先添加战斗单位到指挥台'
+        return '请添加部队到指挥台'
     elseif self.hasRandomSpells and self.isCalcRandom == false then
         return ''
     elseif not self.isMissionOver then
@@ -391,11 +391,11 @@ function Board:constructResultString()
 
     local result = self:isWin()
     if self.probability == 100 and result then
-        return '|cFF00FF00 预测结果： 胜利 |r'
+        return '|cFF00FF00 预测结果：胜利 |r'
     elseif self.probability == 0 or (result == false and self.probability == 100) then
         return '|cFFFF0000 预测结果： 失败 |r'
     else
-        return string.format('|cFFFF7700 预测结果： 胜利 (~%s%%) |r', self.probability)
+        return string.format('|cFFFF7700 预测结果：胜利 (~%s%%) |r', self.probability)
     end
 end
 
