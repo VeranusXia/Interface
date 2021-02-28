@@ -7,7 +7,7 @@ local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
 	["PALADIN"] = "/targetfriendplayer\n/castsequence 殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
-	["ROGUE"] = "/cast 猩红之瓶\n", --Rogue
+	["ROGUE"] = "/cast 猩红之瓶\n/cast [nostealth,nocombat] 潜行\n", --Rogue
 	["PRIEST"] = "/cast 绝望祷言\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n/cast 亡者复生\n/castsequence 寒冬号角,牺牲契约\n", --DeathKnight
 	["SHAMAN"] = "/cast 血肉铸造\n", --Shaman
