@@ -70,7 +70,7 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210224082738"),
+	Revision = parseCurseDate("20210302081203"),
 	DisplayVersion = "9.0.22 alpha", -- the string that is shown as version
 	ReleaseRevision = releaseDate(2021, 2, 18) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
@@ -509,7 +509,7 @@ local instanceDifficultyBylevel = {
 	[1643]={50, 1},[1642]={50, 1},[1718]={50, 1},[1943]={50, 1},[1876]={50, 1},[2105]={50, 1},[2111]={50, 1},[2275]={50, 1},--Bfa World bosses and warfronts
 	--Raids
 	[509]={30, 3},[531]={30, 3},[469]={30, 3},[409]={30, 3},--Classic Raids
-	[564]=30,[534]={30, 3},[532]={30, 3},[565]={30, 3},[544]={30, 3},[548]={30, 3},[580]={30, 3},[550]={30, 3},--BC Raids
+	[564]={30, 3},[534]={30, 3},[532]={30, 3},[565]={30, 3},[544]={30, 3},[548]={30, 3},[580]={30, 3},[550]={30, 3},--BC Raids
 	[615]={30, 3},[724]={30, 3},[649]={30, 3},[616]={30, 3},[631]={30, 3},[533]={30, 3},[249]={30, 3},[603]={30, 3},[624]={30, 3},--Wrath Raids
 	[757]={35, 3},[671]={35, 3},[669]={35, 3},[967]={35, 3},[720]={35, 3},[951]={35, 3},[754]={35, 3},--Cata Raids
 	[1009]={35, 3},[1008]={35, 3},[1136]={35, 3},[996]={35, 3},[1098]={35, 3},--MoP Raids
@@ -12248,7 +12248,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210224082738" then
+	if not revision or revision == "20210302081203" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end

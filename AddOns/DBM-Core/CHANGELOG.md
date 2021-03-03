@@ -1,8 +1,14 @@
 # Deadly Boss Mods Core
 
-## [9.0.21-7-gf738096](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/f738096671b6a454108e7e449eb9d8795a27cd00) (2021-02-24)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...f738096671b6a454108e7e449eb9d8795a27cd00) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.21-12-gc742b1e](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/c742b1e4b35ec8de4638c19557e96a2361eff10b) (2021-03-02)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...c742b1e4b35ec8de4638c19557e96a2361eff10b) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Fix Lua exception (#517)  
+    Bad table entry, reported by user :)  
+- Clear paused status on a bar when :Start or :Stop is called on a timer object. Start should always clear previous status of timer.  
+- Add new test condition  
+- Update README.md  
+- Update README.md  
 - Forgot these  
 - tiny bit of post tier cleanup  
 - Fix  
