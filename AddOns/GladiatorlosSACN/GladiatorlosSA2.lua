@@ -1,13 +1,15 @@
-﻿ GladiatorlosSA = LibStub("AceAddon-3.0"):NewAddon("GladiatorlosSA", "AceEvent-3.0","AceConsole-3.0","AceTimer-3.0")
+﻿ GladiatorlosSACN = LibStub("AceAddon-3.0"):NewAddon("GladiatorlosSACN", "AceEvent-3.0","AceConsole-3.0","AceTimer-3.0")
 
  local AceConfigDialog = LibStub("AceConfigDialog-3.0")
  local AceConfig = LibStub("AceConfig-3.0")
- local L = LibStub("AceLocale-3.0"):GetLocale("GladiatorlosSA")
+ local L = LibStub("AceLocale-3.0"):GetLocale("GladiatorlosSACN")
  local LSM = LibStub("LibSharedMedia-3.0")
- local self, GSA, PlaySoundFile = GladiatorlosSA, GladiatorlosSA, PlaySoundFile
+ local self, GSA, PlaySoundFile = GladiatorlosSACN, GladiatorlosSACN, PlaySoundFile
  local gsadb
  local soundz,sourcetype,sourceuid,desttype,destuid = {},{},{},{},{}
  local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+ local canSpeakHere = false
+ local playerCurrentZone = ""
 
  local LSM_GSA_SOUNDFILES = {
 	["GSA-Demo"] = "Interface\\AddOns\\GladiatorlosSACN\\Voice\\Will-Demo.ogg",
@@ -64,9 +66,6 @@
  }
  self.GSA_TYPE = GSA_TYPE
 
---local sourcetype,sourceuid,desttype,destuid = {},{},{},{}
---local gsadb
---local PlaySoundFile = PlaySoundFile
  local dbDefaults = {
 	profile = {
 		all = false,
@@ -75,9 +74,7 @@
 		epicbattleground = false,
 		field = true,
 		path = GSA_LOCALEPATH[GetLocale()] or "GladiatorlosSACN\\Voice",
-		path_male = GSA_LOCALEPATH[GetLocale()] or "GladiatorlosSACN\\Voice", -- added to 2.3
-		path_neutral = GSA_LOCALEPATH[GetLocale()] or "GladiatorlosSACN\\Voice", -- added to 2.3
-		path_menu = GSA_LOCALEPATH[GetLocale()] or "GladiatorlosSACN\\Voice", -- added to 2.3
+		path_menu = GSA_LOCALEPATH[GetLocale()] or "GladiatorlosSACN\\Voice",
 		throttle = 0,
 		smartDisable = false,
 		outputUnlock = false,
@@ -88,17 +85,16 @@
 		castStart = false,
 		castSuccess = false,
 		interrupt = false,
-		
+
 		aonlyTF = false,
 		conlyTF= false,
 		sonlyTF = false,
 		ronlyTF = false,
 		drinking = true,
 		class = false,
+		connected = false,
 		interruptedfriendly = true,
-		
-		--purge = false,
-		--spellSteal = false,
+		ShatteringThrowSuccess = false,
 		
 		custom = {},
 	}	
@@ -125,7 +121,7 @@
  end
  -- LSM END
 
- function GladiatorlosSA:OnInitialize()
+ function GladiatorlosSACN:OnInitialize()
 	if not self.spellList then
 		self.spellList = self:GetSpellList()
 	end
@@ -137,9 +133,8 @@
 	
 	self.db1 = LibStub("AceDB-3.0"):New("GladiatorlosSADB",dbDefaults, "Default");
 	--DEFAULT_CHAT_FRAME:AddMessage(GSA_TEXT .. GSA_VERSION .. GSA_AUTHOR .."  - /gsa ");
-	self:RegisterChatCommand("GladiatorlosSA", "ShowConfig")
+	self:RegisterChatCommand("GladiatorlosSACN", "ShowConfig")
 	self:RegisterChatCommand("gsa", "ShowConfig")
-	self:RegisterChatCommand("gsaz", "ShowConfig") -- ***** @
 	self.db1.RegisterCallback(self, "OnProfileChanged", "ChangeProfile")
 	self.db1.RegisterCallback(self, "OnProfileCopied", "ChangeProfile")
 	self.db1.RegisterCallback(self, "OnProfileReset", "ChangeProfile")
@@ -158,7 +153,7 @@
 			gsavers = {
 			order = 2,
 			type = "description",
-			name = "|cffFF7D0A v1.18 |r(|cFF00FF968.0.1 BFA|r)",
+			name = "|cffFF7D0A SLB 3.2 |r(|cFF00FF96 9.0.2 Shadowlands|r)",
 			cmdHidden = true
 			},
 		},
@@ -168,50 +163,40 @@
 		name = L["Load Configuration"],
 		desc = L["Load Configuration Options"],
 		type = 'execute',
-		func = function() 
-		self:OnOptionCreate() 
+		func = function()
+		self:OnOptionCreate()
 			bliz_options.args.load.disabled = true
-			GameTooltip:Hide() 
+			GameTooltip:Hide()
 			--fix for in 5.3 BLZOptionsFrame can't refresh on load
-			InterfaceOptionsFrame:Hide() 
-			InterfaceOptionsFrame:Show() 
+			InterfaceOptionsFrame:Hide()
+			InterfaceOptionsFrame:Show()
 		end,
-		handler = GladiatorlosSA,
+		handler = GladiatorlosSACN,
 	}
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("GladiatorlosSA_bliz", bliz_options)
-	AceConfigDialog:AddToBlizOptions("GladiatorlosSA_bliz", "GladiatorlosSA")
+	AceConfigDialog:AddToBlizOptions("GladiatorlosSA_bliz", "GladiatorlosSACN")
 	LSM.RegisterCallback(LSM_GSA_SOUNDFILES, "LibSharedMedia_Registered", LSMRegistered)
  end
 
- function GladiatorlosSA:OnEnable()
-	GladiatorlosSA:RegisterEvent("PLAYER_ENTERING_WORLD")
-	GladiatorlosSA:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	GladiatorlosSA:RegisterEvent("UNIT_AURA")
+ function GladiatorlosSACN:OnEnable()
+	GladiatorlosSACN:RegisterEvent("PLAYER_ENTERING_WORLD")
+	GladiatorlosSACN:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	GladiatorlosSACN:RegisterEvent("UNIT_AURA")
 	if not GSA_LANGUAGE[gsadb.path] then gsadb.path = GSA_LOCALEPATH[GetLocale()] end
 	self.throttled = {}
 	self.smarter = 0
  end
 
- function GladiatorlosSA:OnDisable()
-
- end
-
---local GSA_GENDER = {"gsadb.path_neutral","gsadb.path_male","gsadb.path"}
-
- function GSA:GetGenderPath(genderZ)
-	if genderZ == 1 then return gsadb.path_neutral
-	elseif genderZ == 2 then return gsadb.path_male
-	else return gsadb.path
-	end
+ function GladiatorlosSACN:OnDisable()
+	-- why is this here
  end
 
 -- play sound by file name
- function GSA:PlaySound(fileName, extend, genderZ)
-	local gender_path = self:GetGenderPath(genderZ)
-	PlaySoundFile("Interface\\Addons\\" ..gender_path.. "\\"..fileName .. "." .. (extend or "ogg"), gsadb.output_menu)
+ function GSA:PlaySound(fileName)
+	 PlaySoundFile("Interface\\Addons\\" ..gsadb.path.. "\\"..fileName .. ".ogg", gsadb.output_menu)
  end
 
- function GladiatorlosSA:ArenaClass(id)
+ function GladiatorlosSACN:ArenaClass(id)
 	for i = 1 , 5 do
 		if id == UnitGUID("arena"..i) then
 			return select(2, UnitClass ("arena"..i))
@@ -219,12 +204,13 @@
 	end
  end
 
- function GladiatorlosSA:PLAYER_ENTERING_WORLD()
+ function GladiatorlosSACN:PLAYER_ENTERING_WORLD()
 	--CombatLogClearEntries()
+	 self:CanTalkHere()
  end
 
--- play sound by spell id and spell type AND gender
- function GladiatorlosSA:PlaySpell(listName, spellID, sourceGUID, destGUID, ...)
+-- play sound by spell id and spell type
+ function GladiatorlosSACN:PlaySpell(listName, spellID, sourceGUID, destGUID, ...)
 	local list = self.spellList[listName]
 	if not list[spellID] then return end
 	if not gsadb[list[spellID]] then return	end
@@ -238,46 +224,88 @@
 			self.smarter = 0
 		end
 	end
-	
-	local genderZ
-	if gsadb.genderVoice then
-		if (sourceGUID ~= nil or destGUID ~= nil) then
-			if (sourceGUID == ('') or sourceGUID == nil ) then
-				local _, _, _, _, sex, _, _ = GetPlayerInfoByGUID(destGUID)
-				genderZ = sex
-			else
-				local _, _, _, _, sex, _, _ = GetPlayerInfoByGUID(sourceGUID)
-				genderZ = sex
-			end
-		else
-			GSA.log ("sourceGUID or destGUID error")
-			print("--",sourceGUID,destGUID,listName,spellID)
-		end
-	end
 
-		self:PlaySound(list[spellID],extend,genderZ)
+		self:PlaySound(list[spellID])
 
  end
 
- function GladiatorlosSA:COMBAT_LOG_EVENT_UNFILTERED(event , ...)
+ -- Because arrays are for nerds
+ function GSA:CheckFriendlyDebuffs(spellID)
+	if spellID == 87204 or			-- Vampiric Touch Horrify
+		spellID == 196364 or 		-- Unstable Affliction Silence
+		spellID == 1330 or 			-- Garrote Silence
+		spellID == 1833 or 			-- Cheap Shot
+		spellID == 6770 or 			-- Sap
+		spellID == 3355 or 			-- Freezing Trap
+		spellID == 212332 or 		-- Smash (DK Abomination)
+		spellID == 212337 or 		-- Powerful Smash (DK Abomination)
+		spellID == 91800 or 		-- Gnaw (DK Ghoul)
+		spellID == 91797 or 		-- Monstrous Claw (DK Ghoul)
+		spellID == 163505 or 		-- Rake Stun
+		spellID == 199086 or 		-- Warpath Stun
+		spellID == 202335 or 		-- Double Barrel Stun
+		spellID == 215652 or 		-- Shield of Virtue silence
+		spellID == 302144 then 		-- Gladiator's Maledict
+		return true
+	end
+end
+
+ -- Because arrays are for nerds
+function GSA:CheckForEpicBG(instanceMapID)	-- Determines if battleground is in list of epic bgs.
+	if instanceMapID == 2118 or		-- Wintergrasp [Epic]
+		instanceMapID == 30 or		-- Alterac Valley
+		instanceMapID == 628 or		-- Isle of Conquest
+		instanceMapID == 1280 or	-- Southshore vs Tarren Mill
+		instanceMapID == 1191 or	-- Trashcan
+		instanceMapID == 2197 then	-- Korrak's Revenge		
+		return true
+	end
+end
+
+-- Checks settings and world location to determine if alerts should occur.
+ 		-- I can probably use this to fix the weird problem with PvP flag checking that seemed blizzard-sided
+ 		-- but I am lazy and that will come later.
+function GSA:CanTalkHere()
 	--Disable By Location
 	local _,currentZoneType = IsInInstance()
 	local _,_,_,_,_,_,_,instanceMapID = GetInstanceInfo()
-	if (not ((currentZoneType == "none" and gsadb.field) or (currentZoneType == "pvp" and gsadb.battleground) or (currentZoneType == ("arena" or "scenario") and gsadb.arena) or gsadb.all)) then
-		return
+	--local isPvP = UnitIsWarModeDesired("player")
+	playerCurrentZone = currentZoneType
+
+	if (not ((currentZoneType == "none" and gsadb.field and not gsadb.onlyFlagged) or 												-- World
+		--(currentZoneType == "none" and gsadb.field and (gsadb.onlyFlagged and UnitIsWarModeDesired("player"))) or
+		(currentZoneType == "pvp" and gsadb.battleground and not self:CheckForEpicBG(instanceMapID)) or 	-- Battleground
+		(currentZoneType == "pvp" and gsadb.epicbattleground and self:CheckForEpicBG(instanceMapID)) or		-- Epic Battleground
+		(currentZoneType == "arena" and gsadb.arena) or 													-- Arena
+		(currentZoneType == "scenario" and gsadb.arena) or 													-- Scenario
+		gsadb.all)) then																					-- Anywhere
+		--return false
+		canSpeakHere = false
+	else
+		canSpeakHere = true
 	end
+	--print("CanTalkHere() = " .. tostring(canSpeakHere))
+end
+	
+
+ function GladiatorlosSACN:COMBAT_LOG_EVENT_UNFILTERED(event , ...)
+	-- Checks if alerts should occur here.
+	if (not canSpeakHere) then return end
+
+	 local isSanctuary = GetZonePVPInfo()
+	 if (isSanctuary == "sanctuary") then return end
+
 	local timestamp,event,hideCaster,sourceGUID,sourceName,sourceFlags,sourceFlags2,destGUID,destName,destFlags,destFlags2,spellID = CombatLogGetCurrentEventInfo()
 	--select ( 1 , ... );
 	if not GSA_EVENT[event] then return end
 
-	--	print(sourceName,sourceGUID,destName,destGUID,destFlags,"|cffFF7D0A" .. event.. "|r",spellName,"|cffFF7D0A" .. spellID.. "|r")
-	--	print("|cffff0000timestamp|r",timestamp,"|cffff0000event|r",event,"|cffff0000hideCaster|r",hideCaster,"|cffff0000sourceGUID|r",sourceGUID,"|cffff0000sourceName|r",sourceName,"|cffff0000sourceFlags|r",sourceFlags,"|cffff0000sourceFlags2|r",sourceFlags2,"|cffff0000destGUID|r",destGUID,"|cffff0000destName|r",destName,"|cffff0000destFlags|r",destFlags,"|cffff0000destFlags2|r",destFlags2,"|cffff0000spellID|r",spellID,"|cffff0000spellName|r",spellName)
-		
-		
+		--print(sourceName,sourceGUID,destName,destGUID,destFlags,"|cffFF7D0A" .. event.. "|r",spellName,"|cffFF7D0A" .. spellID.. "|r")
+		--print("|cffff0000timestamp|r",timestamp,"|cffff0000event|r",event,"|cffff0000hideCaster|r",hideCaster,"|cffff0000sourceGUID|r",sourceGUID,"|cffff0000sourceName|r",sourceName,"|cffff0000sourceFlags|r",sourceFlags,"|cffff0000sourceFlags2|r",sourceFlags2,"|cffff0000destGUID|r",destGUID,"|cffff0000destName|r",destName,"|cffff0000destFlags|r",destFlags,"|cffff0000destFlags2|r",destFlags2,"|cffff0000spellID|r",spellID,"|cffff0000spellName|r",spellName)
+
 	if (destFlags) then
 		for k in pairs(GSA_TYPE) do
 			desttype[k] = CombatLog_Object_IsA(destFlags,k)
-			--log("desttype:"..k.."="..(desttype[k] or "nil"))
+			--print("desttype:"..k.."="..(desttype[k] or "nil"))
 		end
 	else
 		for k in pairs(GSA_TYPE) do
@@ -287,93 +315,84 @@
 	if (destGUID) then
 		for k in pairs(GSA_UNIT) do
 			destuid[k] = (UnitGUID(k) == destGUID)
-			--log("destuid:"..k.."="..(destuid[k] and "true" or "false"))
+			--print("destuid:"..k.."="..(destuid[k] and "true" or "false"))
 		end
 	else
 		for k in pairs(GSA_UNIT) do
 			destuid[k] = nil
-			--log("destuid:"..k.."="..(destuid[k] and "true" or "false"))
+			--print("destuid:"..k.."="..(destuid[k] and "true" or "false"))
 		end
 	end
 	destuid.any = true
 	if (sourceFlags) then
 		for k in pairs(GSA_TYPE) do
 			sourcetype[k] = CombatLog_Object_IsA(sourceFlags,k)
-			--log("sourcetype:"..k.."="..(sourcetype[k] or "nil"))
+			--print("sourcetype:"..k.."="..(sourcetype[k] or "nil"))
 		end
 	else
 		for k in pairs(GSA_TYPE) do
 			sourcetype[k] = nil
-			--log("sourcetype:"..k.."="..(sourcetype[k] or "nil"))
+			--print("sourcetype:"..k.."="..(sourcetype[k] or "nil"))
 		end
 	end
 	if (sourceGUID) then
 		for k in pairs(GSA_UNIT) do
 			sourceuid[k] = (UnitGUID(k) == sourceGUID)
-			--log("sourceuid:"..k.."="..(sourceuid[k] and "true" or "false"))
+			--print("sourceuid:"..k.."="..(sourceuid[k] and "true" or "false"))
 		end
 	else
 		for k in pairs(GSA_UNIT) do
 			sourceuid[k] = nil
-			--log("sourceuid:"..k.."="..(sourceuid[k] and "true" or "false"))
+			--print("sourceuid:"..k.."="..(sourceuid[k] and "true" or "false"))
 		end
 	end
 	sourceuid.any = true
 
 	if (event == "SPELL_AURA_APPLIED" and desttype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and (not gsadb.aonlyTF or destuid.target or destuid.focus) and not gsadb.aruaApplied) then
-	--The following section is to disable alerts for aura applications (such as dispel protection) from your team onto theirs. IDs should be identical to the ones below.
-	-- 87204 = Vampiric Embrace || 196364 = Unstable Affliction || 1330 = Garrote - Silence || 1833 = Cheap Shot || 6770 = Sap || 3355 = Freezing Trap || 212332 = Smash (DK Abomination) || 212337 = Powerful Smash (DK Abomination) || 91800 = Gnaw (DK Ghoul) || 91797 = Monstrous Blow (DK Ghoul) || 163505 = Druid Rake Stun || 199086 = Warpath stun || 202335 = Double Barrel stun || 215652 = Shield of Virtue silence || 19577 = Intimidation (hunter pet stun)
-		if spellID == 87204 or spellID == 196364 or spellID == 1330 or spellID == 1833 or spellID == 6770 or spellID == 3355 or spellID == 212332 or spellID == 212337 or spellID == 91800 or spellID == 91797 or spellID == 163505 or spellID == 199086 or spellID == 202335 or spellID == 215652 or spellID == 19577 then return end
-			--if (MapID == 40 or InstanceMapID == 4710) and gsadb.epicbattleground then return end
-				self:PlaySpell("auraApplied", spellID, sourceGUID, destGUID)
+		if self:CheckFriendlyDebuffs(spellID) then
+			return
+		end
+		self:PlaySpell("auraApplied", spellID, sourceGUID, destGUID)
 	elseif (event == "SPELL_AURA_APPLIED" and (desttype[COMBATLOG_FILTER_FRIENDLY_UNITS] or desttype[COMBATLOG_FILTER_ME]) and (not gsadb.aonlyTF or destuid.target or destuid.focus) and not gsadb.auraApplied) then
-	--The following section is to enable alerts for aura applications (such as dispel protection) onto your team from theirs. IDs should be identical to the ones below.
-		if spellID == 87204 or spellID == 196364 or spellID == 1330 or spellID == 1833 or spellID == 6770 or spellID == 3355 or spellID == 212332 or spellID == 212337 or spellID == 91800 or spellID == 91797 or spellID == 163505 or spellID == 199086 or spellID == 202335 or spellID == 215652 or spellID == 19577 then
-			--if (MapID == 40 or InstanceMapID == 4710) and gsadb.epicbattleground then return end
-				self:PlaySpell("auraApplied", spellID, sourceGUID, destGUID)
+		if self:CheckFriendlyDebuffs(spellID) then
+			self:PlaySpell("auraApplied", spellID, sourceGUID, destGUID)
 		end
 	elseif (event == "SPELL_AURA_REMOVED" and desttype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and (not gsadb.ronlyTF or destuid.target or destuid.focus) and not gsadb.auraRemoved) then
-			--if (MapID == 40 or InstanceMapID == 4710) and gsadb.epicbattleground then return end
 			self:PlaySpell("auraRemoved", spellID, sourceGUID, destGUID)
 	elseif (event == "SPELL_CAST_START" and sourcetype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and (not gsadb.conlyTF or sourceuid.target or sourceuid.focus) and not gsadb.castStart) then
-			--if (MapID == 40 or InstanceMapID == 4710) and gsadb.epicbattleground then return end
-				--if spellID == 2060 or spellID == 82326 or spellID == 77472 or spellID == 5185 or spellID == 116670 or spellID == 194509 or spellID == 152118 then
-				--	if currentZoneType == "arena" then
-				--		self:PlaySpell("castStart", spellID, sourceGUID, destGUID)
-				--else return end
 			self:PlaySpell("castStart", spellID, sourceGUID, destGUID)
 	elseif (event == "SPELL_CAST_SUCCESS" and sourcetype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and (not gsadb.sonlyTF or sourceuid.target or sourceuid.focus) and not gsadb.castSuccess) then
-			--if (MapID == 40 or InstanceMapID == 4710) and gsadb.epicbattleground then return end
 		if self:Throttle(tostring(spellID).."default", 0.05) then return end
-		if gsadb.class and currentZoneType == "arena" then
-			if spellID == 42292 or spellID == 208683 or spellID == 195710 then
+		if gsadb.class and playerCurrentZone == "arena" then
+			if spellID == 42292 or spellID == 208683 or spellID == 195710 or spellID == 336126 then
 				local c = self:ArenaClass(sourceGUID) -- PvP Trinket Class Callout
-					if c then 
+					if c then
 					self:PlaySound(c);
 				end
-			else 
+			else
 				self:PlaySpell("castSuccess", spellID, sourceGUID, destGUID)
 			end
 		else
 			self:PlaySpell("castSuccess", spellID, sourceGUID, destGUID)
 		end
-	elseif (event == "SPELL_INTERRUPT" and desttype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and not gsadb.interrupt) then 
+	elseif (event == "SPELL_INTERRUPT" and desttype[COMBATLOG_FILTER_HOSTILE_PLAYERS] and not gsadb.interrupt) then
 		self:PlaySpell ("friendlyInterrupt", spellID, sourceGUID, destGUID)
-	elseif (event == "SPELL_INTERRUPT" and (desttype[COMBATLOG_FILTER_FRIENDLY_UNITS] or desttype[COMBATLOG_FILTER_ME]) and not gsadb.interruptedfriendly) then 
+	elseif (event == "SPELL_INTERRUPT" and (desttype[COMBATLOG_FILTER_FRIENDLY_UNITS] or desttype[COMBATLOG_FILTER_ME]) and not gsadb.interruptedfriendly) then
 		self:PlaySpell ("friendlyInterrupted", spellID, sourceGUID, destGUID)
 	end
 
+
 	-- play custom spells
 	for k, css in pairs (gsadb.custom) do
-		if css.destuidfilter == "custom" and destName == css.destcustomname then 
-			destuid.custom = true  
-		else 
+		if css.destuidfilter == "custom" and destName == css.destcustomname then
+			destuid.custom = true
+		else
 			destuid.custom = false
 		end
 		if css.sourceuidfilter == "custom" and sourceName == css.sourcecustomname then
-			sourceuid.custom = true  
+			sourceuid.custom = true
 		else
-			sourceuid.custom = false 
+			sourceuid.custom = false
 		end
 
 		if css.eventtype[event] and destuid[css.destuidfilter] and desttype[css.desttypefilter] and sourceuid[css.sourceuidfilter] and sourcetype[css.sourcetypefilter] and spellID == tonumber(css.spellid) then
@@ -395,27 +414,21 @@
  end
 
 -- play drinking in arena
- --local DRINK_SPELL, REFRESHMENT_SPELL, FOOD_SPELL = GetSpellInfo(104270), GetSpellInfo(167152), GetSpellInfo(5006), GetSpellInfo(138292)
- function GladiatorlosSA:UNIT_AURA(event,uid)
---
--- 	local _,currentZoneType = IsInInstance()
---
---	if uid:find("arena") and gsadb.drinking then
---	-- if gsadb.drinking then
---		if (UnitAura(uid,DRINK_SPELL) or UnitAura(uid,REFRESHMENT_SPELL) or UnitAura(uid,FOOD_SPELL)) and currentZoneType == "arena" then
---
---			local genderZ
---			if gsadb.genderVoice then
---				genderZ = UnitSex(uid)
---			end
---
---			if self:Throttle(tostring(104270) .. uid, 4) then return end
---			self:PlaySound("drinking",extend,genderZ)
---		end
---	end
+ function GladiatorlosSACN:UNIT_AURA(event,uid)
+ 	local _,currentZoneType = IsInInstance()
+
+	--if gsadb.drinking then--if uid:find("arena") and gsadb.drinking then 
+		if gsadb.drinking then
+			if (AuraUtil.FindAuraByName("Drinking",uid) or AuraUtil.FindAuraByName("Food",uid) or AuraUtil.FindAuraByName("Refreshment",uid) or AuraUtil.FindAuraByName("Drink",uid)) and currentZoneType == "arena" then
+				if self:Throttle(tostring(104270) .. uid, 4) then return end
+			self:PlaySound("drinking")
+			end
+		end
+	--end
  end
 
- function GladiatorlosSA:Throttle(key,throttle)
+
+ function GladiatorlosSACN:Throttle(key,throttle)
 	if (not self.throttled) then
 		self.throttled = {}
 	end

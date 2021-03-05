@@ -1,4 +1,4 @@
-﻿local L = LibStub("AceLocale-3.0"):NewLocale("GladiatorlosSA", "enUS",true)
+﻿local L = LibStub("AceLocale-3.0"):NewLocale("GladiatorlosSACN", "enUS",true)
 if not L then return end
 
 L["Spell_CastSuccess"] = "On Successful Cast"
@@ -42,7 +42,7 @@ L["Custom unit name"] = "Custom Unit Name"
 L["Dest unit"] = "Destination Unit"
 L["Dest type"] = "Destination Type"
 
-L["GladiatorlosSACredits"] = "Customizable PvP Announcer addon for vocalizing many important spells cast by your enemies.|n|n|cffC41F3BIMPORTANT: The update for Battle for Azeroth is still a work in progress. Not all abilities listed in the options currently have an alert associated with them. This will be addressed soon.|r|n|n|cffFFF569Created by|r |cff9482C9Abatorlos|r |cffFFF569of Spinebreaker|r|n|cffFFF569Legion/BfA support by|r |cffC79C6EOrunno|r |cffFFF569of Moon Guard (With permission from zuhligan)|r|n|n|cffFFF569Special Thanks|r|n|cffA330C9superk521|r (Past Project Manager)|n|cffA330C9DuskAshes|r (Chinese Support)|n|cffA330C9N30Ex|r (Mists of Pandaria Support)|n|cffA330C9zuhligan|r (Warlords of Draenor & French Support)|n|cffA330C9jungwan2|r (Korean Support)|n|cffA330C9Mini_Dragon|r (Chinese support for WoD & Legion)|n|cffA330C9LordKuper|r (Russian support for Legion)|n|cffA330C9Tzanee - Wyrmrest Accord|r (Placeholder Voice Lines)|n|nAll feedback, questions, suggestions, and bug reports are welcome at the addon's page on Curse:|nhttps://wow.curseforge.com/projects/gladiatorlossa2"
+L["GladiatorlosSACredits"] = "Customizable PvP Announcer addon for vocalizing many important spells cast by your enemies.|n|n|cffFFF569Created by|r |cff9482C9Abatorlos|r |cffFFF569of Spinebreaker|r|n|cffFFF569Legion/BfA/Shadowlands support by|r |cFF00FF96Treasuretail|r |cffFFF569of Wyrmrest Accord (With permission from zuhligan)|r|n|n|cffFFF569Special Thanks|r|n|cffA330C9superk521|r (Past Project Manager)|n|cffA330C9DuskAshes|r (Chinese Support)|n|cffA330C9N30Ex|r (Mists of Pandaria Support; Shadowlands voice recordings)|n|cffA330C9zuhligan|r (Warlords of Draenor & French Support)|n|cffA330C9jungwan2|r (Korean Support)|n|cffA330C9Mini_Dragon|r (Chinese support for WoD & Legion)|n|cffA330C9LordKuper|r (Russian support for Legion)|n|cffA330C9Tzanee - Wyrmrest Accord|r (Placeholder Voice Lines)|n|nAll feedback, questions, suggestions, and bug reports are welcome at the addon's page on Curse:|nhttps://wow.curseforge.com/projects/gladiatorlossa2|nOR GitHub:|nhttps://github.com/Rhykes/GladiatorlosSA2"
 L["PVP Voice Alert"] = true
 L["Load Configuration"] = "<-- Load GSA2 Menus"
 L["Load Configuration Options"] = true
@@ -86,7 +86,7 @@ L["Buff Applied"] = true
 L["Target and Focus Only"] = true
 L["Alert works only when your current target or focus gains the buff effect or use the ability"] = "If enabled, alerts will only happen if the ability is used on, or is cast by, your current target or focused target.|n|nThis option is separate for each category."
 L["Alert Drinking"] = true
-L["In arena, alert when enemy is drinking"] = "In arena, alert when enemy is drinking.|n|cffC41F3BTemporarily disabled.|r"
+L["In arena, alert when enemy is drinking"] = "In arena, alert when enemy is drinking."
 L["PvP Trinketed Class"] = true
 L["Also announce class name with trinket alert when hostile targets use PvP trinket in arena"] = "In arenas, announces the class that used their Gladiator Medallion. (2 Minute Trinket)|r"
 L["General Abilities"] = true
@@ -151,12 +151,12 @@ L["DPSDispel_Desc"] = "Generic alert for hybrid class dispels that do not remove
 L["HealerDispel"] = "Magic Dispels"
 L["HealerDispel_Desc"] = "Generic alert for healing class (AND WARLOCKS. >:| ) dispels that remove Magic effects.|n|nNature's Cure (|cffFF7D0ADruid|r)|nDetox (|cFF00FF96Monk|r)|nCleanse (|cffF58CBAPaladin|r)|nPurify (Priest)|nPurify Spirit (|cff0070daShaman|r)|nSinge Magic (|cff9482C9Warlock|r)"
 L["CastingSuccess"] = "CC Cast Success"
-L["CastingSuccess_Desc"] = "Enables generic 'success' alert when a major enemy cast-time Crowd Control ability successfully finishes a cast.|n|nBe aware that this will announce even if the victim is unaffected, such as a target that is in a full Diminishing Return cycle.|n|n|cffC41F3BWARNING: ALL of the abilities below will announce their success if this is enabled, even if you have some of them disabled in Spell Casting.|r|n|nCyclone (|cffFF7D0ADruid|r)|nHibernate (|cffFF7D0ADruid|r)|nPolymorph (|cff69CCF0Mage|r)|nRing of Frost (|cff69CCF0Mage|r)|nRepentance (|cffF58CBAPaladin|r)|nMind Control (Priest)|nHex (|cff0070daShaman|r)|nFear (|cff9482C9Warlock|r)"
+L["CastingSuccess_Desc"] = "Enables generic 'success' alert when a major enemy cast-time Crowd Control ability successfully finishes a cast.|n|nBe aware that this will announce even if the victim is unaffected, such as on a target that is in a full Diminishing Return cycle.|n|n|cffC41F3BWARNING: ALL of the abilities below will announce their success if this is enabled, even if you have some of them disabled in Spell Casting.|r|n|nCyclone (|cffFF7D0ADruid|r)|nHibernate (|cffFF7D0ADruid|r)|nScare Beast (|cffABD473Hunter|r)|nPolymorph (|cff69CCF0Mage|r)|nRing of Frost (|cff69CCF0Mage|r)|nRepentance (|cffF58CBAPaladin|r)|nMind Control (Priest)|nHex (|cff0070daShaman|r)|nFear (|cff9482C9Warlock|r)"
 
 L["DispelKickback"] = "Dispel Penalties"
 
 L["Purge"] = "Purges"
-L["PurgeDesc"] = "Generic alert for purges that remove magic effects from your team, excluding Arcane Torrent.|n|nConsume Magic (|cffA330C9Demon Hunter|r)|nDispel Magic (Priest)|nPurge (|cff0070daShaman|r)|nDevour Magic (|cff9482C9Warlock|r)"
+L["PurgeDesc"] = "Generic alert for purges that remove magic effects from your team, excluding Arcane Torrent.|n|nConsume Magic (|cffA330C9Demon Hunter|r)|nTranquilizing Shot (|cffABD473Hunter|r)|nDispel Magic (Priest)|nPurge (|cff0070daShaman|r)|nDevour Magic (|cff9482C9Warlock|r)"
 
 L["FriendlyInterrupted"] = "Ally Lockout Alert"
 L["FriendlyInterruptedDesc"] = "Disable the alert that occurs when an enemy successfully interrupts you or an ally which locks them out of casting.|n|n(Plays the Blizzard 'Quest Failed' sound effect.)"
@@ -164,10 +164,63 @@ L["FriendlyInterruptedDesc"] = "Disable the alert that occurs when an enemy succ
 L["epicbattleground"] = "Epic Battlegrounds"
 L["epicbattlegroundDesc"] = "Alerts occur in Epic Battlegrounds.|n|nYou're welcome."
 
-L["OnlyIfPvPFlagged"] = true
-L["OnlyIfPvPFlaggedDesc"] = true
+L["OnlyIfPvPFlagged"] = "Only in PvP"
+L["OnlyIfPvPFlaggedDesc"] = "If enabled, alerts will no longer play unless you are PvP flagged; such as in War Mode or in a PvP instance. Those areas still need to be enabled for GSA to function there, even if this option is enabled.|n|n|cffC41F3BWARNING: This also disables alerts while in a Duel, so remember to toggle it off!|r"
 
 L["TankTauntsOFF"] = "Intimidation"
 L["TankTauntsOFF_Desc"] = "Alerts the fading of Intimidation: a damage amplification effect originating from tank specializations."
 L["TankTauntsON"] = "Intimidation"
 L["TankTauntsON_Desc"] = "Alerts the application of Intimidation: a damage amplifcation effect originating from tank specializations."
+
+L["Connected"] = "Connected Alerts"
+L["Connected_Desc"] = "Plays a simple 'Connected' alert when certain very powerful cast-time abilities successfully complete their cast.|n|nGreater Pyroblast (|cff69CCF0Mage|r)|nChaos Bolt (|cff9482C9Warlock|r)"
+
+L["CovenantAbilities"] = "Covenant Abilities"
+
+L["FrostDK"] = "Frost"
+L["BloodDK"] = "Blood"
+L["UnholyDK"] = "Unholy"
+
+L["HavocDH"] = "Havoc"
+L["VengeanceDH"] = "Vengeance"
+
+L["FeralDR"] = "Feral"
+L["BalanceDR"] = "Balance"
+L["RestorationDR"] = "Restoration"
+L["GuardianDR"] = "Guardian"
+
+L["MarksmanshipHN"] = "Marksmanship"
+L["SurvivalHN"] = "Survival"
+L["BeastMasteryHN"] = "Beast Mastery"
+
+L["FrostMG"] = "Frost"
+L["FireMG"] = "Fire"
+L["ArcaneMG"] = "Arcane"
+
+L["MistweaverMN"] = "Mistweaver"
+L["WindwalkerMN"] = "Windwalker"
+L["BrewmasterMN"] = "Brewmaster"
+
+L["HolyPD"] = "Holy"
+L["RetributionPD"] = "Retribution"
+L["ProtectionPD"] = "Protection"
+
+L["HolyPR"] = "Holy"
+L["DisciplinePR"] = "Discipline"
+L["ShadowPR"] = "Shadow"
+
+L["OutlawRG"] = "Outlaw"
+L["AssassinationRG"] = "Assassination"
+L["SubtletyRG"] = "Subtlety"
+
+L["RestorationSH"] = "Restoration"
+L["EnhancementSH"] = "Enhancement"
+L["ElementalSH"] = "Elemental"
+
+L["DestructionWL"] = "Destruction"
+L["DemonologyWL"] = "Demonology"
+L["AfflictionWL"] = "Affliction"
+
+L["ArmsWR"] = "Arms"
+L["FuryWR"] = "Fury"
+L["ProtectionWR"] = "Protection"

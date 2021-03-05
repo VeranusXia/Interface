@@ -1,4 +1,4 @@
-local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 26
+local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 27
 local AceDB = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
 
 if not AceDB then return end -- No upgrade needed
@@ -332,7 +332,7 @@ AceDB.frame:SetScript("OnEvent", logoutHandler)
 
 function DBObjectLib:RegisterDefaults(defaults)
 	if defaults and type(defaults) ~= "table" then
-		error("Usage: AceDBObject:RegisterDefaults(defaults): 'defaults' - table or nil expected.", 2)
+		error(("Usage: AceDBObject:RegisterDefaults(defaults): 'defaults' - table or nil expected, got %q."):format(type(defaults)), 2)
 	end
 
 	validateDefaults(defaults, self.keys)
@@ -361,7 +361,7 @@ end
 
 function DBObjectLib:SetProfile(name)
 	if type(name) ~= "string" then
-		error("Usage: AceDBObject:SetProfile(name): 'name' - string expected.", 2)
+		error(("Usage: AceDBObject:SetProfile(name): 'name' - string expected, got %q."):format(type(name)), 2)
 	end
 
 	-- changing to the same profile, dont do anything
@@ -400,7 +400,7 @@ end
 
 function DBObjectLib:GetProfiles(tbl)
 	if tbl and type(tbl) ~= "table" then
-		error("Usage: AceDBObject:GetProfiles(tbl): 'tbl' - table or nil expected.", 2)
+		error(("Usage: AceDBObject:GetProfiles(tbl): 'tbl' - table or nil expected, got %q."):format(type(tbl)), 2)
 	end
 
 	-- Clear the container table
@@ -435,15 +435,15 @@ end
 
 function DBObjectLib:DeleteProfile(name, silent)
 	if type(name) ~= "string" then
-		error("Usage: AceDBObject:DeleteProfile(name): 'name' - string expected.", 2)
+		error(("Usage: AceDBObject:DeleteProfile(name): 'name' - string expected, got %q."):format(type(name)), 2)
 	end
 
 	if self.keys.profile == name then
-		error("Cannot delete the active profile in an AceDBObject.", 2)
+		error(("Cannot delete the active profile (%q) in an AceDBObject."):format(name), 2)
 	end
 
 	if not rawget(self.profiles, name) and not silent then
-		error("Cannot delete profile '" .. name .. "'. It does not exist.", 2)
+		error(("Cannot delete profile %q as it does not exist."):format(name), 2)
 	end
 
 	self.profiles[name] = nil
@@ -470,15 +470,15 @@ end
 
 function DBObjectLib:CopyProfile(name, silent)
 	if type(name) ~= "string" then
-		error("Usage: AceDBObject:CopyProfile(name): 'name' - string expected.", 2)
+		error(("Usage: AceDBObject:CopyProfile(name): 'name' - string expected, got %q."):format(type(name)), 2)
 	end
 
 	if name == self.keys.profile then
-		error("Cannot have the same source and destination profiles.", 2)
+		error(("Cannot have the same source and destination profiles (%q)."):format(name), 2)
 	end
 
 	if not rawget(self.profiles, name) and not silent then
-		error("Cannot copy profile '" .. name .. "'. It does not exist.", 2)
+		error(("Cannot copy profile %q as it does not exist."):format(name), 2)
 	end
 
 	-- Reset the profile before copying
@@ -527,7 +527,7 @@ end
 
 function DBObjectLib:ResetDB(defaultProfile)
 	if defaultProfile and type(defaultProfile) ~= "string" then
-		error("Usage: AceDBObject:ResetDB(defaultProfile): 'defaultProfile' - string or nil expected.", 2)
+		error(("Usage: AceDBObject:ResetDB(defaultProfile): 'defaultProfile' - string or nil expected, got %q."):format(type(defaultProfile)), 2)
 	end
 
 	local sv = self.sv
@@ -556,13 +556,13 @@ end
 
 function DBObjectLib:RegisterNamespace(name, defaults)
 	if type(name) ~= "string" then
-		error("Usage: AceDBObject:RegisterNamespace(name, defaults): 'name' - string expected.", 2)
+		error(("Usage: AceDBObject:RegisterNamespace(name, defaults): 'name' - string expected, got %q."):format(type(name)), 2)
 	end
 	if defaults and type(defaults) ~= "table" then
-		error("Usage: AceDBObject:RegisterNamespace(name, defaults): 'defaults' - table or nil expected.", 2)
+		error(("Usage: AceDBObject:RegisterNamespace(name, defaults): 'defaults' - table or nil expected, got %q."):format(type(defaults)), 2)
 	end
 	if self.children and self.children[name] then
-		error ("Usage: AceDBObject:RegisterNamespace(name, defaults): 'name' - a namespace with that name already exists.", 2)
+		error(("Usage: AceDBObject:RegisterNamespace(name, defaults): 'name' - a namespace called %q already exists."):format(name), 2)
 	end
 
 	local sv = self.sv
@@ -580,10 +580,10 @@ end
 
 function DBObjectLib:GetNamespace(name, silent)
 	if type(name) ~= "string" then
-		error("Usage: AceDBObject:GetNamespace(name): 'name' - string expected.", 2)
+		error(("Usage: AceDBObject:GetNamespace(name): 'name' - string expected, got %q."):format(type(name)), 2)
 	end
 	if not silent and not (self.children and self.children[name]) then
-		error ("Usage: AceDBObject:GetNamespace(name): 'name' - namespace does not exist.", 2)
+		error(("Usage: AceDBObject:GetNamespace(name): 'name' - namespace %q does not exist."):format(name), 2)
 	end
 	if not self.children then self.children = {} end
 	return self.children[name]
@@ -600,15 +600,15 @@ function AceDB:New(tbl, defaults, defaultProfile)
 	end
 
 	if type(tbl) ~= "table" then
-		error("Usage: AceDB:New(tbl, defaults, defaultProfile): 'tbl' - table expected.", 2)
+		error(("Usage: AceDB:New(tbl, defaults, defaultProfile): 'tbl' - table expected, got %q."):format(type(tbl)), 2)
 	end
 
 	if defaults and type(defaults) ~= "table" then
-		error("Usage: AceDB:New(tbl, defaults, defaultProfile): 'defaults' - table expected.", 2)
+		error(("Usage: AceDB:New(tbl, defaults, defaultProfile): 'defaults' - table expected, got %q."):format(type(defaults)), 2)
 	end
 
 	if defaultProfile and type(defaultProfile) ~= "string" and defaultProfile ~= true then
-		error("Usage: AceDB:New(tbl, defaults, defaultProfile): 'defaultProfile' - string or true expected.", 2)
+		error(("Usage: AceDB:New(tbl, defaults, defaultProfile): 'defaultProfile' - string or true expected, got %q."):format(type(defaultProfile)), 2)
 	end
 
 	return initdb(tbl, defaults, defaultProfile)

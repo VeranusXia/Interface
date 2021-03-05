@@ -1,9 +1,9 @@
---[[ $Id: AceGUIWidget-DropDown.lua 1167 2017-08-29 22:08:48Z funkydude $ ]]--
+--[[ $Id: AceGUIWidget-DropDown.lua 1239 2020-09-20 10:22:02Z nevcairiel $ ]]--
 local AceGUI = LibStub("AceGUI-3.0")
 
 -- Lua APIs
 local min, max, floor = math.min, math.max, math.floor
-local select, pairs, ipairs, type = select, pairs, ipairs, type
+local select, pairs, ipairs, type, tostring = select, pairs, ipairs, type, tostring
 local tsort = table.sort
 
 -- WoW APIs
@@ -35,8 +35,8 @@ end
 
 do
 	local widgetType = "Dropdown-Pullout"
-	local widgetVersion = 3
-	
+	local widgetVersion = 5
+
 	--[[ Static data ]]--
 	
 	local backdrop = {
@@ -97,7 +97,7 @@ do
 		child:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, offset)
 		child:SetPoint("TOPRIGHT", frame, "TOPRIGHT", self.slider:IsShown() and -12 or 0, offset)
 		status.offset = offset
-		status.scrollvalue = value		
+		status.scrollvalue = value
 	end
 	
 	-- exported
@@ -131,7 +131,7 @@ do
 			child:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, offset)
 			self.slider:SetValue(0)
 		else
-			self.slider:Show()			
+			self.slider:Show()
 			local value = (offset / (viewheight - height) * 1000)
 			if value > 1000 then value = 1000 end
 			self.slider:SetValue(value)
@@ -184,12 +184,7 @@ do
 				
 		local height = 8
 		for i, item in pairs(items) do
-			if i == 1 then
-				item:SetPoint("TOP", itemFrame, "TOP", 0, -2)
-			else
-				item:SetPoint("TOP", items[i-1].frame, "BOTTOM", 0, 1)
-			end
-			
+			item:SetPoint("TOP", itemFrame, "TOP", 0, -2 + (i - 1) * -16)
 			item:Show()
 			
 			height = height + 16
@@ -249,7 +244,7 @@ do
 	
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
-		local frame = CreateFrame("Frame", "AceGUI30Pullout"..count, UIParent)
+		local frame = CreateFrame("Frame", "AceGUI30Pullout"..count, UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
 		local self = {}
 		self.count = count
 		self.type = widgetType
@@ -299,8 +294,8 @@ do
 		
 		scrollFrame.obj = self
 		itemFrame.obj = self
-		
-		local slider = CreateFrame("Slider", "AceGUI30PulloutScrollbar"..count, scrollFrame)
+
+		local slider = CreateFrame("Slider", "AceGUI30PulloutScrollbar"..count, scrollFrame, BackdropTemplateMixin and "BackdropTemplate" or nil)
 		slider:SetOrientation("VERTICAL")
 		slider:SetHitRectInsets(0, 0, -10, 0)
 		slider:SetBackdrop(sliderBackdrop)
@@ -347,8 +342,8 @@ end
 
 do
 	local widgetType = "Dropdown"
-	local widgetVersion = 31
-	
+	local widgetVersion = 35
+
 	--[[ Static data ]]--
 	
 	--[[ UI event handler ]]--
@@ -456,6 +451,7 @@ do
 		self:SetWidth(200)
 		self:SetLabel()
 		self:SetPulloutWidth(nil)
+		self.list = {}
 	end
 	
 	-- exported, AceGUI callback
@@ -526,9 +522,7 @@ do
 	
 	-- exported
 	local function SetValue(self, value)
-		if self.list then
-			self:SetText(self.list[value] or "")
-		end
+		self:SetText(self.list[value] or "")
 		self.value = value
 	end
 	
@@ -583,8 +577,16 @@ do
 	
 	-- exported
 	local sortlist = {}
+	local function sortTbl(x,y)
+		local num1, num2 = tonumber(x), tonumber(y)
+		if num1 and num2 then -- numeric comparison, either two numbers or numeric strings
+			return num1 < num2
+		else -- compare everything else tostring'ed
+			return tostring(x) < tostring(y)
+		end
+	end
 	local function SetList(self, list, order, itemType)
-		self.list = list
+		self.list = list or {}
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
@@ -593,8 +595,8 @@ do
 			for v in pairs(list) do
 				sortlist[#sortlist + 1] = v
 			end
-			tsort(sortlist)
-			
+			tsort(sortlist, sortTbl)
+
 			for i, key in ipairs(sortlist) do
 				AddListItem(self, key, list[key], itemType)
 				sortlist[i] = nil
@@ -612,10 +614,8 @@ do
 	
 	-- exported
 	local function AddItem(self, value, text, itemType)
-		if self.list then
-			self.list[value] = text
-			AddListItem(self, value, text, itemType)
-		end
+		self.list[value] = text
+		AddListItem(self, value, text, itemType)
 	end
 	
 	-- exported
@@ -641,8 +641,7 @@ do
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
 		local frame = CreateFrame("Frame", nil, UIParent)
-		--local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate")
-		local dropdown = MSA_DropDownMenu_Create("AceGUI30DropDown"..count, frame)
+		local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate")
 		
 		local self = {}
 		self.type = widgetType

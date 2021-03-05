@@ -1,7 +1,7 @@
 ﻿-- Mini Dragon(projecteurs@gmail.com)
 -- Last update: Jan 29, 2015
 
-local L = LibStub("AceLocale-3.0"):NewLocale("GladiatorlosSA", "zhTW")
+local L = LibStub("AceLocale-3.0"):NewLocale("GladiatorlosSACN", "zhTW")
 if not L then return end
 
 L["Spell_CastSuccess"] = "施法成功"
@@ -65,8 +65,8 @@ L["Alert works anywhere else then anena, BG, dungeon instance"] = "除了戰場�
 L["Voice config"] = "聲音設置"
 L["Voice language"] = "語言類型"
 L["Select language of the alert"] = "選擇通報所用語音"
-L["Chinese(female)"] = "漢語(女聲)"
-L["English(female)"] = "英語(女聲)"
+L["Chinese(female)"] = "漢語女聲(VV)"
+L["English(female)"] = "英語女聲(??)"
 L["Volume"] = "聲音大小"
 L["adjusting the voice volume(the same as adjusting the system master sound volume)"] = "調節聲音大小(等同於調節系統主音量大小)"
 L["Advance options"] = "高級設置"
@@ -174,3 +174,56 @@ L["TankTauntsOFF"] = true
 L["TankTauntsOFF_Desc"] = true
 L["TankTauntsON"] = true
 L["TankTauntsON_Desc"] = true
+
+L["Connected"] = true
+L["Connected_Desc"] = true
+
+L["CovenantAbilities"] = true
+
+L["FrostDK"] = true
+L["BloodDK"] = true
+L["UnholyDK"] = true
+
+L["HavocDH"] = true
+L["VengeanceDH"] = true
+
+L["FeralDR"] = true
+L["BalanceDR"] = true
+L["RestorationDR"] = true
+L["GuardianDR"] = true
+
+L["MarksmanshipHN"] = true
+L["SurvivalHN"] = true
+L["BeastMasteryHN"] = true
+
+L["FrostMG"] = true
+L["FireMG"] = true
+L["ArcaneMG"] = true
+
+L["MistweaverMN"] = true
+L["WindwalkerMN"] = true
+L["BrewmasterMN"] = true
+
+L["HolyPD"] = true
+L["RetributionPD"] = true
+L["ProtectionPD"] = true
+
+L["HolyPR"] = true
+L["DisciplinePR"] = true
+L["ShadowPR"] = true
+
+L["OutlawRG"] = true
+L["AssassinationRG"] = true
+L["SubtletyRG"] = true
+
+L["RestorationSH"] = true
+L["EnhancementSH"] = true
+L["ElementalSH"] = true
+
+L["DestructionWL"] = true
+L["DemonologyWL"] = true
+L["AfflictionWL"] = true
+
+L["ArmsWR"] = true
+L["FuryWR"] = true
+L["ProtectionWR"] = true

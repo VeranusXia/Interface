@@ -1,28 +1,16 @@
-lightweight tag 465846e98179eebe8c532846afc9234109251e34 v4.0.3
-Author:	VallanTV <thevallantv@protonmail.com>
-Date:	Sun Nov 1 06:50:55 2020 -0800
+lightweight tag a5d0e8bdf993736f8393b86b6cace3a769e80a43 4.0.8-release
+Author:	GitHub <noreply@github.com>
+Date:	Sat Jan 30 17:49:57 2021 +0000
 
-commit 465846e98179eebe8c532846afc9234109251e34
-Author: VallanTV <thevallantv@protonmail.com>
-Date:   Sun Nov 1 06:50:55 2020 -0800
+commit 48bda60046631d359382afded13a9f389ba3a0f8
+Author: pereira-a <pereirasmandre@gmail.com>
+Date:   Sat Jan 30 17:49:13 2021 +0000
 
-    Update for Shadowlands prepatch
+    Revert "Update to handle buttons that do not have "OnClick" scripts"
 
-commit 1646e7b4fa4f35831a7319513bcd3b65e293c9d0
-Author: vallantv <60242784+vallantv@users.noreply.github.com>
-Date:   Fri Jan 24 14:30:49 2020 -0800
+commit 48bda60046631d359382afded13a9f389ba3a0f8
+Author: pereira-a <pereirasmandre@gmail.com>
+Date:   Sat Jan 30 17:49:13 2021 +0000
 
-    Create LICENSE
-
-commit c1e409d2db79908d43dd9d815fa6b0b987d68b4f
-Author: VallanTV <vallantv@protonmail.com>
-Date:   Fri Jan 24 10:57:35 2020 -0800
-
-    Fix in game version display
-
-commit 32bbcd9d82a1b3caed1ae6700cc05945c6fadab8
-Author: VallanTV <vallantv@protonmail.com>
-Date:   Fri Jan 24 10:50:20 2020 -0800
-
-    Fix version number
+    Revert "Update to handle buttons that do not have "OnClick" scripts"
 

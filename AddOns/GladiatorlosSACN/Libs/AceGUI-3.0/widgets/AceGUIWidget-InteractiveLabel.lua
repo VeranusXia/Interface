@@ -6,9 +6,6 @@ if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 -- Lua APIs
 local select, pairs = select, pairs
 
--- WoW APIs
-local CreateFrame, UIParent = CreateFrame, UIParent
-
 local function Control_OnEnter(frame)
 	frame.obj:Fire("OnEnter")
 end

@@ -1,8 +1,18 @@
 # Deadly Boss Mods Core
 
-## [9.0.21-12-gc742b1e](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/c742b1e4b35ec8de4638c19557e96a2361eff10b) (2021-03-02)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...c742b1e4b35ec8de4638c19557e96a2361eff10b) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.21-21-g5557ab7](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/5557ab74fbe0a4b5c37bdf5012bc905faae6b913) (2021-03-05)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...5557ab74fbe0a4b5c37bdf5012bc905faae6b913) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Added user request, dreadbindings in sanguine depths  
+- restore backup method for volatile ejection, CLEU not consistent  
+- went over cap, revert this  
+- Fix typo  
+- Fixes to last to actually do what was intended  
+- Allow CreatePizzaTimer object to be called with "whisper" arg by external modders using function to unicast timers. Also allows DBM to accept pizza timers sent this way via whisper sync handler.  
+- Update koKR (#518)  
+- Missed some schedules  
+- Save cpu on hungering destroyer by using new hotfixed events and no longer rely on cpu heavier spell\_damage and scheduling  
+    Also moved volatile to combat log events so it no longer relies on victims running boss mods for them to get marked  
 - Fix Lua exception (#517)  
     Bad table entry, reported by user :)  
 - Clear paused status on a bar when :Start or :Stop is called on a timer object. Start should always clear previous status of timer.  

@@ -1,13 +1,13 @@
-﻿## Interface: 80200
-## Title: GladiatorlosSA
+## Interface: 90002
+## Title: GladiatorlosSACN
 ## Title-zhCN: |cFF99CC01[PVP]|r技能语音
 ## Title-zhTW: |cFF99CC01[PVP]|r技能語音
-## Notes: PVP Spell Sound Alert
+## Notes: PVP Spell Sound Alerter
 ## Notes-zhCN: PVP技能語音提示
 ## Notes-zhTW: PVP技能語音提示
-## Author: Abatorlos(of Spinebreaker), DuskAshes, superk521, zuhligan, Grit (Legion Update), Mini_Dragon, LordKuper + VV(20190627)
+## Author: Abatorlos(of Spinebreaker), DuskAshes, superk521, zuhligan, Grit (Legion Update), Mini_Dragon, LordKuper + VV(2021-02-02)
 ## SavedVariables: GladiatorlosSADB
-## Version: B3
+## Version: 3.2
 
 ## X-Repple: 2 UI
 

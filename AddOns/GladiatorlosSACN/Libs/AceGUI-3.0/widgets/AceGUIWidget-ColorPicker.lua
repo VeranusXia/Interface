@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 ColorPicker Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "ColorPicker", 23
+local Type, Version = "ColorPicker", 25
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -40,7 +40,7 @@ local function Control_OnLeave(frame)
 end
 
 local function ColorSwatch_OnClick(frame)
-	HideUIPanel(ColorPickerFrame)
+	ColorPickerFrame:Hide()
 	local self = frame.obj
 	if not self.disabled then
 		ColorPickerFrame:SetFrameStrata("FULLSCREEN_DIALOG")
@@ -70,7 +70,7 @@ local function ColorSwatch_OnClick(frame)
 			ColorCallback(self, r, g, b, a, true)
 		end
 
-		ShowUIPanel(ColorPickerFrame)
+		ColorPickerFrame:Show()
 	end
 	AceGUI:ClearFocus()
 end
@@ -137,6 +137,7 @@ local function Constructor()
 	colorSwatch:SetPoint("LEFT")
 
 	local texture = frame:CreateTexture(nil, "BACKGROUND")
+	colorSwatch.background = texture
 	texture:SetWidth(16)
 	texture:SetHeight(16)
 	texture:SetColorTexture(1, 1, 1)
@@ -144,6 +145,7 @@ local function Constructor()
 	texture:Show()
 
 	local checkers = frame:CreateTexture(nil, "BACKGROUND")
+	colorSwatch.checkers = checkers
 	checkers:SetWidth(14)
 	checkers:SetHeight(14)
 	checkers:SetTexture(188523) -- Tileset\\Generic\\Checkers
