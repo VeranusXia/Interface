@@ -5,7 +5,7 @@
 ## Notes: PVP Spell Sound Alerter
 ## Notes-zhCN: PVP技能語音提示
 ## Notes-zhTW: PVP技能語音提示
-## Author: Abatorlos(of Spinebreaker), DuskAshes, superk521, zuhligan, Grit (Legion Update), Mini_Dragon, LordKuper + VV(2021-02-02)
+## Author: Abatorlos(of Spinebreaker), DuskAshes, superk521, zuhligan, Grit (Legion Update), Mini_Dragon, LordKuper + VV(2020-03-18)
 ## SavedVariables: GladiatorlosSADB
 ## Version: 3.2
 

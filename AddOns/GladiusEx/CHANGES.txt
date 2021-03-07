@@ -1,0 +1,28 @@
+lightweight tag 46a5a3b40f25758b44f802faa4896e3a75724f80 1.8
+Author:	vendethiel <vendethiel@hotmail.fr>
+Date:	Thu Jan 28 17:25:10 2021 +0100
+
+commit 46a5a3b40f25758b44f802faa4896e3a75724f80
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Thu Jan 28 17:25:10 2021 +0100
+
+    adjust default options
+
+commit bf3874ba87c12403fec3c353d2629f2a2ffee365
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Thu Jan 21 10:48:10 2021 +0100
+
+    BackdropTemplate for detached grp
+
+commit 7f1a3f6b48b55ba26e14a05b9a358fec36402275
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Wed Jan 20 22:37:37 2021 +0100
+
+    Basic covenant support
+
+commit f84e053bc1f73c1c9b41414dc89100d824672fdc
+Author: vendethiel <vendethiel@hotmail.fr>
+Date:   Wed Jan 20 14:14:29 2021 +0100
+
+    fix remove a default Clicks
+
