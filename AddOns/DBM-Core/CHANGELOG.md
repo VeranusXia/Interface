@@ -1,8 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.0.21-21-g5557ab7](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/5557ab74fbe0a4b5c37bdf5012bc905faae6b913) (2021-03-05)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...5557ab74fbe0a4b5c37bdf5012bc905faae6b913) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.21-23-g722a0bd](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/722a0bd8ed7324dbdcf350ae6a9d8abba7f5348b) (2021-03-09)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.21...722a0bd8ed7324dbdcf350ae6a9d8abba7f5348b) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Disabled Xira's ability, per hottfixes  
+- no changes, just removed obsolete comment  
 - Added user request, dreadbindings in sanguine depths  
 - restore backup method for volatile ejection, CLEU not consistent  
 - went over cap, revert this  
