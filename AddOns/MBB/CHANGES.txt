@@ -1,45 +1,16 @@
-lightweight tag ea50b856a4d13eed76bff44dfb7099d04e834541 v4.0.5
+lightweight tag 2642d8d80a40d7ff2c843eb2b1d511d9ea3c51be v4.0.6
 Author:	VallanTV <thevallantv@protonmail.com>
-Date:	Sun Mar 7 05:24:08 2021 -0800
+Date:	Wed Mar 10 10:13:36 2021 -0800
 
-commit ea50b856a4d13eed76bff44dfb7099d04e834541
+commit 2642d8d80a40d7ff2c843eb2b1d511d9ea3c51be
 Author: VallanTV <thevallantv@protonmail.com>
-Date:   Sun Mar 7 05:24:08 2021 -0800
+Date:   Wed Mar 10 10:12:39 2021 -0800
 
-    Bump for shadowlands release
+    bump game version
 
-commit cb75ed64cf2ffb4e3efc25b6bebfef988821ba03
+commit 48a81430932995af4b1bbe8674fc0e203b70ade8
 Author: VallanTV <thevallantv@protonmail.com>
-Date:   Sat Jan 2 12:14:55 2021 -0800
+Date:   Wed Mar 10 10:12:39 2021 -0800
 
-    Bump Version
-
-commit 2b10a76f97b11f37ff013eeef439b9f228cd7b82
-Author: IKnewOne <41551327+IKnewOne@users.noreply.github.com>
-Date:   Thu Nov 12 23:14:27 2020 +0200
-
-    Ru localization improvements
-
-commit 2b10a76f97b11f37ff013eeef439b9f228cd7b82
-Author: IKnewOne <41551327+IKnewOne@users.noreply.github.com>
-Date:   Thu Nov 12 23:14:27 2020 +0200
-
-    Ru localization improvements
-
-commit 13c99b1b28383b8d030653f0320ae4526ecd4430
-Author: IKnewOne <41551327+IKnewOne@users.noreply.github.com>
-Date:   Thu Nov 12 23:10:07 2020 +0200
-
-    HandyNotes plugins support
-    
-    A better solution to the previous iteration, focused on long-term support.
-
-commit d9189369f446686a914464c787118988f4fe874d
-Author: IKnewOne <41551327+IKnewOne@users.noreply.github.com>
-Date:   Wed Nov 11 17:58:08 2020 +0200
-
-    HandyNotes Shadowlands Pin Ignore
-    
-    Fix for MBB - HandyNotes_Shadowlands bug regarding the Pin from the second addons not being ignored correctly by the MBB.  Further info
-    MBB/issues/13
+    bump game version
 

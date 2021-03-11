@@ -1,4 +1,4 @@
-﻿## Interface: 90000
+﻿## Interface: 90005
 ## Title: [微微修改]tdBattlePetScript_Ext
 ## Title-zhCN: [微微修改]tdBattlePetScript扩展
 ## Author: scdhao

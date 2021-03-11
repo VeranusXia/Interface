@@ -70,9 +70,9 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210309031111"),
-	DisplayVersion = "9.0.22 alpha", -- the string that is shown as version
-	ReleaseRevision = releaseDate(2021, 2, 18) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	Revision = parseCurseDate("20210310161826"),
+	DisplayVersion = "9.0.23 alpha", -- the string that is shown as version
+	ReleaseRevision = releaseDate(2021, 3, 9) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 DBM.HighestRelease = DBM.ReleaseRevision --Updated if newer version is detected, used by update nags to reflect critical fixes user is missing on boss pulls
 
@@ -7454,7 +7454,7 @@ end
 -----------------------
 function DBM:AddMsg(text, prefix)
 	local tag = prefix or (self.localization and self.localization.general.name) or L.DBM
-	local frame = _G[tostring(self.Options.ChatFrame)]
+	local frame = DBM.Options.ChatFrame and _G[tostring(DBM.Options.ChatFrame)] or DEFAULT_CHAT_FRAME
 	frame = frame and frame:IsShown() and frame or DEFAULT_CHAT_FRAME
 	if prefix ~= false then
 		frame:AddMessage(("|cffff7d0a<|r|cffffd200%s|r|cffff7d0a>|r %s"):format(tostring(tag), tostring(text)), 0.41, 0.8, 0.94)
@@ -12266,7 +12266,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210309031111" then
+	if not revision or revision == "20210310161826" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end
