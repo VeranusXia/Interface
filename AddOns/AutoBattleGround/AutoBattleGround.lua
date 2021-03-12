@@ -2,13 +2,13 @@
 local start = false  
 local step = 0
 local oldtime = nil
-local totalgaNum = 5
+local totalgaNum = 6
 local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n",--Warrior 
 	["PALADIN"] = "/targetfriendplayer\n/castsequence 殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
 	["HUNTER"] = "/cast 意气风发\n", --Hunter
 	["ROGUE"] = "/cast 猩红之瓶\n/cast [nostealth,nocombat] 潜行\n", --Rogue
-	["PRIEST"] = "/cast 绝望祷言\n",--Priest
+	["PRIEST"] = "/targetenemy\n/cast 绝望祷言\n/cast 真言术：盾\n",--Priest
 	["DEATHKNIGHT"] = "/cast 天灾契约\n/cast 亡者复生\n/castsequence 寒冬号角,牺牲契约\n", --DeathKnight
 	["SHAMAN"] = "/cast 血肉铸造\n", --Shaman
 	["MAGE"] = "/castsequence 寒冰护体,寒冰宝珠\n", --Mage
@@ -20,7 +20,7 @@ local classSpell ={
 local _, className, index = UnitClass("player"); --检测职业
 local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[className]
 local pr= UnitName("player") .. "-" .. GetRealmName()
-local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
+--local curHour = tonumber(date("%H")) --当前时间 夜间模式判断用
 local macrotxt = ""
 local groupLeaderName = ""
 local rateFrame  
@@ -118,17 +118,17 @@ rlButton:SetScript("OnClick", function()
 	ReloadUI()
 end)
 --按钮3
-local rateButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
-rateButton:SetSize(90, 30)
-rateButton:SetPoint("LEFT", 210, 0)
-rateButton.Text = rateButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
-rateButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
-rateButton.Text:SetText("车头数据") -- 设置材质路径 
-rateButton.Text:SetPoint("CENTER", rateButton)
-rateButton:SetScript("OnClick", function() 
-	AddRateWindow()	 
-	rateButton:SetEnabled(false)
-end)
+-- local rateButton= CreateFrame("Button",nil,line1, "UIPanelButtonTemplate")
+-- rateButton:SetSize(90, 30)
+-- rateButton:SetPoint("LEFT", 210, 0)
+-- rateButton.Text = rateButton:CreateFontString(nil, "OVERLAY") -- 为Frame创建一个新的文字层
+-- rateButton.Text:SetFont(STANDARD_TEXT_FONT, 14, "THINOUTLINE") -- 设置字体路径, 大小, 描边
+-- rateButton.Text:SetText("车头数据") -- 设置材质路径 
+-- rateButton.Text:SetPoint("CENTER", rateButton)
+-- rateButton:SetScript("OnClick", function() 
+	-- AddRateWindow()	 
+	-- rateButton:SetEnabled(false)
+-- end)
 
 
 
@@ -352,14 +352,14 @@ function AutoBattleGround:Action()
 	end
 	
 	
- 	local curHour = tonumber(date("%H")) 
+ 	--local curHour = tonumber(date("%H")) 
 	--local daynightmode = blck:GetChecked() and true or (curHour>22 or curHour<8)
 	local difftime_config= 400 
 	--local groupmembers_config = daynightmode and 6 or 5 
 	
 	local groupmembersMin_config = 4
 	local groupmembersMax_config = 9
-	local groupassistantnum_config = 9
+	local groupassistantnum_config = 10
 
  
 	 
@@ -415,13 +415,15 @@ function AutoBattleGround:Action()
 			local gaNum=GetGroupAssistantNum()
 			if gaNum> groupassistantnum_config  then
 				C_PartyInfo.LeaveParty()
+				logText("队伍A的数量:"..gaNum)
 				logText("这个队伍A太多了 果断换一个")
 				return
 			end
 			if gaNum <= totalgaNum  then
 				blackList[groupLeaderName]=1
-				ABG_CONFIG.BLACKLIST = blackList
+				ABG_DB.BLACKLIST = blackList
 				C_PartyInfo.LeaveParty()
+				logText("队伍A的数量:"..gaNum)
 				logText("这个队伍活人队 果断换一个")
 				return
 			end
@@ -509,27 +511,27 @@ end
 
 
 
-function GetWinRate(leaderName)
-	local win = 0
-	local lose =0  
-	if leaderName~= nil then 
-		for k1,v1 in pairs(ABG_DB) do  
-			for k2,v2 in pairs(v1) do
-				if k2==leaderName then
-					win = win + v2.win
-					lose = lose + v2.lose
-				end
-			end
-		end
-	else
-		return ""
-	end
-	if lose==0 and win==0 then
-		return leaderName.."(暂无胜率)"
-	else
-		return leaderName.."("..string.format("%.2f",win/(win+lose)*100).."%)"
-	end
-end
+-- function GetWinRate(leaderName)
+	-- local win = 0
+	-- local lose =0  
+	-- if leaderName~= nil then 
+		-- for k1,v1 in pairs(ABG_DB) do  
+			-- for k2,v2 in pairs(v1) do
+				-- if k2==leaderName then
+					-- win = win + v2.win
+					-- lose = lose + v2.lose
+				-- end
+			-- end
+		-- end
+	-- else
+		-- return ""
+	-- end
+	-- if lose==0 and win==0 then
+		-- return leaderName.."(暂无胜率)"
+	-- else
+		-- return leaderName.."("..string.format("%.2f",win/(win+lose)*100).."%)"
+	-- end
+-- end
 
 
 function SlashCmdList.AutoBattleGround(msg)
@@ -575,22 +577,22 @@ function GetRate()
 	if  groupLeaderName =="" or groupLeaderName == nil then
 		logText("统计车头数据失败")
 	else
-		if (not ABGCharacterDB[groupLeaderName]) then
-			ABGCharacterDB[groupLeaderName] = {};
-			ABGCharacterDB[groupLeaderName].win=0;
-			ABGCharacterDB[groupLeaderName].lose=0;
-		end 
+		--if (not ABGCharacterDB[groupLeaderName]) then
+			--ABGCharacterDB[groupLeaderName] = {};
+			--ABGCharacterDB[groupLeaderName].win=0;
+			--ABGCharacterDB[groupLeaderName].lose=0;
+		--end 
 		if winner == fatcion then
 			loseNum = 0
-			ABGCharacterDB[groupLeaderName].win= ABGCharacterDB[groupLeaderName].win +1
-			logText(groupLeaderName.." 胜场+1")
+			--ABGCharacterDB[groupLeaderName].win= ABGCharacterDB[groupLeaderName].win +1
+			--logText(groupLeaderName.." 胜场+1")
 		else
 			loseNum = loseNum + 1
-			ABGCharacterDB[groupLeaderName].lose= ABGCharacterDB[groupLeaderName].lose+1
-			logText(groupLeaderName.." 负场+1")
+			--ABGCharacterDB[groupLeaderName].lose= ABGCharacterDB[groupLeaderName].lose+1
+			--logText(groupLeaderName.." 负场+1")
 		end
 	end
-	ABG_DB[pr] = ABGCharacterDB
+	--ABG_DB[pr] = ABGCharacterDB
 	
 	if loseNum>=2 then
 		logText("连跪"..loseNum.."把了")
@@ -613,41 +615,18 @@ function AutoBattleGround_CreateMinimapButton()
 end
  
 function AutoBattleGround:Init() 
- 
 	if (not ABG_DB) then
 		ABG_DB = {}
 	end 
-	if ABG_DB.config then
-		ABG_DB = {}
-	end
-	if ABG_DB.marco then
-		ABG_DB = {}
-	end
+	 
 	if not ABG_CONFIG then
 		ABG_CONFIG={}
-		--ABG_CONFIG.modeck=true
-		--ABG_CONFIG.boxck =true
-		--ABG_CONFIG.fishck = false
-		--ABG_CONFIG.blck = false
 	end
-	
-	if (not ABG_DB[pr]) then
-		ABG_DB[pr] = {}
-	end 
-	
-	--存储数据优化
-	if (not ABGCharacterDB) then
-		ABGCharacterDB = ABG_DB[pr]
-		ABG_DB[pr] = {}
-	end
-	
-	if ABGCharacterDB then
-		ABG_DB[pr] = ABGCharacterDB
-	end
-	 if not ABG_CONFIG.BLACKLIST then
-		ABG_CONFIG.BLACKLIST={}
+	  
+	if not ABG_DB.BLACKLIST then
+		ABG_DB.BLACKLIST={}
 	else
-		blackList = ABG_CONFIG.BLACKLIST
+		blackList = ABG_DB.BLACKLIST
 	end
 	if  not GetMacroInfo("快乐评级") then
 		CreateMacro("快乐评级", "1322720", "/click HappyPVP", nil, nil)
@@ -658,8 +637,8 @@ function AutoBattleGround:Init()
 	--fishck:SetChecked(ABG_CONFIG.fishck)
 	--blck:SetChecked(ABG_CONFIG.blck)
 	
-	--itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
-	--itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866)
+	itemwp:SetChecked(GetInventoryItemID("player", 16)==168973)
+	itemtk:SetChecked(GetInventoryItemID("player", 13)==167866 or GetInventoryItemID("player", 14)==167866 or GetInventoryItemID("player", 13)==178783 or GetInventoryItemID("player", 14)==178783)
 	--neckck:SetChecked(classSpell[className]=="")
 	--classSPck:SetChecked(classSpell[className]~="")
 	SaveConfig()
@@ -700,7 +679,7 @@ abgPVPmatch:RegisterEvent("LFG_LIST_SEARCH_RESULTS_RECEIVED")
 abgPVPmatch:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")  
 function abgPVPmatch:OnEvent(event, arg1)  
 	if start then
-		local curHour = tonumber(date("%H")) 
+		--local curHour = tonumber(date("%H")) 
 		--local daynightmode = blck:GetChecked() and true or (curHour>23 or curHour<7)
 		--local difftime_config= 400 
 		local groupmembersMin_config = 4 
@@ -759,12 +738,13 @@ function abgPVPmatch:OnEvent(event, arg1)
 					end 
 					
 				end 
-				logText("本次搜索到评级队伍"..#resultIDTable.."个,其中脚本队"..#temp.."个")
+				logText("本次搜索到评级队伍"..#resultIDTable.."个,疑似脚本队"..#temp.."个")
 			    if #temp>0 then
 					local num = math.random(#temp) 
 						local item = temp[num]
 					logText("随机选择:"..item.name.."("..num.."/"..#temp..")") 
-					logText("车头:"..GetWinRate(item.leaderName)) 
+					--logText("车头:"..GetWinRate(item.leaderName)) 
+					logText("车头:"..item.leaderName) 
 					signUp(item)
 					 
 					--LFGListApplicationDialog_Show(LFGListApplicationDialog,item.searchResultID)
