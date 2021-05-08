@@ -256,7 +256,7 @@ function AutoBattleGround:Action()
 				C_PartyInfo.LeaveParty()
 				logText("我怎么变团长了? 果断离队")
 			end
-			if loseNum>=5 then
+			if loseNum>=3 then
 				C_PartyInfo.LeaveParty()
 				logText("连跪N把了 离队换个车头")
 				return
@@ -270,7 +270,7 @@ function AutoBattleGround:Action()
 				return
 			end
 			if gaNum <= groupassistantnumMin_config  then
-				if string.find(groupLeaderName,"活树") or string.find(groupLeaderName,"小超") then
+				if string.find(groupLeaderName,"活树") or string.find(groupLeaderName,"小超")  or string.find(groupLeaderName,"漠然") then
 					logText("熟人队伍 观望一下")
 				else
 					blackList[groupLeaderName]=1
@@ -496,7 +496,7 @@ function abgPVPmatch:OnEvent(event, arg1)
 					
 					if #comment>0 and #voiceChat==0 and numBNetFriends==0 and numGuildMates==0 and age<300 and requiredItemLevel>=0 and requiredItemLevel<100 and numMembers>=groupmembersMin_config and numMembers<=groupmembersMax_config and leaderName and blackList[leaderName]==nil  then
 						table.insert(temp,result)
-						if string.find(leaderName,"活树") or string.find(leaderName,"小超") then
+						if string.find(leaderName,"活树") or string.find(leaderName,"小超")  or string.find(groupLeaderName,"漠然") then
 							logText("偶遇熟人:"..leaderName)
 							signUp(result)
 						end 

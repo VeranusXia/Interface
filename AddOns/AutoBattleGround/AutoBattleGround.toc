@@ -1,7 +1,7 @@
 ﻿## Interface: 90005
 ## Title: [微微出品]自助评级小助手
 ## Notes-zhCN: 艾泽拉斯科学研究院自助评级小助手
-## Version: 4.6
+## Version: 4.7
 ## SavedVariables: ABG_DB,ABG_CONFIG
 ## SavedVariablesPerCharacter: ABGCharacterDB
 ## LoadManagers: AddonLoader
