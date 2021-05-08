@@ -1,0 +1,17 @@
+﻿## Interface: 90005
+## Title: [微微出品]自助评级小助手
+## Notes-zhCN: 艾泽拉斯科学研究院自助评级小助手
+## Version: 4.6
+## SavedVariables: ABG_DB,ABG_CONFIG
+## SavedVariablesPerCharacter: ABGCharacterDB
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+## Author: Veranus
+
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+libs\AceAddon-3.0\AceAddon-3.0.xml
+AutoBattleGround.lua

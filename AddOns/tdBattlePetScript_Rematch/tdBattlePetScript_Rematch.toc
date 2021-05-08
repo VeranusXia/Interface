@@ -1,0 +1,7 @@
+﻿## Interface: 90005
+## Title: [微微修改]tdBattlePetScript增强
+## Author: DengSir
+## Version: 80100.01
+## Dependencies: tdBattlePetScript, Rematch
+
+Load.xml

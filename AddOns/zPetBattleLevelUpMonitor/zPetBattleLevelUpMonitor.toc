@@ -1,0 +1,9 @@
+﻿## Interface: 90005
+## Version: 1.0.3
+## Title: [微微修改]宠物练级状态监控
+## Author: scdhao
+## Notes: 宠物练级状态监控
+## Dependencies: Rematch
+## SavedVariables: PBLMData
+
+Monitor.xml

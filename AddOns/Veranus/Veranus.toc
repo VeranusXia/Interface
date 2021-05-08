@@ -1,0 +1,40 @@
+﻿## Interface: 90005
+## Title: [微微出品]Customer Option
+## Notes-zhCN: 微微写的自定义功能
+## Version: 1.1Test
+## SavedVariables: VERANUS_UI_DB,StatusSave
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+##CVar修改
+CVar.lua 
+##进出战斗提示,战斗提示(打断,驱散)
+Combat.lua 
+##巅峰声望显示
+extraRep.lua 
+##shift+左键设置焦点
+Focus.lua 
+##公会大米排名
+GuildKeystone.lua 
+##入侵提示
+Intrusion.lua 
+##低血量报警
+LowHP.lua 
+##战网好友名字颜色改职业颜色
+FriendListColors.lua
+
+##聊天物品图标
+ChatLinkIcon.lua
+##FriendsMenuXP
+FriendsMenuXP.lua
+##自动分享任务
+AutoShare.lua
+
+##爬塔BUFF向右
+##ScenarioBlocks.lua
+
+##快捷删除物品
+EasyDelete.lua
+
+##人物属性
+StatusInfo.lua

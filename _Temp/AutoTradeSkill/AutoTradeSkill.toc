@@ -1,0 +1,11 @@
+﻿## Interface: 90002
+## Title: [微微出品]艾泽拉斯科学研究院时尚洋品店
+## Notes-zhCN: 艾泽拉斯科学研究院时尚洋品店
+## Version: 1.0
+## SavedVariables: ATS_DB
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+## Author: Veranus
+
+AutoTradeSkill.lua

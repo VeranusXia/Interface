@@ -1,0 +1,11 @@
+﻿## Interface: 80200
+## Title: LootHistory
+## Notes-zhCN: 拾取历史
+## Version: 1.0
+## SavedVariables: LootHistory_DB
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+
+
+LootHistory.lua

@@ -1,0 +1,9 @@
+﻿## Interface: 90005
+## Title: [微微出品]自动屏蔽陌生人组队
+## Notes-zhCN: 自动屏蔽陌生人组队
+## Version: 1.0
+## LoadManagers: AddonLoader
+## X-LoadOn-Always: delayed
+## X-WoWBox-Ver: 1 
+
+AutoRefuse.lua
