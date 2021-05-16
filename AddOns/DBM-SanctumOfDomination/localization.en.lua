@@ -12,12 +12,21 @@ L:SetMiscLocalization({
 ---------------------------
 --  The Eye of the Jailer --
 ---------------------------
---L= DBM:GetModLocalization(2442)
+L= DBM:GetModLocalization(2442)
+
+L:SetOptionLocalization({
+	ContinueRepeating	= "Continue repeating icon yells for Scorn and Ire until debuffs are gone"
+})
 
 ---------------------------
 --  The Nine --
 ---------------------------
---L= DBM:GetModLocalization(2439)
+L= DBM:GetModLocalization(2439)
+
+L:SetMiscLocalization({
+	AgathaBlade		= "Fall before my blade!",
+	AradneStrike	= "You are all outmatched!"
+})
 
 ---------------------------
 --  Remnant of Ner'zhul --

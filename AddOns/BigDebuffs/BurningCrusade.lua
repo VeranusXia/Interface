@@ -1,6 +1,6 @@
 local addonName, addon = ...
 
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
+if WOW_PROJECT_ID ~= WOW_PROJECT_BURNING_CRUSADE_CLASSIC then return end
 
 local BUFF_DEFENSIVE = "buffs_defensive"
 local BUFF_OFFENSIVE = "buffs_offensive"
@@ -14,10 +14,24 @@ addon.Units = {
     "player",
     "pet",
     "target",
+    "focus",
     "party1",
     "party2",
     "party3",
     "party4",
+    "arena1",
+    "arena2",
+    "arena3",
+    "arena4",
+    "arena5",
+}
+
+-- Show one of these when a big debuff is displayed
+addon.WarningDebuffs = {
+    30108, -- Unstable Affliction
+    30404, -- Unstable Affliction
+    30405, -- Unstable Affliction
+    34914, -- Vampiric Touch
 }
 
 -- Make sure we always see these debuffs, but don't make them bigger
