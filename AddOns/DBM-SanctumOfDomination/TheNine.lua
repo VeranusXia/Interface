@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2439, "DBM-SanctumOfDomination", nil, 1193)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210515225647")
+mod:SetRevision("20210518225915")
 mod:SetCreatureID(175726)--Skyja (TODO, add other 2 and set health to highest?)
 mod:SetEncounterID(2429)
 mod:SetUsedIcons(8, 7, 6, 4, 3, 2, 1)
@@ -109,6 +109,7 @@ mod:AddNamePlateOption("NPAuraOnBrightAegis", 350158)
 
 local castsPerGUID = {}
 mod.vb.phase = 1
+mod.vb.valksDead = 11--1 not dead, 2 dead. 10s Kyra and 1s Signe
 --mod.vb.addIcon = 8
 mod.vb.valkCount = 0
 mod.vb.fragmentsIcon = 1
@@ -124,6 +125,7 @@ mod.vb.linkEssence = 0
 function mod:OnCombatStart(delay)
 	table.wipe(castsPerGUID)
 	self.vb.phase = 1
+	self.vb.valksDead = 11
 --	self.vb.addIcon = 8
 	self.vb.valkCount = 0
 	self.vb.fragmentCount = 0
@@ -145,7 +147,7 @@ function mod:OnCombatStart(delay)
 	if self:IsMythic() then--Journal says mythic, but it's been wrong on earlier testing, leaving this here for now
 --		timerFragmentsofDestinyCD:Start(1-delay, 1)
 	end
---	berserkTimer:Start(-delay)
+	berserkTimer:Start(300-delay)--Phase 1
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(DBM_CORE_L.INFOFRAME_POWER)
 		DBM.InfoFrame:Show(3, "enemypower", 2)
@@ -170,13 +172,17 @@ end
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 350202 then
-		timerUnendingStrikeCD:Start()
+		if self.vb.valksDead == 11 or self.vb.valksDead == 12 then
+			timerUnendingStrikeCD:Start()
+		end
 	elseif spellId == 350342 then
 --		self.vb.addIcon = 8
 		self.vb.massCount = self.vb.massCount + 1
 		specWarnFormlessMass:Show(self.vb.massCount)
 		specWarnFormlessMass:Play("killmob")
-		timerFormlessMassCD:Start(nil, self.vb.massCount+1)
+		if self.vb.valksDead == 11 or self.vb.valksDead == 12 then
+			timerFormlessMassCD:Start(nil, self.vb.massCount+1)
+		end
 		if self.Options.SetIconOnFormlessMass then--Only use up to 5 icons
 			self:ScanForMobs(177407, 0, 8, 2, 0.2, 12, "SetIconOnFormlessMass")
 		end
@@ -210,7 +216,9 @@ function mod:SPELL_CAST_START(args)
 		self.vb.wingCount = self.vb.wingCount + 1
 		specWarnWingsofRage:Show()
 		specWarnWingsofRage:Play("justrun")
-		timerWingsofRageCD:Start(nil, self.vb.wingCount+1)
+		if self.vb.valksDead == 11 or self.vb.valksDead == 12 then
+			timerWingsofRageCD:Start(nil, self.vb.wingCount+1)
+		end
 	elseif spellId == 350283 and self:CheckInterruptFilter(args.sourceGUID, false, false) then
 		specWarnSoulfulBlast:Show(args.sourceName)
 		specWarnSoulfulBlast:Play("kickcast")
@@ -218,7 +226,9 @@ function mod:SPELL_CAST_START(args)
 		self.vb.refrainCount = self.vb.refrainCount + 1
 		specWarnReverberatingRefrain:Show(args.sourceName)
 		specWarnReverberatingRefrain:Play("findshelter")
-		timerReverberatingRefrainCD:Start(nil, self.vb.refrainCount+1)
+		if self.vb.valksDead == 11 or self.vb.valksDead == 21 then
+			timerReverberatingRefrainCD:Start(nil, self.vb.refrainCount+1)
+		end
 	elseif spellId == 350467 then
 		self.vb.valkCount = self.vb.valkCount + 1
 		warnCalloftheValkyr:Show(self.vb.valkCount)
@@ -248,7 +258,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
 	if spellId == 350286 then
 		self.vb.songCount = self.vb.songCount + 1
-		timerSongofDissolutionCD:Start(nil, self.vb.songCount+1)
+		if self.vb.valksDead == 11 or self.vb.valksDead == 21 then
+			timerSongofDissolutionCD:Start(nil, self.vb.songCount+1)
+		end
 		if self:CheckInterruptFilter(args.sourceGUID, false, false) then
 			specWarnSongofDissolution:Show(args.sourceName)
 			specWarnSongofDissolution:Play("kickcast")
@@ -384,10 +396,12 @@ function mod:UNIT_DIED(args)
 	if cid == 177407 then--Formless Mass
 		castsPerGUID[args.destGUID] = nil
 	elseif cid == 177095 then--Kyra
+		self.vb.valksDead = self.vb.valksDead + 10
 		timerUnendingStrikeCD:Stop()
 		timerFormlessMassCD:Stop()
 		timerWingsofRageCD:Stop()
 	elseif cid == 177094 then--Signe
+		self.vb.valksDead = self.vb.valksDead + 1
 		timerSongofDissolutionCD:Stop()
 		timerReverberatingRefrainCD:Stop()
 	end
@@ -429,7 +443,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 			timerLinkEssenceCD:Start(22, 1)
 --			timerWordofRecallCD:Start(2, 1)--Cast instantly on phasing
 		end
-		berserkTimer:Start(602)--Can delay couple seconds if boss is casting when timer expires.
+		berserkTimer:Cancel()
+		berserkTimer:Start(602)--Phase 2
 	end
 end
 

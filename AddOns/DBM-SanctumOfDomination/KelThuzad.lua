@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2440, "DBM-SanctumOfDomination", nil, 1193)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210513011959")
+mod:SetRevision("20210516213448")
 mod:SetCreatureID(175559)
 mod:SetEncounterID(2422)
 mod:SetUsedIcons(1, 2, 3, 4, 6, 7, 8)
@@ -374,6 +374,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					timerFrostBlastCD:Start(85)--Speculation
 --					timerHowlingBlizzardCD:Update(0, 109.8)
 --					timerDarkEvocationCD:Update(0, 86.2)
+					DBM:AddMsg("if you are seeing this message, please share your WCL of this pull with DBM Authors with the number '80'")
 				elseif bossPower == 60 then--LOG coded
 					timerFrostBlastCD:Start(42)--Confirmed
 					timerHowlingBlizzardCD:Update(63.3, 109.8)
@@ -386,10 +387,12 @@ function mod:SPELL_AURA_APPLIED(args)
 					timerFrostBlastCD:Start(85)--Speculation
 --					timerHowlingBlizzardCD:Update(98.3, 109.8)
 --					timerDarkEvocationCD:Update(39.7, 86.2)
+					DBM:AddMsg("if you are seeing this message, please share your WCL of this pull with DBM Authors with the number '20'")
 				else--100/0--TODO, FIXME
 					timerFrostBlastCD:Start(85)--Speculation
 --					timerHowlingBlizzardCD:Update(0, 109.8)
 --					timerDarkEvocationCD:Update(0, 86.2)
+					DBM:AddMsg("if you are seeing this message, please share your WCL of this pull with DBM Authors with the number '100'")
 				end
 			end
 		end
