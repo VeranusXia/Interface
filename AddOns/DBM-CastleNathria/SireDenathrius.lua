@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2424, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210514022153")
+mod:SetRevision("20210524134429")
 mod:SetCreatureID(167406)
 mod:SetEncounterID(2407)
 mod:SetUsedIcons(1, 2, 3, 4, 7, 8)
@@ -663,7 +663,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerCrimsonCabalistsCD:Start(timer, self.vb.addCount+1)
 		end
 		if self.Options.SetIconOnBalefulShadows then--Only use up to 5 icons
-			self:ScanForMobs(175205, 0, 8, 2, 0.2, 12, "SetIconOnBalefulShadows")
+			self:ScanForMobs(175205, 0, 8, 2, 0.2, 25, "SetIconOnBalefulShadows")
 		end
 	end
 end

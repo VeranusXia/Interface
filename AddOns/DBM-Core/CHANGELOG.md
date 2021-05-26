@@ -1,8 +1,16 @@
 # Deadly Boss Mods Core
 
-## [9.0.28-20-gcc7a05c](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/cc7a05c86a40d294307868ba959ab7be4a30f684) (2021-05-21)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.28...cc7a05c86a40d294307868ba959ab7be4a30f684) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.28-26-ge49be96](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/e49be96149e703a24842c8617becf3ebe6d22070) (2021-05-25)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.28...e49be96149e703a24842c8617becf3ebe6d22070) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Just push this mod now. I've been trying to find motivation for a week now to fix it and honestly just can't find it, so leaving it as is for now.  
+- Make it the new scan policy to scan for at least 5 seconds.  
+- stuff  
+- This isn't done yet but I'm done for night and will pick it up tomorrow  
+- Push a few updates that are done-ish so far  
+- Add "no translate" markers for translation portal. (#578)  
+    * Add "no translate" markers for translation portal.  
+    * Also flag these two as no translate.  
 - more quick fixes  
 - quick fix  
 - They changed threat spellId because why not  

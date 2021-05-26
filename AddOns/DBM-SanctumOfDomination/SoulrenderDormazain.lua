@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2445, "DBM-SanctumOfDomination", nil, 1193)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210521022641")
+mod:SetRevision("20210523002923")
 mod:SetCreatureID(175727)
 mod:SetEncounterID(2434)
 mod:SetUsedIcons(1, 2, 3, 4)
@@ -239,7 +239,7 @@ function mod:SPELL_CAST_START(args)
 		end
 		timerBrandofTormentCD:Start(6, 1)
 	elseif spellId == 350411 then--Hellscream
-		timerHellscream:Start(self:IsHerioc() and 35 or self:IsMythic() and 25 or 50)--Heroic and mythic known, other difficulties not yet
+		timerHellscream:Start(self:IsHeroic() and 35 or self:IsMythic() and 25 or 50)--Heroic and mythic known, other difficulties not yet
 	elseif spellId == 350415 then--Warmonger Shackles
 		self.vb.shacklesCount = self.vb.shacklesCount + 1
 		specWarnWarmongerShackles:Show(self.vb.shacklesCount)

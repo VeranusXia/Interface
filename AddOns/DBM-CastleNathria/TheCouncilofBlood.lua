@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2426, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210517143201")
+mod:SetRevision("20210524134429")
 mod:SetCreatureID(166971, 166969, 166970)--Castellan Niklaus, Baroness Frieda, Lord Stavros
 mod:SetEncounterID(2412)
 mod:SetBossHPInfoToHighest()
@@ -649,7 +649,7 @@ function mod:SPELL_CAST_START(args)
 			timerDutifulAttendantCD:UpdateInline(DBM_CORE_L.MYTHIC_ICON)
 		end
 		if self.Options.SetIconOnDutiful then
-			self:ScanForMobs(175992, 2, 8, 1, 0.2, 10, "SetIconOnDutiful")--creatureID, iconSetMethod, mobIcon, maxIcon, scanInterval, scanningTime, optionName
+			self:ScanForMobs(175992, 2, 8, 1, 0.2, 25, "SetIconOnDutiful")--creatureID, iconSetMethod, mobIcon, maxIcon, scanInterval, scanningTime, optionName
 		end
 	elseif spellId == 346800 then
 		specWarnWaltzofBlood:Show()
