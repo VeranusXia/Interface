@@ -21,7 +21,7 @@
 ## X-Curse-Project-ID: 3358
 ## X-WoWI-ID: 8814
 ## X-Wago-ID: qv633o6b
-## Version: 9.0.28-26-ge49be96
+## Version: 9.0.29-5-g1f36add
 
 #@no-lib-strip@
 Libs\LibStub\LibStub.lua
