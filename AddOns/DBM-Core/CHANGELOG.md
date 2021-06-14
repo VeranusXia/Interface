@@ -1,8 +1,19 @@
 # Deadly Boss Mods Core
 
-## [9.0.29-8-gb55e553](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/b55e553e92605ead9cb59dfebc84a93c022339af) (2021-06-01)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.29...b55e553e92605ead9cb59dfebc84a93c022339af) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.0.29-18-gc9d3caf](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/c9d3caf373c9faae0699afebca10984b269c2b5b) (2021-06-11)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.29...c9d3caf373c9faae0699afebca10984b269c2b5b) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Update koKR (#595)  
+- Add some prints  
+- Some spell renames and stuff from latest journal update, so i'm not confused later  
+    Also added optional (off by default) stack counter for tarragrue debuffs  
+- Sync fix (#594)  
+- Adjustment to fatescribe based on journal updates  
+- Delete license.txt (#591)  
+- Sync delta code changes. (#590)  
+- Fix the fix to the fix  
+- Fix last  
+- Add 15 seconds per hotfix  
 - Add a link to BCC issues in issue templates. (#588)  
 - Update Rohkalo from mythic testing, still WIP do to incomplete logs as well as blizzard breaking combat log  
     Updated Kel Thuzad from mythic testing. Also WIP and incomplete because blizzard designed fight is a crappy way that makes doing accurate timers very miserable.  

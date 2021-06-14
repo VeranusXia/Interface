@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2424, "DBM-CastleNathria", nil, 1190)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210601031908")
+mod:SetRevision("20210602063305")
 mod:SetCreatureID(167406)
 mod:SetEncounterID(2407)
 mod:SetUsedIcons(1, 2, 3, 4, 7, 8)
@@ -704,7 +704,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			timerWrackingPainCD:Start(21.1, 1)
 			timerHandofDestructionCD:Start(44.2, 1)
 			timerCommandMassacreCD:Start(63.7, 1)
-			timerNextPhase:Start(219.4)
+			timerNextPhase:Start(234.4)
 		else
 			--Remornia
 			timerImpaleCD:Start(27.5, 1)
@@ -713,6 +713,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			timerWrackingPainCD:Start(21.1, 1)
 			timerHandofDestructionCD:Start(46.6, 1)
 			timerCommandMassacreCD:Start(64.9, 1)
+			timerNextPhase:Start(219.4)
 		end
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(DBM_CORE_L.ADDS)

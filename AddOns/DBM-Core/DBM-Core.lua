@@ -70,7 +70,7 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210601032124"),
+	Revision = parseCurseDate("20210611035244"),
 	DisplayVersion = "9.0.30 alpha", -- the string that is shown as version
 	ReleaseRevision = releaseDate(2021, 5, 26) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
@@ -832,7 +832,7 @@ do
 	local args = setmetatable({}, argsMT)
 
 	function argsMT.__index:IsSpellID(...)
-		return tIndexOf({...}, self.spellId) ~= nil
+		return tIndexOf({...}, args.spellId) ~= nil
 	end
 
 	function argsMT.__index:IsPlayer()
@@ -12306,7 +12306,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210601032124" then
+	if not revision or revision == "20210611035244" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end
