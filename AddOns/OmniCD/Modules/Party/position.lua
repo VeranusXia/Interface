@@ -4,6 +4,7 @@ local _G = _G
 local IsInRaid = IsInRaid
 local UnitGUID = UnitGUID
 local P = E["Party"]
+local isColdStartDC = true
 
 function P:IsCRFActive() -- [21]
 	return IsInRaid() and not self.isInArena or self.useCRF
@@ -58,6 +59,11 @@ function P:UpdatePosition()
 		return
 	end
 
+	if isColdStartDC then
+		isColdStartDC = nil
+		self:UpdateCRFCVars()
+	end
+
 	P:HideBars() -- [63]
 
 	for guid, info in pairs(P.groupInfo) do
@@ -89,6 +95,12 @@ function P:CVAR_UPDATE(cvar, value)
 	end
 end
 
+function P:UpdateCRFCVars() -- [103]
+	self.useCRF = C_CVar.GetCVarBool("useCompactPartyFrames")
+	self.useKGT = CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
+	self.isShownCRFM = CompactRaidFrameManager_GetSetting("IsShown")
+end
+
 do
 	local hookTimer
 
@@ -111,12 +123,12 @@ do
 		end
 
 		-- Grid2
-		if ( not IsAddOnLoaded("Blizzard_CompactRaidFrames") or not IsAddOnLoaded("Blizzard_CUFProfiles") ) then return end
+		if ( not IsAddOnLoaded("Blizzard_CompactRaidFrames") or not IsAddOnLoaded("Blizzard_CUFProfiles") ) then
+			return
+		end
 
-		self.useCRF = C_CVar.GetCVarBool("useCompactPartyFrames")
-		self.useKGT = CompactRaidFrameManager_GetSetting("KeepGroupsTogether")
-		self.isShownCRFM = CompactRaidFrameManager_GetSetting("IsShown")
-		self.activeRaidProfile = GetActiveRaidProfile()
+		self:UpdateCRFCVars()
+		--self.activeRaidProfile = GetActiveRaidProfile()
 
 		hooksecurefunc("CompactRaidFrameManager_SetSetting", function(arg) -- [64]
 			if arg == "IsShown" then

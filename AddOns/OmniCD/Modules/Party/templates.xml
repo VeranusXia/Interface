@@ -79,7 +79,7 @@
 					<Color r="0" g="0" b="0"/>
 				</Texture>
 			</Layer>
-			<Layer level="OVERLAY">
+			<!--Layer level="OVERLAY">
 				<Texture parentKey="flash" alpha="0" alphaMode="ADD" atlas="bags-glow-flash" useAtlasSize="true">
 					<Anchors>
 						<Anchor point="CENTER"/>
@@ -90,9 +90,9 @@
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-			</Layer>
+			</Layer-->
 		</Layers>
-		<Animations>
+		<!--Animations>
 			<AnimationGroup parentKey="newitemglowAnim" setToFinalAlpha="true" looping="NONE">
 				<Alpha childKey="NewItemTexture" smoothing="NONE" duration="1" order="1" fromAlpha="1" toAlpha="0.2"/>
 				<Alpha childKey="NewItemTexture" smoothing="NONE" duration="1" order="2" fromAlpha="0.2" toAlpha="1"/>
@@ -101,7 +101,7 @@
 			<AnimationGroup parentKey="flashAnim" setToFinalAlpha="true">
 				<Alpha childKey="flash" smoothing="OUT" duration="1" order="1.1" fromAlpha="1" toAlpha="0"/>
 			</AnimationGroup>
-		</Animations>
+		</Animations-->
 		<Frames>
 			<Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate" parentKey="cooldown" reverse="false" drawBling="false" drawEdge="false" hidden="true">
 				<SwipeTexture>
@@ -141,7 +141,7 @@
 			</Frame>
 			<Frame parentKey="AnimFrame" setAllPoints="true" hidden="true">
 				<Layers>
-					<Layer level="ARTWORK">
+					<Layer level="OVERLAY">
 						<Texture parentKey="Glow" file="Interface\Transmogrify\Textures.png" alpha="0">
 							<Size x="58" y="57"/>
 							<Anchors>
@@ -149,7 +149,7 @@
 							</Anchors>
 							<TexCoords left="0.52343750" right="0.97656250" top="0.38476563" bottom="0.49609375"/>
 						</Texture>
-						<Texture parentKey="Transition" file="Interface\Transmogrify\Textures.png" hidden="true">
+						<Texture parentKey="Transition" file="Interface\Transmogrify\Textures.png" hidden="false">
 							<Size x="42" y="41"/>
 							<Anchors>
 								<Anchor point="CENTER"/>
@@ -170,7 +170,7 @@
 						<Alpha childKey="OuterGlow" duration="0.15" fromAlpha="0" toAlpha="1" order="1"/>
 						<Alpha childKey="OuterGlow" duration="0.15" fromAlpha="1" toAlpha="0" order="2"/>
 						<Scale childKey="Transition" duration="0.2" scaleX="1.381" scaleY="1.381" order="2"/>
-						<Alpha childKey="Glow" fromAlpha="1" toAlpha="0" duration="0.2" order="2"/>
+						<!--Alpha childKey="Glow" fromAlpha="1" toAlpha="0" duration="0.2" order="2"/-->
 						<Scripts>
 							<OnFinished>
 								local frame = self:GetParent();

@@ -45,12 +45,14 @@ local highlight = {
 					order = 1,
 					type = "toggle",
 				},
+				--[[
 				glowColor = {
 					name = COLOR,
 					order = 2,
 					type = "select",
 					values = E.L_GLOW_ATLAS,
 				},
+				]]
 			}
 		},
 		highlight = {

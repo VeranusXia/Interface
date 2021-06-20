@@ -328,7 +328,7 @@ local extraBarsInfo = {
 			end
 		end,
 		args = {
-			-- TODO:
+			-- TODO: scrap this and add option to create additional raidbars next major update
 			--[==[
 			groupDetached = {
 				hidden = isInterruptBar,
