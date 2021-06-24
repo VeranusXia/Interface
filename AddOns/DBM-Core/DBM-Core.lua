@@ -70,7 +70,7 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210619024131"),
+	Revision = parseCurseDate("20210623015209"),
 	DisplayVersion = "9.0.31 alpha", -- the string that is shown as version
 	ReleaseRevision = releaseDate(2021, 6, 14) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
@@ -891,7 +891,7 @@ do
 			local zones = v.zones
 			local handler = v[event]
 			local modEvents = v.registeredUnitEvents
-			if handler and (not isUnitEvent or not modEvents or modEvents[event .. ...]) and (not zones or zones[LastInstanceMapID]) and not (v.isTrashMod and #inCombat > 0) then
+			if handler and (not isUnitEvent or not modEvents or modEvents[event .. ...]) and (not zones or zones[LastInstanceMapID]) and not (not v.isTrashModBossFightAllowed and v.isTrashMod and #inCombat > 0) then
 				handler(v, ...)
 			end
 		end
@@ -12319,7 +12319,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210619024131" then
+	if not revision or revision == "20210623015209" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end

@@ -111,7 +111,21 @@ E.spell_db = {
 		{ spellID = 325727, duration = 25,  type = "covenant",  spec = 321078   },
 		{ spellID = 323764, duration = 120, type = "covenant",  spec = 321077   },
 		{ spellID = 338142, duration = 60,  type = "covenant",  spec = 321076   },
+		--[[ Merged
+		{ spellID = 338035, duration = 60,  type = "covenant",  spec = 321076   },
+		{ spellID = 338018, duration = 60,  type = "covenant",  spec = 321076   },
+		{ spellID = 327022, duration = 60,  type = "covenant",  spec = 321076   },
+		{ spellID = 327037, duration = 60,  type = "covenant",  spec = 321076   },
+		{ spellID = 327071, duration = 60,  type = "covenant",  spec = 321076   },
+		]]
 		{ spellID = 323546, duration = 180, type = "covenant",  spec = 321079   },
+		--[[
+			B       F       G       R Affinity
+		B -         202157  197491  197492
+		F - 197488          217615  197492
+		G - 197488  202155          197492
+		R - 197632  197490  197491
+		]]
 		{ spellID = 106839, duration = 15,  type = "interrupt", spec = {103, 104}   },
 		{ spellID = 78675,  duration = 60,  type = "interrupt", spec = {102}    },
 		{ spellID = 88423,  duration = 8,   type = "dispel",    spec = {105}    },
@@ -144,6 +158,12 @@ E.spell_db = {
 		{ spellID = 197721, duration = 90,  type = "offensive", spec = true     },
 		{ spellID = 202770, duration = 60,  type = "offensive", spec = true     },
 		{ spellID = 319454, duration = 300, type = "offensive", spec = true     },
+		--[[ Merged
+		{ spellID = 108291, duration = 300, type = "offensive", spec = {197488, 197632} },  -- Heart of the Wild (Balance Affinity)
+		{ spellID = 108292, duration = 300, type = "offensive", spec = {202157, 202155, 197490} },  -- Heart of the Wild (Feral Affinity)
+		{ spellID = 108293, duration = 300, type = "offensive", spec = {197491, 217615} },  -- Heart of the Wild (Guardian Affinity)
+		{ spellID = 108294, duration = 300, type = "offensive", spec = 197492   },  -- Heart of the Wild (Restoration Affinity)
+		]]
 		{ spellID = 102560, duration = 180, type = "offensive", spec = true,    parent = 194223 },
 		{ spellID = 102558, duration = 180, type = "offensive", spec = true,    parent = 50334  },
 		{ spellID = 102543, duration = 180, type = "offensive", spec = true,    parent = 106951 },
@@ -632,7 +652,7 @@ E.spell_db = {
 		{ spellID = 118038, duration = 120, type = "defensive", spec = {71}     },
 		{ spellID = 236273, duration = 60,  type = "defensive", spec = true     },
 		{ spellID = 184364, duration = 120, type = "defensive", spec = {72}     },
-		{ spellID = 190456, duration = 12,  type = "defensive"  },
+		{ spellID = 190456, duration = {[73]=1,default=12}, type = "defensive"  },
 		{ spellID = 202168, duration = 30,  type = "defensive", spec = true,    parent = 34428  },
 		{ spellID = 12975,  duration = 180, type = "defensive", spec = {73}     },
 		{ spellID = 2565,   duration = 15,  type = "defensive", charges = 2     },
@@ -780,7 +800,7 @@ local buffFix = {
 	[97462]  = 97463,
 	[2565]   = 132404,
 	[236320] = 236321,
-	[34477]  = 35079,
+	[248518] = 248519,
 }
 
 E.buffFixNoCLEU = {

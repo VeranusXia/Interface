@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2437, "DBM-Party-Shadowlands", 9, 1194)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210619024010")
+mod:SetRevision("20210620030927")
 mod:SetCreatureID(175616)
 mod:SetEncounterID(2425)
 
@@ -40,6 +40,20 @@ function mod:OnCombatStart(delay)
 	timerInterrogationCD:Start(1-delay)
 	timerArmedSecurityCD:Start(1-delay)
 	timerImpoundContrabandCD:Start(1-delay)
+	local trashMod = DBM:GetModByName("TazaveshTrash")
+	if trashMod then
+		trashMod.isTrashModBossFightAllowed = true
+	end
+end
+
+function mod:OnCombatEnd()
+	if self.Options.InfoFrame then
+		DBM.InfoFrame:Hide()
+	end
+	local trashMod = DBM:GetModByName("TazaveshTrash")
+	if trashMod then
+		trashMod.isTrashModBossFightAllowed = false
+	end
 end
 
 function mod:SPELL_CAST_START(args)

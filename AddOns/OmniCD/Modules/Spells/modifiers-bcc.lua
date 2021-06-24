@@ -440,7 +440,7 @@ local spellRanks = {
 	{1776,  1777,   8629,   11285,  11286,  38764   },
 	{1766,  1767,   1768,   1769,   38768   },
 	{408,   8643    },
-	{2983,  8696    },
+	{2983,  8696,   11305   },
 	{1784,  1785,   1786,   1787    },
 	{1856,  1857,   26889   },
 
@@ -586,6 +586,11 @@ for i = 1, #talentRanks do
 	else
 		E.Write("Invalid TalentID: |cffffd200" .. talentID)
 	end
+end
+
+
+for k in pairs(E.spell_merged) do
+	E.spell_highlighted[k] = true
 end
 
 E.spell_updateOnCast = {

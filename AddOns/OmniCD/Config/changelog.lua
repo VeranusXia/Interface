@@ -2,6 +2,10 @@ local E, L, C = select(2, ...):unpack()
 
 if E.isBCC then
     E.changelog = [=[
+v2.6.03
+    Highlighting will now work with all spell ranks.
+    Rogue ability - Sprint (Rank 3) will correctly go on CD when used.
+
 v2.6.02
     Fixed abilities with shared cooldown not starting it's timer.
 
@@ -10,6 +14,12 @@ v2.6.01
 ]=]
 else
     E.changelog = [=[
+v2.6.03
+    Highlighting will now work with merged spells.
+    Hunter ability - Misdirect will correctly be highlighted.
+    Fixed nil error on certain raid frame addons.
+    Localization updated for ruRU, zhTW, koKR
+
 v2.6.02
     Glow animation changed.
     Backend updates for enemy CD tracking.

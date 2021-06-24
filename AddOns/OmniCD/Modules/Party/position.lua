@@ -61,7 +61,10 @@ function P:UpdatePosition()
 
 	if isColdStartDC then
 		isColdStartDC = nil
-		self:UpdateCRFCVars()
+		-- Grid2 !@#$%^&*
+		if IsAddOnLoaded("Blizzard_CompactRaidFrames") and IsAddOnLoaded("Blizzard_CUFProfiles") then
+			self:UpdateCRFCVars()
+		end
 	end
 
 	P:HideBars() -- [63]

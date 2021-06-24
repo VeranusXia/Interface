@@ -367,14 +367,14 @@ local extraBarsInfo = {
 		desc = L["Set the padding space between icon columns"],
 		order = 31,
 		type = "range",
-		min = -1, max = 100, softMax = 10, step = 1,
+		min = -5, max = 100, softMin = -1, softMax = 10, step = 1,
 	},
 	paddingY = {
 		name = L["Padding Y"],
 		desc = L["Set the padding space between icon rows"],
 		order = 32,
 		type = "range",
-		min = -1, max = 100, softMax = 10, step = 1,
+		min = -5, max = 100, softMin = -1, softMax = 10, step = 1,
 	},
 	scale = {
 		name = L["Icon Size"],

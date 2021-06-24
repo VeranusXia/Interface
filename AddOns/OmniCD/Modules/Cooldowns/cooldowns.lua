@@ -230,7 +230,6 @@ local function ProcessSpell(spellID, guid)
 					P:ResetCooldown(icon)
 				end
 			elseif k and not P:IsTalent(k, guid) then
-
 				break
 			end
 		end

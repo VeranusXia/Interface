@@ -4,6 +4,8 @@ local ACD_Tooltip = E.Libs.ACD.tooltip
 local DB_VERSION = 2.51
 
 function E:OnInitialize()
+	-- make changes to profile import on db updates
+
 	if not OmniCDDB or not OmniCDDB.version or OmniCDDB.version < 2.5 then
 		OmniCDDB = { version = DB_VERSION }
 	elseif OmniCDDB.version < DB_VERSION then
