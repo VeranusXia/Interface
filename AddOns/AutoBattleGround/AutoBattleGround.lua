@@ -11,7 +11,7 @@ local difftime_config= 400  --等待秒数
 
 local classSpell ={
 	["WARRIOR"] = "/cast 死亡之愿\n/cast 血性狂暴\n",--Warrior 
-	["PALADIN"] = "/targetfriendplayer\n/castsequence 殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,殉道者之光,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
+	["PALADIN"] = "/targetfriendplayer\n/castsequence 奉献,殉道者之光,神圣震击,奉献,殉道者之光,神圣震击,奉献,殉道者之光,神圣震击,奉献,殉道者之光,神圣震击,正义盾击\n/cast [target=player]圣光道标\n",--Paladin
 	["HUNTER"] = "/cast [nopet]召唤宠物 3\n/cast 意气风发\n", --Hunter
 	["ROGUE"] = "/cast 猩红之瓶\n/cast [nostealth,nocombat] 潜行\n", --Rogue
 	["PRIEST"] = "/targetenemy\n/cast 绝望祷言\n/cast 真言术：盾\n",--Priest
