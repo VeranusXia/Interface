@@ -1,19 +1,10 @@
 # Clique
 
-## [v90005-2.0.2](https://github.com/jnwhiteh/clique/tree/v90005-2.0.2) (2021-04-08)
-[Full Changelog](https://github.com/jnwhiteh/clique/compare/v90005-1.0.1...v90005-2.0.2) [Previous Releases](https://github.com/jnwhiteh/clique/releases)
+## [v3.1.1](https://github.com/jnwhiteh/Clique/tree/v3.1.1) (2021-06-30)
+[Full Changelog](https://github.com/jnwhiteh/Clique/compare/v3.0.2...v3.1.1) [Previous Releases](https://github.com/jnwhiteh/Clique/releases)
 
-- Add TOC for Classic  
-- Disable changelogs  
-- Merge pull request #1 from jnwhiteh/fix-luacheck-errors  
-    Declare globals and fix some luacheck errors  
-- Declare globals and fix some luacheck errors  
-- Fix exclude path  
-- Add working luacheck configuration  
-- Add workflow for pull requests  
-- Update release workflow to package live and classic  
-- Open directly to options when prompted  
-    There is a bug in the Blizzard interface that means this doesn't work  
-    after logging in or reload, unless we call it twice. So call it twice :D  
-- Unify classic and release codebases  
-- Fix backdrop code to work with both classic and live  
+- Update TOC for 9.1  
+- Merge pull request #2 from jnwhiteh/add-meta-support  
+    Add support for meta/command on Mac OS X  
+- Update localisation  
+- Add support for the Meta/Command key on Mac OS X  

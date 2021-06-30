@@ -1,11 +1,12 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: Clique
 ## Author: Cladhaire
-## Version: v90005-2.0.2
+## Version: v3.1.1
 ## Notes: Simply powerful click-casting interface
 ## SavedVariables: CliqueDB, CliqueDB3
 ## X-Curse-Project-ID: 15564
 ## X-WoWI-ID: 5108
+## X-Wago-ID: Mj6jLxGR
 
 ## X-Localizations: enUS, enGB, ruRU, zhCN, zhTW
 ## X-CompatibleLocales: enUS, enGB, deDE, frFR, esES, esMX, zhCN, zhTW, koKR, ruRU
