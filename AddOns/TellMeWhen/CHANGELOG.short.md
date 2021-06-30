@@ -1,8 +1,7 @@
 
-## v9.0.7
-## Bug Fixes
-* Fixed #1886 - invalid key to "next" (new version of LibDogTag-Unit-3.0 should resolve this).
-* Fixed #1889 - error thrown when attempting to import corrupted strings
+## v9.1.0
+* Version bump for WoW 9.1
+* Minor performance improvements
 
 
-[View Full Changelog](https://github.com/ascott18/TellMeWhen/blob/ad3b711724257ab4a37b8b7a9e1f16122370496b/CHANGELOG.md)
+[View Full Changelog](https://github.com/ascott18/TellMeWhen/blob/f6e7c7a18823ab70ea8294d196c0d2c1c285106a/CHANGELOG.md)

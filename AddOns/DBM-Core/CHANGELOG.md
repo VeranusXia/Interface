@@ -1,18 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.0.30-10-g9e889ca](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/9e889ca8cdb1bead61606ced6beb4777565ac8e2) (2021-06-23)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.0.30...9e889ca8cdb1bead61606ced6beb4777565ac8e2) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.1.0-4-gc04388f](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/c04388f7ecc435d3efffbc596f66a6c2956bee45) (2021-06-30)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.0...c04388f7ecc435d3efffbc596f66a6c2956bee45) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
-- Time Capn drycode  
-- dumb  
-- Another boss drycode, including it's hard mode. obviously as a drycode though it's not done/fully functional yet  
-- Added drycode for Mailroom  
-    Added drycode for  Oasis  
-    Preliminary hard mode support for encounders drycoded so far  
-- Update localization.cn.lua (#597)  
-- Dumb shit  
-- Not used to report actually reporting more than one issue, so i didn't even check if there was a second one.  
-- Fix bad copy/paste  
-- Two spell renames  
-    Two Tazavesh drycodes  
-- bump alpha  
+- better fix  
+- Revert "GetDungeonInfo returns a table (#601)"  
+- GetDungeonInfo returns a table (#601)  
+    Change argument handling to use the new table format, rather than the old standard where it was an argument string.  
+- prep next dev cycle  
