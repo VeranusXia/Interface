@@ -1,8 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.1.0-4-gc04388f](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/c04388f7ecc435d3efffbc596f66a6c2956bee45) (2021-06-30)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.0...c04388f7ecc435d3efffbc596f66a6c2956bee45) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.1.0-6-g8773179](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/877317972aa87a485214b6cdec51b95b7011785e) (2021-07-01)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.0...877317972aa87a485214b6cdec51b95b7011785e) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Prep new tag to fix some bugs  
+- Fix #544, remove DBM.Bars compat code. (#603)  
 - better fix  
 - Revert "GetDungeonInfo returns a table (#601)"  
 - GetDungeonInfo returns a table (#601)  

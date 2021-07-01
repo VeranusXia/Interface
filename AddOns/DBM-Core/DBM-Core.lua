@@ -70,9 +70,9 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20210630200528"),
-	DisplayVersion = "9.1.1 alpha", -- the string that is shown as version
-	ReleaseRevision = releaseDate(2021, 6, 29) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	Revision = parseCurseDate("20210701004539"),
+	DisplayVersion = "9.1.1", -- the string that is shown as version
+	ReleaseRevision = releaseDate(2021, 6, 30) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 }
 DBM.HighestRelease = DBM.ReleaseRevision --Updated if newer version is detected, used by update nags to reflect critical fixes user is missing on boss pulls
 
@@ -331,7 +331,6 @@ DBM.DefaultOptions = {
 	SilentMode = false,
 }
 
-DBM.Bars = DBT -- DBM.Bars and DBM.Bars.options compact code will be removed no later than patch 9.1, migrate your addon/weak auras to DBT and DBT.Options respectively
 DBM.Mods = {}
 DBM.ModLists = {}
 DBM.Counts = {
@@ -1425,7 +1424,6 @@ do
 				C_TimerAfter(15, function() AddMsg(self, L.DBMLOOTREMINDER) end)
 			end
 			DBT:LoadOptions("DBM")
-			DBM.Bars.options = DBT.Options--TEMP cloaning, DBM.Bars and DBM.Bars.options compact code will be removed no later than patch 9.1, migrate your addon/weak auras to DBT and DBT.Options respectively
 			self.Arrow:LoadPosition()
 			-- LibDBIcon setup
 			if type(DBM_MinimapIcon) ~= "table" then
@@ -12017,7 +12015,7 @@ end
 
 function bossModPrototype:SetRevision(revision)
 	revision = parseCurseDate(revision or "")
-	if not revision or revision == "20210630200528" then
+	if not revision or revision == "20210701004539" then
 		-- bad revision: either forgot the svn keyword or using github
 		revision = DBM.Revision
 	end
