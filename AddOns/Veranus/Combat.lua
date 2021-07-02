@@ -1,5 +1,5 @@
-﻿ConsoleExec("portal TW")
-ConsoleExec("profanityFilter 0")
+﻿--ConsoleExec("portal TW")
+--ConsoleExec("profanityFilter 0")
 
 
  

@@ -192,8 +192,8 @@ local COLORS = {
 }
 
 local config = {
-	format = "[color=class][=accountName|name][/color] [color=class][if=characterName]([/if][/color][if=level][color=class]Lv[=level][/color][/if] [color=class][if=characterName][=characterName])[/if][/color]",
-	-- format = "[if=level][color=level]L[=level][/color] [/if][color=class][=accountName|characterName|name][/color]",
+	format = "[color=class][=accountName|name][if=characterName]([/if][if=level]Lv[=level][/if] [if=characterName][=characterName][/if][if=realmName]- [=realmName][/if][if=characterName])[/if][/color]",
+	-- format = "[if=level][color=level]L[=level][/color] [/if][color=class][=accountName|characterName|name][/color]", 
 }
 
 local function GetFriendInfo(friend)
