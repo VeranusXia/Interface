@@ -1,8 +1,10 @@
 # HandyNotes_SummerFestival
 
-## [v1.7](https://github.com/Ravendwyr/HandyNotes_SummerFestival/tree/v1.7) (2021-06-11)
-[Full Changelog](https://github.com/Ravendwyr/HandyNotes_SummerFestival/commits/v1.7) [Previous Releases](https://github.com/Ravendwyr/HandyNotes_SummerFestival/releases)
+## [v1.7.1](https://github.com/Ravendwyr/HandyNotes_SummerFestival/tree/v1.7.1) (2021-07-03)
+[Full Changelog](https://github.com/Ravendwyr/HandyNotes_SummerFestival/commits/v1.7.1) [Previous Releases](https://github.com/Ravendwyr/HandyNotes_SummerFestival/releases)
 
+- Bump Interface number to 90100.  
+- Commit VSCode settings file.  
 - Update issue config.  
 - Add packager support for Wago Addons.  
 - Updated for Shadowlands.  
@@ -58,5 +60,3 @@
 - Updated several bonfire locations. Closes GitHub ticket #4.  
 - Updated calendar texture IDs.  
 - Bump Interface number to 70200.  
-- Added Horde bonfires in Draenor and Broken Isles.  
-- Added Alliance bonfires in Draenor and Broken Isles.  

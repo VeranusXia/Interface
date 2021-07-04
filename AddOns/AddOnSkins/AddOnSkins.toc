@@ -1,4 +1,4 @@
-## Interface: 90100
+## Interface: 90005
 ## Title: |cff16C3F2AddOn|r|cFFFFFFFFSkins|r
 ## Version: 4.53
 ## Author: Azilroka, Nihilistzsche

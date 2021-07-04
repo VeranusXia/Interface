@@ -1,3 +1,5 @@
+-- $ comments stripped
+
 local E, L, C = select(2, ...):unpack()
 
 if not E.isBCC then return end
@@ -56,6 +58,20 @@ E.spell_db = {
 		{ spellID = 13809,  duration = 30,  type = "other"      },
 		{ spellID = 34477,  duration = 120, type = "other"      },
 		{ spellID = 3034,   duration = 15,  type = "other"      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	},
 	["MAGE"] = {
@@ -174,10 +190,6 @@ E.spell_db = {
 		{ spellID = 5730,   duration = 30,  type = "other"      },
 	},
 	["WARLOCK"] = {
-
-		{ spellID = 19244,  duration = 24,  type = "interrupt"  },
-		{ spellID = 19505,  duration = 8,   type = "dispel"     },
-
 		{ spellID = 6789,   duration = 120, type = "cc"         },
 		{ spellID = 5484,   duration = 40,  type = "cc",        },
 		{ spellID = 30283,  duration = 20,  type = "cc",        spec = true },
@@ -192,6 +204,9 @@ E.spell_db = {
 		{ spellID = 18540,  duration = 3600,    type = "other"  },
 		{ spellID = 29893,  duration = 300, type = "other"      },
 		{ spellID = 29858,  duration = 300, type = "other"      },
+
+		{ spellID = 19244,  duration = 24,  type = "interrupt"  },
+		{ spellID = 19505,  duration = 8,   type = "dispel"     },
 
 		{ spellID = 7814,   duration = 12,  type = "other"      },
 
