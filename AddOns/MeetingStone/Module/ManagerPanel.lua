@@ -35,11 +35,11 @@ function ShowExportFrame(exportType)
             print("当前没有人申请")
             return
         end
-        local applicants = C_LFGList.GetApplicants();
-        if(not applicants or #applicants == 0) then
-            print("当前没有人申请")
-            return
-        end
+        -- local applicants = C_LFGList.GetApplicants();
+        -- if(not applicants or #applicants == 0) then
+            -- print("当前没有人申请")
+            -- return
+        -- end
         local currentRealm = GetRealmName()
         for k,v in pairs(applicants) do
             applicantInfo = C_LFGList.GetApplicantInfo(v)
@@ -144,8 +144,7 @@ function ManagerPanel:OnInitialize()
             ShowExportFrame(2)
         end)
     end
-
-
+	
     self.FullBlocker = FullBlocker
     self.ApplicantListBlocker = ApplicantListBlocker
     self.RefreshButton = RefreshButton

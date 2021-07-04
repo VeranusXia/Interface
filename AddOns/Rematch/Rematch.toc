@@ -1,4 +1,4 @@
-﻿## Interface: 90005
+﻿## Interface: 90100
 ## Title: [微微修改]宠物编队Rematch
 ## Notes: A pet journal alternative for managing pets and teams.
 ## Author: Gello

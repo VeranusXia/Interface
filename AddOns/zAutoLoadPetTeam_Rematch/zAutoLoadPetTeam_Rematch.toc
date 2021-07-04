@@ -1,4 +1,4 @@
-﻿## Interface: 90005
+﻿## Interface: 90100
 ## Title: [微微修改]AutoLoadPetTeam For Rematch
 ## Title-zhCN: [微微修改]Rematch自动换队
 ## Notes: 宠物自动换队-适配Rematch版

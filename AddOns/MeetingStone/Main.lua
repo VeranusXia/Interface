@@ -47,7 +47,7 @@ function Addon:OnEnable()
     end
 
     if Profile:GetLastVersion() < 70200.06 then
-        SetCVar('profanityFilter', 1)
+        --SetCVar('profanityFilter', 1)
     end
 
     Profile:SaveLastVersion()
@@ -70,7 +70,7 @@ function Addon:MEETINGSTONE_NEW_VERSION(_, version, url, isSupport, changeLog)
 end
 
 function Addon:Toggle()
-    if true then
+    if Logic:IsSupport() then
         if MainPanel:IsShown() then
             Addon:HideModule('MainPanel')
         else

@@ -4,11 +4,14 @@ BuildEnv(...)
 CreatePanel = Addon:NewModule(CreateFrame('Frame', nil, ManagerPanel), 'CreatePanel', 'AceEvent-3.0')
 
 function CreatePanel:OnInitialize()
+
+	self:RegisterEvent('LFG_LIST_APPLICANT_LIST_UPDATED')
     GUI:Embed(self, 'Owner', 'Tab', 'Refresh')
 
     self:SetPoint('TOPLEFT')
     self:SetPoint('BOTTOMLEFT')
-    self:SetWidth(219)
+    local panelWidth=169 --219
+    self:SetWidth(panelWidth)
 
     local line = GUI:GetClass('VerticalLine'):New(self) do
         line:SetPoint('TOPLEFT', self, 'TOPRIGHT', -3, 5)
@@ -26,7 +29,7 @@ function CreatePanel:OnInitialize()
     --- frames
     local InfoWidget = CreateFrame('Frame', nil, ViewBoardWidget) do
         InfoWidget:SetPoint('TOPLEFT')
-        InfoWidget:SetSize(219, 120)
+        InfoWidget:SetSize(panelWidth, 120)
 
         local bg = InfoWidget:CreateTexture(nil, 'BACKGROUND', nil, 1)
         bg:SetPoint('TOPLEFT', -2, 2)
@@ -174,7 +177,7 @@ function CreatePanel:OnInitialize()
     --- options
     local ActivityOptions = GUI:GetClass('TitleWidget'):New(CreateWidget) do
         ActivityOptions:SetPoint('TOPLEFT')
-        ActivityOptions:SetSize(219, 66)
+        ActivityOptions:SetSize(panelWidth, 66)
         ActivityOptions:SetText(L['请选择活动属性'])
     end
 
@@ -207,12 +210,12 @@ function CreatePanel:OnInitialize()
     --- voice and item level
     local VoiceItemLevelWidget = GUI:GetClass('TitleWidget'):New(CreateWidget) do
         VoiceItemLevelWidget:SetPoint('BOTTOMLEFT')
-        VoiceItemLevelWidget:SetSize(219, 100)
+        VoiceItemLevelWidget:SetSize(panelWidth, 100)
     end
 
     local ItemLevel = GUI:GetClass('NumericBox'):New(VoiceItemLevelWidget) do
         ItemLevel:SetPoint('TOP', VoiceItemLevelWidget, 30, -3)
-        ItemLevel:SetSize(108, 23)
+        ItemLevel:SetSize(88, 23)
         ItemLevel:SetLabel(L['最低装等'])
         ItemLevel:SetValueStep(10)
         ItemLevel:SetMinMaxValues(0, 2000)
@@ -220,7 +223,7 @@ function CreatePanel:OnInitialize()
 
     local HonorLevel = GUI:GetClass('NumericBox'):New(VoiceItemLevelWidget) do
         HonorLevel:SetPoint('TOP', ItemLevel, 'BOTTOM', 0, -1)
-        HonorLevel:SetSize(108, 23)
+        HonorLevel:SetSize(88, 23)
         HonorLevel:SetLabel(L['荣誉等级'])
         HonorLevel:SetValueStep(1)
         HonorLevel:SetMinMaxValues(0, 2000)
@@ -231,7 +234,7 @@ function CreatePanel:OnInitialize()
             VoiceBox:ClearAllPoints()
             VoiceBox:SetParent(VoiceItemLevelWidget)
             VoiceBox:SetPoint('TOP', HonorLevel, 'BOTTOM', 2, -1)
-            VoiceBox:SetSize(103, 23)
+            VoiceBox:SetSize(83, 23)
         end)
         VoiceBox:SetScript('OnTextChanged', nil)
         VoiceBox:SetScript('OnEditFocusLost', nil)
@@ -258,7 +261,7 @@ function CreatePanel:OnInitialize()
         PrivateGroup:SetCheckedTexture([[Interface\Buttons\UI-CheckBox-Check]])
         PrivateGroup:SetDisabledCheckedTexture([[Interface\Buttons\UI-CheckBox-Check-Disabled]])
         PrivateGroup:SetSize(22, 22)
-        PrivateGroup:SetPoint('TOPLEFT', VoiceBox, 'BOTTOMLEFT', -83, 0)
+        PrivateGroup:SetPoint('TOPLEFT', VoiceBox, 'BOTTOMLEFT', -73, 0)
         local text = PrivateGroup:CreateFontString(nil, 'ARTWORK')
         text:SetPoint('LEFT', PrivateGroup, 'RIGHT', 2, 0)
         PrivateGroup:SetFontString(text)
@@ -302,6 +305,102 @@ function CreatePanel:OnInitialize()
         MagicButton_OnLoad(CreateButton)
     end
 
+    local LeavePartyButton = CreateFrame('Button', nil, self, 'UIPanelButtonTemplate') do
+        LeavePartyButton:SetPoint('RIGHT', CreateButton, 'LEFT')
+        LeavePartyButton:SetSize(120, 22)
+        LeavePartyButton:SetText(L['离开队伍'])
+        --LeavePartyButton:Disable()
+        LeavePartyButton:SetScript('OnClick', function(LeavePartyButton)
+            LeaveParty()
+        end)
+        MagicButton_OnLoad(LeavePartyButton)
+    end
+	
+	
+    local AutoInvCheckBox = CreateFrame('CheckButton', nil, self, 'UICheckButtonTemplate') do
+        AutoInvCheckBox:SetPoint('RIGHT', LeavePartyButton, 'LEFT', -70, 0)
+        AutoInvCheckBox:SetSize(22, 22)
+		local text = AutoInvCheckBox:CreateFontString(nil, 'AutoInv')
+        text:SetPoint('LEFT', AutoInvCheckBox, 'RIGHT', 2, 0)
+        AutoInvCheckBox:SetFontString(text)
+        AutoInvCheckBox.text:SetText(L['自动邀请'])
+		AutoInvCheckBox:SetScript("OnClick", function() 
+			NoticeCp(1) 
+		end)
+    end
+	
+		
+    -- local AutoJoinBatCheckBox = CreateFrame('CheckButton', nil, self, 'UICheckButtonTemplate') do
+        -- AutoJoinBatCheckBox:SetPoint('RIGHT', LeavePartyButton, 'LEFT', -145, 0)
+        -- AutoJoinBatCheckBox:SetSize(22, 22)
+		-- local text = AutoJoinBatCheckBox:CreateFontString(nil, 'AutoJoin')
+        -- text:SetPoint('LEFT', AutoJoinBatCheckBox, 'RIGHT', 2, 0)
+        -- AutoJoinBatCheckBox:SetFontString(text)
+        -- AutoJoinBatCheckBox.text:SetText(L['自动进场'])
+		-- AutoJoinBatCheckBox:SetScript("OnClick", function() 
+			-- --print('123')
+			-- NoticeCp(2) 
+		-- end)
+    -- end
+	
+
+	function NoticeCp(exportType)
+		if(exportType == 1) then
+			if AutoInvCheckBox:GetChecked() then
+				MEETINGSTONE_UI_E_POINTS.AutoInv = true
+				logText('\124cFF00FF00开启\124r'..'自动邀请')
+			else			
+				MEETINGSTONE_UI_E_POINTS.AutoInv = false
+				logText('\124cFFFF0000关闭\124r'..'自动邀请')
+			end
+		-- else			
+			-- if AutoJoinBatCheckBox:GetChecked() then
+				-- logText('\124cFF00FF00开启\124r'..'自动进场')
+			-- else
+				-- logText('\124cFFFF0000关闭\124r'..'自动进场')
+			-- end
+		end
+	end
+	
+    if(MEETINGSTONE_UI_E_POINTS ~= nil and MEETINGSTONE_UI_E_POINTS.AutoInv ~= nil) then
+        AutoInvCheckBox:SetChecked(MEETINGSTONE_UI_E_POINTS.AutoInv)
+    end
+	
+	function logText(text)
+	print(date("[%H:%M:%S] ")..text)
+	end
+		
+	-- PVPReadyDialog:SetScript("OnShow",function(self) 
+		 -- if AutoJoinBatCheckBox:GetChecked() then
+			-- logText("自动进场")
+			-- PVPReadyDialogEnterBattleButton:Click()
+			-- logText("自动进场ED")
+		-- end
+	-- end)
+	
+	
+function CreatePanel:AutoJoin()
+	if AutoInvCheckBox:GetChecked() and UnitIsGroupLeader('player') then
+		local currentRealm = GetRealmName()	
+		local applicants = C_LFGList.GetApplicants();
+		if(not applicants or #applicants == 0) then		
+			--logText("没人申请")
+			return
+		end
+		local currentRealm = GetRealmName()
+		for k,v in pairs(applicants) do
+			applicantInfo = C_LFGList.GetApplicantInfo(v)
+			for i=1,applicantInfo.numMembers,1 do
+				local name = C_LFGList.GetApplicantMemberInfo(applicantInfo.applicantID, i)
+				if string.find(name, "-") == nil then
+					name = name.."-"..currentRealm
+				end				
+				logText("自动邀请"..name)
+				C_PartyInfo.InviteUnit(name)
+			end
+		end
+	end
+end
     -- local CreateHelpPlate do
     --     CreateHelpPlate = {
     --         FramePos = { x = -10,          y = 55 },
@@ -402,7 +501,7 @@ function CreatePanel:OnInitialize()
 
     self:RegisterEvent('LFG_LIST_ACTIVE_ENTRY_UPDATE')
     self:RegisterEvent('LFG_LIST_AVAILABILITY_UPDATE')
-    self:RegisterEvent('LFG_LIST_ENTRY_CREATION_FAILED')
+    self:RegisterEvent('LFG_LIST_ENTRY_CREATION_FAILED')	
     -- self:RegisterEvent('PARTY_LEADER_CHANGED')
     self:RegisterMessage('MEETINGSTONE_PERMISSION_UPDATE', 'ChooseWidget')
 
@@ -653,6 +752,12 @@ function CreatePanel:LFG_LIST_ENTRY_CREATION_FAILED()
     System:Error(L['活动创建失败，请重试。'])
 end
 
+
+function CreatePanel:LFG_LIST_APPLICANT_LIST_UPDATED(_, hasNewPending, hasNewPendingWithData)
+    self:AutoJoin()
+end
+
+	
 function CreatePanel:UpdateMenu()
     self.ActivityType:SetMenuTable(GetActivitesMenuTable(ACTIVITY_FILTER_CREATE))
 end

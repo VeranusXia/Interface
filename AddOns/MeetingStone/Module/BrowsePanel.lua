@@ -1,14 +1,15 @@
-
 BuildEnv(...)
 
-BrowsePanel = Addon:NewModule(CreateFrame('Frame'), 'BrowsePanel', 'AceEvent-3.0', 'AceTimer-3.0', 'AceSerializer-3.0', 'AceBucket-3.0')
-local Private_EnableQuickJoin = false
+BrowsePanel = Addon:NewModule(CreateFrame('Frame'), 'BrowsePanel', 'AceEvent-3.0', 'AceTimer-3.0', 'AceSerializer-3.0',
+                              'AceBucket-3.0')
+
 function BrowsePanel:OnInitialize()
     MainPanel:RegisterPanel(L['查找活动'], self, 5, 100)
 
     self.filters = {}
 
-    local ActivityList = GUI:GetClass('DataGridView'):New(self) do
+    local ActivityList = GUI:GetClass('DataGridView'):New(self)
+    do
         ActivityList:SetAllPoints(self)
         ActivityList:SetItemHighlightWithoutChecked(true)
         ActivityList:SetItemHeight(32)
@@ -29,6 +30,7 @@ function BrowsePanel:OnInitialize()
                 text = '@',
                 style = 'ICON:20:20',
                 width = 30,
+                enableMouse = true,
                 iconHandler = function(activity)
                     if activity:IsUnusable() then
                         return
@@ -38,37 +40,39 @@ function BrowsePanel:OnInitialize()
                         return [[Interface\AddOns\MeetingStone\Media\Icons]], 0.375, 0.5, 0, 1
                     elseif activity:IsApplication() then
                         return [[Interface\AddOns\MeetingStone\Media\Icons]], 0.5, 0.625, 0, 1
+                    elseif activity:IsGoldLeader() then
+                        return [[Interface\AddOns\MeetingStone\Media\Icons]], 0.625, 0.75, 0, 1
                     elseif activity:IsAnyFriend() then
                         return [[Interface\AddOns\MeetingStone\Media\Icons]], 0, 0.125, 0, 1
                     end
                 end,
                 sortHandler = ActivityList:GetSortHandler(),
-            },
-            {
+            }, {
                 key = 'Title',
                 text = L['活动标题'],
                 style = 'LEFT',
-                width = 170,
+                width = 150,
                 showHandler = function(activity)
                     if activity:IsUnusable() then
                         return activity:GetSummary(), GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
                     elseif activity:IsAnyFriend() then
-                        return activity:GetSummary(), BATTLENET_FONT_COLOR.r, BATTLENET_FONT_COLOR.g, BATTLENET_FONT_COLOR.b
+                        return activity:GetSummary(), BATTLENET_FONT_COLOR.r, BATTLENET_FONT_COLOR.g,
+                               BATTLENET_FONT_COLOR.b
                     else
                         return activity:GetSummary(), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
                     end
-                end
-            },
-            {
+                end,
+            }, {
                 key = 'ActivityName',
                 text = L['活动类型'],
                 style = 'LEFT',
-                width = 170,
+                width = 150,
                 showHandler = function(activity)
                     if activity:IsUnusable() then
                         return activity:GetName(), GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
                     elseif activity:IsAnyFriend() then
-                        return activity:GetName(), BATTLENET_FONT_COLOR.r, BATTLENET_FONT_COLOR.g, BATTLENET_FONT_COLOR.b
+                        return activity:GetName(), BATTLENET_FONT_COLOR.r, BATTLENET_FONT_COLOR.g,
+                               BATTLENET_FONT_COLOR.b
                     else
                         return activity:GetName(), NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
                     end
@@ -86,9 +90,8 @@ function BrowsePanel:OnInitialize()
                     else
                         grid:GetParent():SetSelectable(true)
                     end
-                end
-            },
-            -- {
+                end,
+            }, -- {
             --     key = 'ActivityLoot',
             --     text = L['拾取'],
             --     style = 'LEFT',
@@ -130,9 +133,8 @@ function BrowsePanel:OnInitialize()
                 end,
                 sortHandler = function(activity)
                     return activity:GetMaxMembers() - activity:GetNumMembers()
-                end
-            },
-            -- {
+                end,
+            }, -- {
             --     key = 'Level',
             --     text = L['等级'],
             --     width = 60,
@@ -141,7 +143,6 @@ function BrowsePanel:OnInitialize()
             --         local maxLevel = activity:GetMaxLevel()
             --         local isMax = maxLevel >= MAX_PLAYER_LEVEL
             --         local isMin = minLevel <= 1
-
             --         if isMax and isMin then
             --             return NONE, GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
             --         else
@@ -157,14 +158,15 @@ function BrowsePanel:OnInitialize()
             {
                 key = 'ItemLeave',
                 text = L['要求'],
-                width = 60,
+                width = 55,
                 textHandler = function(activity)
                     if activity:IsArenaActivity() then
                         local pvpRating = activity:GetPvPRating()
                         if pvpRating == 0 then
                             return NONE, GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
                         else
-                            local color = activity:IsUnusable() and GRAY_FONT_COLOR or activity:IsPvPRatingValid() and GREEN_FONT_COLOR or RED_FONT_COLOR
+                            local color = activity:IsUnusable() and GRAY_FONT_COLOR or activity:IsPvPRatingValid() and
+                                              GREEN_FONT_COLOR or RED_FONT_COLOR
                             return floor(pvpRating), color.r, color.g, color.b
                         end
                     else
@@ -172,16 +174,16 @@ function BrowsePanel:OnInitialize()
                         if itemLevel == 0 then
                             return NONE, GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
                         else
-                            local color = activity:IsUnusable() and GRAY_FONT_COLOR or activity:IsItemLevelValid() and GREEN_FONT_COLOR or RED_FONT_COLOR
+                            local color = activity:IsUnusable() and GRAY_FONT_COLOR or activity:IsItemLevelValid() and
+                                              GREEN_FONT_COLOR or RED_FONT_COLOR
                             return floor(itemLevel), color.r, color.g, color.b
                         end
                     end
                 end,
                 sortHandler = function(activity)
                     return 0xFFFF - activity:GetItemLevel()
-                end
-            },
-            {
+                end,
+            }, {
                 key = 'Leader',
                 text = L['团长'],
                 style = 'LEFT',
@@ -190,22 +192,38 @@ function BrowsePanel:OnInitialize()
                     if activity:IsUnusable() then
                         return activity:GetLeaderShort(), GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
                     else
-                        return activity:GetLeaderShortText(), HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b
+                        return activity:GetLeaderShortText(), HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g,
+                               HIGHLIGHT_FONT_COLOR.b
                     end
                 end,
-            },
-            {
+            }, {
+                key = 'LeaderScore',
+                text = L['分数'],
+                width = 55,
+                textHandler = function(activity)
+                    local score = activity:GetLeaderOverallDungeonScore()
+                    if not score or score == 0 then
+                        return NONE, GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b
+                    else
+                        local color = C_ChallengeMode.GetDungeonScoreRarityColor(score) or HIGHLIGHT_FONT_COLOR
+                        return score, color.r, color.g, color.b
+                    end
+                end,
+                sortHandler = function(activity)
+                    return 0xFFFF - activity:GetLeaderOverallDungeonScore()
+                end,
+            }, {
                 key = 'Summary',
                 text = L['说明'],
-                width = 170,
+                width = 160,
                 class = Addon:GetClass('SummaryGrid'),
                 formatHandler = function(grid, activity)
                     grid:SetActivity(activity)
-                end
+                end,
                 -- showHandler = function(activity)
                 --     return activity:GetTitle()
                 -- end,
-            }
+            },
         }
         ActivityList:SetHeaderPoint('BOTTOMLEFT', ActivityList, 'TOPLEFT', -2, 2)
 
@@ -244,7 +262,8 @@ function BrowsePanel:OnInitialize()
             else
                 self.NoResultBlocker:SetPoint('TOP')
             end
-            self.ActivityTotals:SetFormattedText(L['活动总数：%d/%d'], ActivityList:GetItemCount(), LfgService:GetActivityCount())
+            self.ActivityTotals:SetFormattedText(L['活动总数：%d/%d'], ActivityList:GetItemCount(),
+                                                 LfgService:GetActivityCount())
         end)
         ActivityList:SetCallback('OnItemEnter', function(_, _, activity)
             MainPanel:OpenActivityTooltip(activity)
@@ -255,9 +274,21 @@ function BrowsePanel:OnInitialize()
         ActivityList:SetCallback('OnItemMenu', function(_, itemButton, activity)
             self:ToggleActivityMenu(itemButton, activity)
         end)
+        ActivityList:SetCallback('OnGridEnter_@', function(_, button, activity)
+            if not (activity:IsSelf() or
+                activity:IsInActivity() or
+                activity:IsApplication()) and
+                activity:IsGoldLeader() then
+                GameTooltip:SetOwner(button.Icon, 'ANCHOR_RIGHT')
+                GameTooltip:SetText(L['金牌导师'],1.0, 1.0, 1.0)
+                GameTooltip:Show()
+            end
+        end)
+        ActivityList:SetCallback('OnGridLeave_@', GameTooltip_Hide)
     end
 
-    local SearchingBlocker = CreateFrame('Frame', nil, self) do
+    local SearchingBlocker = CreateFrame('Frame', nil, self)
+    do
         SearchingBlocker:Hide()
         SearchingBlocker:SetAllPoints(self)
         SearchingBlocker:SetScript('OnShow', function()
@@ -268,28 +299,33 @@ function BrowsePanel:OnInitialize()
             SearchingBlocker:Hide()
         end)
 
-        local Spinner = CreateFrame('Frame', nil, SearchingBlocker, 'LoadingSpinnerTemplate') do
+        local Spinner = CreateFrame('Frame', nil, SearchingBlocker, 'LoadingSpinnerTemplate')
+        do
             Spinner:SetPoint('CENTER')
             Spinner.Anim:Play()
         end
 
-        local Label = SearchingBlocker:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge') do
+        local Label = SearchingBlocker:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
+        do
             Label:SetPoint('BOTTOM', Spinner, 'TOP')
             Label:SetText(SEARCHING)
         end
     end
 
-    local NoResultBlocker = CreateFrame('Frame', nil, self) do
+    local NoResultBlocker = CreateFrame('Frame', nil, self)
+    do
         NoResultBlocker:SetPoint('BOTTOMLEFT')
         NoResultBlocker:SetPoint('BOTTOMRIGHT')
         NoResultBlocker:SetPoint('TOP')
         NoResultBlocker:Hide()
 
-        local Label = NoResultBlocker:CreateFontString(nil, 'ARTWORK', 'GameFontDisable') do
+        local Label = NoResultBlocker:CreateFontString(nil, 'ARTWORK', 'GameFontDisable')
+        do
             Label:SetPoint('CENTER', 0, 20)
         end
 
-        local Button = CreateFrame('Button', nil, NoResultBlocker, 'UIPanelButtonTemplate') do
+        local Button = CreateFrame('Button', nil, NoResultBlocker, 'UIPanelButtonTemplate')
+        do
             Button:SetPoint('CENTER', 0, -20)
             Button:SetSize(120, 22)
             Button:SetText(L['创建活动'])
@@ -302,7 +338,8 @@ function BrowsePanel:OnInitialize()
         NoResultBlocker.Button = Button
     end
 
-    local SignUpButton = CreateFrame('Button', nil, self, 'UIPanelButtonTemplate') do
+    local SignUpButton = CreateFrame('Button', nil, self, 'UIPanelButtonTemplate')
+    do
         GUI:Embed(SignUpButton, 'Tooltip')
         SignUpButton:SetTooltipAnchor('ANCHOR_TOP')
         SignUpButton:SetSize(120, 22)
@@ -319,12 +356,14 @@ function BrowsePanel:OnInitialize()
         MagicButton_OnLoad(SignUpButton)
     end
 
-    local ActivityLabel = self:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight') do
+    local ActivityLabel = self:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
+    do
         ActivityLabel:SetPoint('TOPLEFT', MainPanel, 'TOPLEFT', 70, -30)
         ActivityLabel:SetText(L['活动类型'])
     end
 
-    local ActivityDropdown = GUI:GetClass('Dropdown'):New(self) do
+    local ActivityDropdown = GUI:GetClass('Dropdown'):New(self)
+    do
         ActivityDropdown:SetPoint('TOPLEFT', ActivityLabel, 'BOTTOMLEFT', 0, -5)
         ActivityDropdown:SetSize(170, 26)
         ActivityDropdown:SetMaxItem(20)
@@ -347,53 +386,32 @@ function BrowsePanel:OnInitialize()
         end)
     end
 
-    local AdvFilterPanel = CreateFrame('Frame', nil, self, 'SimplePanelTemplate') do
+    local AdvFilterPanel = CreateFrame('Frame', nil, self, 'SimplePanelTemplate')
+    do
         GUI:Embed(AdvFilterPanel, 'Refresh')
-        AdvFilterPanel:SetSize(200, 340)
+        AdvFilterPanel:SetSize(200, 320)
         AdvFilterPanel:SetPoint('TOPLEFT', MainPanel, 'TOPRIGHT', -2, -30)
-        AdvFilterPanel:SetFrameLevel(ActivityList:GetFrameLevel()+5)
+        AdvFilterPanel:SetFrameLevel(ActivityList:GetFrameLevel() + 5)
         AdvFilterPanel:EnableMouse(true)
         AdvFilterPanel:Hide()
 
-        local closeButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelCloseButton') do
+        local closeButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelCloseButton')
+        do
             closeButton:SetPoint('TOPRIGHT', 0, -1)
         end
 
-        local Label = AdvFilterPanel:CreateFontString(nil, 'ARTWORK', 'GameFontNormal') do
+        local Label = AdvFilterPanel:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
+        do
             Label:SetPoint('TOPLEFT', 5, -10)
             Label:SetText(L['高级过滤'])
         end
     end
 
     local filters = {
-        {
-            key = 'ItemLevel',
-            text = L['装备等级'],
-            min = 0,
-            max = 500,
-            step = 10,
-        },
-        {
-            key = 'BossKilled',
-            text = L['Boss击杀数量'],
-            min = 0,
-            max = 15,
-            step = 1,
-        },
-        {
-            key = 'Age',
-            text = L['活动创建时长'],
-            min = 0,
-            max = 1440,
-            step = 10,
-        },
-        {
-            key = 'Members',
-            text = L['队伍人数'],
-            min = 0,
-            max = 40,
-            step = 1,
-        },
+        {key = 'ItemLevel', text = L['装备等级'], min = 0, max = 500, step = 10},
+        {key = 'BossKilled', text = L['Boss击杀数量'], min = 0, max = 15, step = 1},
+        {key = 'Age', text = L['活动创建时长'], min = 0, max = 1440, step = 10},
+        {key = 'Members', text = L['队伍人数'], min = 0, max = 40, step = 1},
     }
 
     local function RefreshFilter()
@@ -424,8 +442,6 @@ function BrowsePanel:OnInitialize()
         table.insert(self.filters, Box)
     end
     
-    --暂时禁用
-    --[[
     local Box = Addon:GetClass('FilterBox'):New(AdvFilterPanel.Inset)
     Box.Check:SetText("广告过滤(测试)")
     Box.Check:SetChecked(_G["MEETINGSTONE_UI_E_FILTERAD"])
@@ -436,9 +452,9 @@ function BrowsePanel:OnInitialize()
     Box:SetPoint('TOPLEFT', self.filters[#self.filters], 'BOTTOMLEFT')
     Box:SetPoint('TOPRIGHT', self.filters[#self.filters], 'BOTTOMRIGHT')
     Box:HideInput()
-    ]]--
 
-    local ResetFilterButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelButtonTemplate') do
+    local ResetFilterButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelButtonTemplate')
+    do
         ResetFilterButton:SetSize(80, 22)
         ResetFilterButton:SetPoint('BOTTOMRIGHT', AdvFilterPanel, 'BOTTOM', 0, 3)
         ResetFilterButton:SetText(RESET)
@@ -449,7 +465,8 @@ function BrowsePanel:OnInitialize()
         end)
     end
 
-    local RefreshFilterButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelButtonTemplate') do
+    local RefreshFilterButton = CreateFrame('Button', nil, AdvFilterPanel, 'UIPanelButtonTemplate')
+    do
         RefreshFilterButton:SetSize(80, 22)
         RefreshFilterButton:SetPoint('BOTTOMLEFT', AdvFilterPanel, 'BOTTOM', 0, 3)
         RefreshFilterButton:SetText(REFRESH)
@@ -458,7 +475,8 @@ function BrowsePanel:OnInitialize()
         end)
     end
 
-    local RefreshButton = Addon:GetClass('RefreshButton'):New(self) do
+    local RefreshButton = Addon:GetClass('RefreshButton'):New(self)
+    do
         RefreshButton:SetPoint('TOPRIGHT', MainPanel, 'TOPRIGHT', -90, -38)
         RefreshButton:SetTooltip(LFG_LIST_SEARCH_AGAIN)
         RefreshButton:SetScript('OnClick', function()
@@ -476,7 +494,8 @@ function BrowsePanel:OnInitialize()
         end
     end
 
-    local AdvButton = CreateFrame('Button', nil, self, 'UIMenuButtonStretchTemplate') do
+    local AdvButton = CreateFrame('Button', nil, self, 'UIMenuButtonStretchTemplate')
+    do
         GUI:Embed(AdvButton, 'Tooltip')
         AdvButton:SetTooltipAnchor('ANCHOR_RIGHT')
         AdvButton:SetTooltip(L['高级过滤'])
@@ -488,7 +507,8 @@ function BrowsePanel:OnInitialize()
         AdvButton:SetDisabledFontObject('GameFontDisable')
 
         if Profile:IsProfileKeyNew('advShine', 60200.09) then
-            local Shine = GUI:GetClass('ShineWidget'):New(AdvButton) do
+            local Shine = GUI:GetClass('ShineWidget'):New(AdvButton)
+            do
                 Shine:SetPoint('TOPLEFT', 5, -5)
                 Shine:SetPoint('BOTTOMRIGHT', -5, 5)
                 Shine:Start()
@@ -524,31 +544,87 @@ function BrowsePanel:OnInitialize()
             MEETINGSTONE_UI_E_POINTS.QuickJoin = Private_EnableQuickJoin
           end)
     end
+	
+	
+    local AutoJoinCheckBox = CreateFrame("CheckButton", "MeetingStone_AutoJoinCheckBox", self, "UICheckButtonTemplate") do
+        AutoJoinCheckBox:SetSize(24, 24)
+        AutoJoinCheckBox:SetPoint('TOPLEFT', quickJoinCheckBox, 'TOPLEFT', 0, 24)
+        MeetingStone_AutoJoinCheckBoxText:SetText("自动进组")
+        AutoJoinCheckBox:SetScript("OnClick", function() 
+			NoticeBp() 
+		end)
+    end
+	
+	function NoticeBp()	
+		if AutoJoinCheckBox:GetChecked() then
+			MEETINGSTONE_UI_E_POINTS.AutoJoinCheckBox = true
+			logText('\124cFF00FF00开启\124r'..'自动进组')
+		else
+			MEETINGSTONE_UI_E_POINTS.AutoJoinCheckBox = false
+			logText('\124cFFFF0000关闭\124r'..'自动进组')
+		end
+	end
+	
+	LFDRoleCheckPopup:SetScript("OnShow",function() 
+		if AutoJoinCheckBox:GetChecked() then
+			LFDRoleCheckPopupAccept_OnClick()
+			logText("确认职责")
+		end
+	end)
+	
+	-- BonusRollFrame:SetScript("OnShow",function() 
+		-- if AutoJoinCheckBox:GetChecked() then
+			-- DeclineSpellConfirmationPrompt(BonusRollFrame.spellID)
+			-- logText("关闭ROLL币框")
+		-- end
+	-- end)
 
+	function logText(text)
+	print(date("[%H:%M:%S] ")..text)
+	end
+	
+	LFGListInviteDialog:SetScript("OnShow",function(self) 
+		 if AutoJoinCheckBox:GetChecked() then
+			local _, status, _, _, role = C_LFGList.GetApplicationInfo(LFGListInviteDialog.resultID)
+			if status=="invited" then
+				LFGListInviteDialog.AcceptButton:Click()
+			end
+			if status=="inviteaccepted" then
+				LFGListInviteDialog.AcknowledgeButton:Click()
+			end
+		 end
+	end)
+	
     if(MEETINGSTONE_UI_E_POINTS.QuickJoin ~= nil) then
         quickJoinCheckBox:SetChecked(MEETINGSTONE_UI_E_POINTS.QuickJoin)
         Private_EnableQuickJoin = MEETINGSTONE_UI_E_POINTS.QuickJoin
     end
-
-    
+	
+	
+    if(MEETINGSTONE_UI_E_POINTS ~= nil and MEETINGSTONE_UI_E_POINTS.AutoJoinCheckBox ~= nil) then
+        AutoJoinCheckBox:SetChecked(MEETINGSTONE_UI_E_POINTS.AutoJoinCheckBox)
+    end
 
     local ActivityTotals = self:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightRight') do
         ActivityTotals:SetPoint('BOTTOMRIGHT', MainPanel, -7, 7)
         ActivityTotals:SetFormattedText(L['活动总数：%d/%d'], 0, 0)
     end
 
-    local IconSummary = CreateFrame('Button', nil, self) do
+    local IconSummary = CreateFrame('Button', nil, self)
+    do
         IconSummary:SetSize(50, 20)
         IconSummary:SetPoint('BOTTOMLEFT', MainPanel, 10, 5)
 
-        local icon = IconSummary:CreateTexture(nil, 'OVERLAY') do
+        local icon = IconSummary:CreateTexture(nil, 'OVERLAY')
+        do
             icon:SetSize(20, 20)
             icon:SetPoint('LEFT')
             icon:SetTexture([[Interface\AddOns\MeetingStone\Media\Icons]])
             icon:SetTexCoord(0, 32/256, 0, 1)
         end
 
-        local label = IconSummary:CreateFontString(nil, 'OVERLAY') do
+        local label = IconSummary:CreateFontString(nil, 'OVERLAY')
+        do
             label:SetPoint('LEFT', icon, 'RIGHT', 2, 0)
         end
 
@@ -559,10 +635,21 @@ function BrowsePanel:OnInitialize()
         IconSummary:SetScript('OnEnter', function(button)
             GameTooltip:SetOwner(button, 'ANCHOR_RIGHT')
             GameTooltip:SetText(L['图示'])
-            GameTooltip:AddLine(format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:64:96:0:32|t %s]], L['我的活动']), 1, 1, 1)
-            GameTooltip:AddLine(format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:96:128:0:32|t %s]], L['已加入活动']), 1, 1, 1)
-            GameTooltip:AddLine(format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:128:160:0:32|t %s]], L['申请中活动']), 1, 1, 1)
-            GameTooltip:AddLine(format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:0:32:0:32|t %s]], L['好友或公会成员参与的活动']), 1, 1, 1)
+            GameTooltip:AddLine(
+                format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:64:96:0:32|t %s]],
+                       L['我的活动']), 1, 1, 1)
+            GameTooltip:AddLine(format(
+                                    [[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:96:128:0:32|t %s]],
+                                    L['已加入活动']), 1, 1, 1)
+            GameTooltip:AddLine(format(
+                                    [[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:128:160:0:32|t %s]],
+                                    L['申请中活动']), 1, 1, 1)
+            local title = format(
+                [[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:160:192:0:32|t %s]],-- 宽：高：左：右：上：下
+                L['金牌导师'])
+            GameTooltip:AddLine(title, 1, 1, 1)
+            GameTooltip:AddLine(format([[|TInterface\AddOns\MeetingStone\Media\Icons:20:20:0:0:256:32:0:32:0:32|t %s]],
+                                       L['好友或公会成员参与的活动']), 1, 1, 1)
             GameTooltip:Show()
         end)
         IconSummary:SetScript('OnLeave', GameTooltip_Hide)
@@ -570,7 +657,8 @@ function BrowsePanel:OnInitialize()
 
     local FilterButton
     if not NO_SCAN_WORD then
-        FilterButton = CreateFrame('Button', nil, self) do
+        FilterButton = CreateFrame('Button', nil, self)
+        do
             FilterButton:SetNormalFontObject('GameFontNormalSmall')
             FilterButton:SetHighlightFontObject('GameFontHighlightSmall')
             FilterButton:SetSize(70, 22)
@@ -839,7 +927,8 @@ function BrowsePanel:MEETINGSTONE_ACTIVITIES_RESULT_RECEIVED(event, isFailed)
     local resultCount = LfgService:GetActivityCount()
 
     self.NoResultBlocker:SetShown(resultCount == 0)
-    self.NoResultBlocker.Label:SetText(isFailed and [[|TInterface\DialogFrame\UI-Dialog-Icon-AlertNew:30|t  ]] .. LFG_LIST_SEARCH_FAILED or LFG_LIST_NO_RESULTS_FOUND)
+    self.NoResultBlocker.Label:SetText(isFailed and [[|TInterface\DialogFrame\UI-Dialog-Icon-AlertNew:30|t  ]] ..
+                                           LFG_LIST_SEARCH_FAILED or LFG_LIST_NO_RESULTS_FOUND)
     self.NoResultBlocker.Button:SetShown(not isFailed)
     self.ActivityList:Refresh()
 end
@@ -971,11 +1060,8 @@ function BrowsePanel:GetSearchCode(fullName, mode, loot, customId)
     loot = loot and rawget(ACTIVITY_LOOT_LONG_NAMES, loot)
     mode = mode and rawget(ACTIVITY_MODE_NAMES, mode)
 
-    return format('%s %s %s',
-        fullName and format('%s%s', customId and '-' or '', fullName) or '',
-        loot and format('-%s-', loot) or '',
-        mode and format('-%s-', mode) or ''
-    )
+    return format('%s %s %s', fullName and format('%s%s', customId and '-' or '', fullName) or '',
+                  loot and format('-%s-', loot) or '', mode and format('-%s-', mode) or '')
 end
 
 function BrowsePanel:OnRefreshTimer()
@@ -996,8 +1082,7 @@ function BrowsePanel:OnFilterButtonClicked()
             func = function(_, _, _, checked)
                 Profile:SetSetting('spamWord', checked)
             end,
-        },
-        {
+        }, {
             text = L['活动说明字数过滤'],
             checkable = true,
             isNotRadio = true,
@@ -1007,11 +1092,8 @@ function BrowsePanel:OnFilterButtonClicked()
             end,
             func = function(_, _, _, checked)
                 Profile:SetSetting('spamLengthEnabled', checked)
-            end
-        },
-        {
-            text = CANCEL
-        }
+            end,
+        }, {text = CANCEL},
     })
 end
 
@@ -1143,23 +1225,16 @@ function BrowsePanel:SaveSearchProfile()
         customId = activityItem.customId,
     }
 
-    GUI:CallInputDialog(
-        L['请输入搜索配置名称：'],
-        function(result, name)
-            if not result then
-                return
-            end
-            if not Profile:GetSearchProfile(name) then
-                Profile:AddSearchProfile(name, profile)
-            else
-                System:Errorf(L['搜索配置“%s”已存在。'], name)
-            end
-        end,
-        self,
-        format('%s %s %s', activityItem.text, GetLootName(profile.loot), GetModeName(profile.mode)),
-        255,
-        250
-    )
+    GUI:CallInputDialog(L['请输入搜索配置名称：'], function(result, name)
+        if not result then
+            return
+        end
+        if not Profile:GetSearchProfile(name) then
+            Profile:AddSearchProfile(name, profile)
+        else
+            System:Errorf(L['搜索配置“%s”已存在。'], name)
+        end
+    end, self, format('%s %s %s', activityItem.text, GetLootName(profile.loot), GetModeName(profile.mode)), 255, 250)
 end
 
 function BrowsePanel:StartSet()
@@ -1196,3 +1271,5 @@ function BrowsePanel:GetFilters()
     end
     return filters
 end
+
+_G.MeetingStone_BrowsePanel = BrowsePanel

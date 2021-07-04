@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: PetTracker Battle
 ## Notes: Load on demand modification for the pet battle UI.
 ## Author: Jaliborc (João Cardoso)

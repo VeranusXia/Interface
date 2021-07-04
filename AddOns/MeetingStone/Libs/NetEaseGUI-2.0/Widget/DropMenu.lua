@@ -11,6 +11,8 @@ local Tooltip = GUI:GetClass('Tooltip')
 
 DropMenu._Objects = DropMenu._Objects or {}
 
+BuildEnv(...)
+
 local function check(value, data, owner)
     if type(value) == 'function' then
         return value(data, owner)
@@ -139,9 +141,20 @@ function DropMenu:Open(level, menuTable, owner, ...)
     menu:SetPoint(self:GetOpenPosition(owner, select(hasMaxItem and 2 or 1, ...)))
     menu:Show()
     menu:Refresh()
-    menu:SetScale(menu:GetParent() and 1
-            or GetCVarBool('useUIScale') and min(UIParent:GetScale(), tonumber(GetCVar('uiscale')))
-            or UIParent:GetScale())
+     -- Should not modify this.Too bad
+    local scale = Profile:GetSetting('uiscale')
+    if(scale == nil or scale < 1.0) then
+        scale = 1.0
+    end
+    if #self.menuList[1]:GetItemList() == 5 then
+        local sysScale = menu:GetParent() and 1
+        or GetCVarBool('useUIScale') and min(UIParent:GetScale(), tonumber(GetCVar('uiscale')))
+        or UIParent:GetScale()
+        sysScale = sysScale * scale;
+        menu:SetScale(sysScale)
+    else
+        menu:SetScale(scale)
+    end    
 end
 
 function DropMenu:Toggle(level, menuTable, owner, ...)

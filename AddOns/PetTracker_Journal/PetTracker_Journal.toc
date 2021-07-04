@@ -1,4 +1,4 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: PetTracker Journal
 ## Notes: Load on demand modification for the Pet Journal.
 ## Author: Jaliborc (João Cardoso)

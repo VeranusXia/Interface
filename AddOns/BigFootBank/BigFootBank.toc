@@ -1,4 +1,4 @@
-﻿## Interface: 90005
+﻿## Interface: 90100
 ## Title: BigFootBank
 ## Notes: Allow user to collect data in game and upload to server to share with other players.
 ## Title-zhCN: |c0066ffffBigFootBank大脚黒市助手|r

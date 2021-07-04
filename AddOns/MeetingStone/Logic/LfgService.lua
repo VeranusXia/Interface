@@ -86,18 +86,20 @@ function LfgService:_CacheActivity(id)
         return
     end
 
-
     if self.activityId and activity:GetActivityID() ~= self.activityId then
         return
     end
+
     if activity:HasInvalidContent() then
         return
     end
     if not activity:IsValidCustomActivity() then
         return
     end
+
     tinsert(self.activityList, activity)
     self.activityHash[id] = activity
+
     return true
 end
 
@@ -105,6 +107,7 @@ function LfgService:LFG_LIST_SEARCH_RESULTS_RECEIVED(event)
     table.wipe(self.activityList)
     table.wipe(self.activityHash)
     table.wipe(self.activityRemoved)
+
     self.inSearch = false
 
     local applications = C_LFGList.GetApplications()
@@ -140,6 +143,7 @@ end
 function LfgService:Search(categoryId, baseFilter, activityId)
     self.ourSearch = true
     self.activityId = activityId
+
     C_LFGList.Search(categoryId, 0, baseFilter)
     self.ourSearch = false
     self.dirty = false

