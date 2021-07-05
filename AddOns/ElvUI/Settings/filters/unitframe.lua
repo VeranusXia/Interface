@@ -1191,6 +1191,12 @@ G.unitframe.aurafilters.RaidBuffsElvUI = {
 		[344739] = Defaults(), -- Spectral
 		[333227] = Defaults(), -- Undying Rage
 		[322773] = Defaults(), -- Blood Barrier
+	---------------------------------------------------------
+	----------------------- Open World ----------------------
+	---------------------------------------------------------
+	-- Korthia
+		[354840] = Defaults(), -- Rift Veiled (Silent Soulstalker, Deadsoul Hatcher, Screaming Shade)
+		[355249] = Defaults(), -- Anima Gorged (Consumption)
 	},
 }
 
