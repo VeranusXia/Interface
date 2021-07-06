@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(2440, "DBM-SanctumOfDomination", nil, 1193)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20210704232829")
+mod:SetRevision("20210706053825")
 mod:SetCreatureID(175559)
 mod:SetEncounterID(2422)
 mod:SetUsedIcons(1, 2, 3, 4, 6, 7, 8)
@@ -165,6 +165,7 @@ function mod:OnCombatEnd()
 	if self.Options.NPAuraOnNecroticEmpowerment or self.Options.NPAuraOnFixate then
 		DBM.Nameplate:Hide(true, nil, nil, nil, true, true)
 	end
+	DBM:AddMsg("Timers for this fight are incomplete/inaccurate until a lot more data is collected from various push timings. This data can only be improved with transcriptor logs")
 end
 
 function mod:SPELL_CAST_START(args)
