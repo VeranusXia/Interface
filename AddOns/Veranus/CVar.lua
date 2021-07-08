@@ -33,8 +33,8 @@ local function eventHandler(self, event, ...)
          defaultcvar() 
 end 
 
---ConsoleExec("portal TW")
---ConsoleExec("profanityFilter 0")
+ConsoleExec("portal TW")
+ConsoleExec("profanityFilter 0")
 
 
 local pre = C_BattleNet.GetFriendGameAccountInfo
