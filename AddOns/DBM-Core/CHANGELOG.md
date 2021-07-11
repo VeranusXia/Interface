@@ -1,8 +1,10 @@
 # Deadly Boss Mods Core
 
-## [9.1.1-34-g0d29ce3](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/0d29ce3e3d2f6dcc50ebbc6dc5a5bacb9141dcc8) (2021-07-10)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.1...0d29ce3e3d2f6dcc50ebbc6dc5a5bacb9141dcc8) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.1.1-36-g4e3cdd9](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/4e3cdd97f98f9d5cf8454433f153ea847d25c690) (2021-07-11)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.1...4e3cdd97f98f9d5cf8454433f153ea847d25c690) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Blizzard hotfixed sylvanas agian, this time rolling back to previous timers. Those timers have been restored and extended with latest logs  
+- Fixed call of eternity not showing on normal difficulty  
 - Updated the normal mode sylvana stage 3 timers to the new post july 9th hotfix versions. Thiis makes sylvanas mod accurate on both heroic and normal once more (til next round of fight changes anyways)  
 - Fix some stray crap  
 - Tiny sylvanas tweak  
