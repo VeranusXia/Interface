@@ -2612,8 +2612,22 @@ local function GetMapOptions()
 					handler = RareScanner,
 					desc = AL["MAP_TOOLTIPS_DESC"],
 					args = {
-						worldmapTooltips = {
+						scale = {
 							order = 1,
+							type = "range",
+							name = AL["MAP_TOOLTIPS_SCALE"],
+							desc = AL["MAP_TOOLTIPS_SCALE_DESC"],
+							min	= 0.1,
+							max	= 1.5,
+							step = 0.05,
+							get = function() return RSConfigDB.GetWorldMapTooltipsScale() end,
+							set = function(_, value)
+								RSConfigDB.SetWorldMapTooltipsScale(value)
+							end,
+							width = "full",
+						},
+						worldmapTooltips = {
+							order = 2,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_WORLDMAP_ICONS"],
 							desc = AL["MAP_TOOLTIPS_WORLDMAP_ICONS_DESC"],
@@ -2624,7 +2638,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						achievementsInfo = {
-							order = 2,
+							order = 3,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_ACHIEVEMENT"],
 							desc = AL["MAP_TOOLTIPS_ACHIEVEMENT_DESC"],
@@ -2635,7 +2649,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						notes = {
-							order = 3,
+							order = 4,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_NOTES"],
 							desc = AL["MAP_TOOLTIPS_NOTES_DESC"],
@@ -2646,7 +2660,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						loot = {
-							order = 4,
+							order = 5,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_LOOT"],
 							desc = AL["MAP_TOOLTIPS_LOOT_DESC"],
@@ -2657,7 +2671,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						lastTimeSeen = {
-							order = 5,
+							order = 6,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_SEEN"],
 							desc = AL["MAP_TOOLTIPS_SEEN_DESC"],
@@ -2668,7 +2682,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						state = {
-							order = 6,
+							order = 7,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_STATE"],
 							desc = AL["MAP_TOOLTIPS_STATE_DESC"],
@@ -2679,7 +2693,7 @@ local function GetMapOptions()
 							width = "full",
 						},
 						commands = {
-							order = 7,
+							order = 8,
 							type = "toggle",
 							name = AL["MAP_TOOLTIPS_COMMANDS"],
 							desc = AL["MAP_TOOLTIPS_COMMANDS_DESC"],

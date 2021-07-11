@@ -1,8 +1,30 @@
 # Deadly Boss Mods Core
 
-## [9.1.1-18-g79af9bc](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/79af9bc8a0c40c8c87dafbfb2988e439fbb1b094) (2021-07-08)
-[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.1...79af9bc8a0c40c8c87dafbfb2988e439fbb1b094) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
+## [9.1.1-34-g0d29ce3](https://github.com/DeadlyBossMods/DeadlyBossMods/tree/0d29ce3e3d2f6dcc50ebbc6dc5a5bacb9141dcc8) (2021-07-10)
+[Full Changelog](https://github.com/DeadlyBossMods/DeadlyBossMods/compare/9.1.1...0d29ce3e3d2f6dcc50ebbc6dc5a5bacb9141dcc8) [Previous Releases](https://github.com/DeadlyBossMods/DeadlyBossMods/releases)
 
+- Updated the normal mode sylvana stage 3 timers to the new post july 9th hotfix versions. Thiis makes sylvanas mod accurate on both heroic and normal once more (til next round of fight changes anyways)  
+- Fix some stray crap  
+- Tiny sylvanas tweak  
+- Added support for Morgeth  
+- rename zhTW to localization.tw (#609)  
+    Sorry, I made a mistake.  
+- Creat zhTW.lua (#608)  
+- Redid the heroic sylvanas timers for P3, post July 9th hotfixes. Although something tells me, I will be redoing these timers again since I don't think some of these changes were intentional, just side effects of fight enrage/length tweaks that resulted in two mechanics virtually vanishing from the phase.  
+- Hide infoframe in stage 2 sylvanas since it doesn't do anything there ATM, but then reshow it in stage 3 to track bane stacks  
+    Improved bane warning to announce all stacks not just initial application  
+- Fixed minor bug with source name missing in ruin interrupt warning  
+- Updated spiked balls to use CLEU event on raznal and updated first timer now that locks are easier to read. 👍  
+    Updated heroic P3 timers for sylvanas to include further data  
+- extend P3 data on heroic sylvanas just a bit longer from latest public logs, before heading to bed  
+- Fulfil 2x request to use icons for traps, including yells/etc on raznal. while at it, fixed a bug where target warning never actually fired and showed who traps were on (other than personal warning)  
+- fix typo  
+- First KT update  
+    Update initial KT timers, and updated timers for KT at a 100/0 mana phase change.  
+    Disabled timers for other mana phase changes since they won't be applicable anymore. Those need verified logs phasing at those values  
+    Fixed frost blast detection in phase 3 and updated P3 initial timers  
+- Begin populating P1 and P3 heroic timer data from public sylvanas wipes  
+- Update BW version check, which I might have neglected for a while, oops  
 - Good catch luacheck!  
 - Populated timer tables for normal sylvanas, heroic still needs work, but no public logs yet.  
     Also added timers for the heartseekers  
